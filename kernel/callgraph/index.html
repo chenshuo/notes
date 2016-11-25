@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Call Graphs - Shuo Chen's Notes</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../">Overview</a>
+</li>
+                            
+<li >
+    <a href="../data-structures/">Data Structures</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Call Graphs</a>
+</li>
+                        </ul>
+                    </li>
+                    <li >
+                        <a href="../../lua/">Lua</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../data-structures/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../lua/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#bind">bind</a></li>
+        <li class="main "><a href="#listen">listen</a></li>
+        <li class="main "><a href="#passive-open">Passive open</a></li>
+            <li><a href="#receive-syn">Receive SYN</a></li>
+            <li><a href="#receive-ack">Receive ACK</a></li>
+        <li class="main "><a href="#connect">connect</a></li>
+        <li class="main "><a href="#tcp_v4_rcv">tcp_v4_rcv</a></li>
+        <li class="main "><a href="#read">read</a></li>
+        <li class="main "><a href="#write">write</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="bind">bind</h1>
+<pre><code>sys_bind
+  -&gt; inet_bind
+    -&gt; inet_csk_get_port
+      -&gt; goto have_snum:
+      -&gt; goto tb_not_found:  tb == NULL
+        -&gt; inet_bind_bucket_create
+      -&gt; goto success:
+        -&gt; inet_bind_hash
+          -&gt; sk_add_bind_node
+  -&gt; fput_light
+</code></pre>
+
+<h1 id="listen">listen</h1>
+<pre><code>sys_listen
+  -&gt; inet_listen
+    -&gt; inet_csk_listen_start
+      -&gt; reqsk_queue_alloc
+      -&gt; inet_csk_delack_init
+      -&gt; set sk-&gt;sk_state = TCP_LISTEN
+      -&gt; inet_csk_get_port
+        -&gt; goto have_snum:
+        -&gt; goto tb_found:
+          -&gt; inet_csk_bind_conflict
+        -&gt; goto tb_not_found:  tb != NULL
+      -&gt; inet_hash
+        -&gt; __inet_hash  // tcp_hashinfo.listening_hash[X] add node
+</code></pre>
+
+<p><img alt="after bind() and listen()" src="../bhash.png" /></p>
+<h1 id="passive-open">Passive open</h1>
+<h2 id="receive-syn">Receive SYN</h2>
+<pre><code>tcp_v4_rcv
+  -&gt; __inet_lookup_skb
+    -&gt; __inet_lookup
+      -&gt; __inet_lookup_established
+      -&gt; __inet_lookup_listener  // found
+
+  -&gt; tcp_v4_do_rcv  // sk_state == TCP_LISTEN
+    -&gt; tcp_rcv_state_process
+      -&gt; tcp_v4_conn_request  // icsk-&gt;icsk_af_ops-&gt;conn_request
+        -&gt; tcp_conn_request
+          -&gt; req = inet_reqsk_alloc
+            -&gt; reqsk_alloc
+               req-&gt;rsk_listener = sk_listener;
+            ireq-&gt;ireq_state = TCP_NEW_SYN_RECV;
+          -&gt; tcp_parse_options
+          -&gt; tcp_openreq_init
+          -&gt; tcp_v4_init_req  // af_ops-&gt;init_req
+            -&gt; tcp_v4_save_options
+          -&gt; tcp_v4_init_sequence  // af_ops-&gt;init_seq
+          -&gt; tcp_v4_route_req  // af_ops-&gt;route_req
+            -&gt; inet_csk_route_req
+              -&gt; flowi4_init_output
+              -&gt; ip_route_output_flow
+          -&gt; tcp_ecn_create_request
+          -&gt; tcp_reqsk_record_syn
+          -&gt; inet_csk_reqsk_queue_hash_add
+            -&gt; reqsk_queue_hash_req
+              -&gt; inet_ehash_insert
+                -&gt; __sk_nulls_add_node_rcu
+            -&gt; inet_csk_reqsk_queue_added
+          -&gt; tcp_v4_send_synack  // af_ops-&gt;send_synack
+            -&gt; tcp_make_synack
+            -&gt; __tcp_v4_send_check
+            -&gt; ip_build_and_send_pkt
+              -&gt; ip_local_out
+                -&gt; __ip_local_out
+                  -&gt; dst_output
+                    -&gt; ip_output
+</code></pre>
+
+<h2 id="receive-ack">Receive ACK</h2>
+<pre><code>tcp_v4_rcv
+  -&gt; __inet_lookup_skb
+    -&gt; __inet_lookup
+      -&gt; __inet_lookup_established  // found
+  -&gt; sk-&gt;sk_state == TCP_NEW_SYN_RECV
+  -&gt; tcp_check_req
+    -&gt; tcp_parse_options
+      -&gt; tcp_paws_reject
+      -&gt; tcp_in_window
+    -&gt; tcp_v4_syn_recv_sock  // inet_csk(sk)-&gt;icsk_af_ops-&gt;syn_recv_sock
+      -&gt; tcp_create_openreq_child
+        -&gt; inet_csk_clone_lock
+          -&gt; sk_clone_lock
+            -&gt; sk_prot_alloc
+        -&gt; tcp_init_xmit_timers
+      -&gt; inet_sk_rx_dst_set
+      -&gt; inet_csk_route_child_sock
+      -&gt; tcp_ca_openreq_child
+        -&gt; tcp_assign_congestion_control
+        -&gt; tcp_set_ca_state TCP_CA_Open
+          -&gt; bictcp_state
+      -&gt; tcp_sync_mss -&gt; dst_mtu -&gt; ipv4_mtu
+        -&gt; tcp_mtu_to_mss
+        -&gt; tcp_bound_to_half_wnd
+      -&gt; dst_metric_advmss -&gt; ipv4_default_advmss
+      -&gt; tcp_initialize_rcv_mss
+      -&gt; __inet_inherit_port -&gt; inet_bind_hash
+      -&gt; inet_ehash_nolisten
+        -&gt; inet_ehash_insert
+          -&gt; sk_nulls_del_node_init_rcu
+          -&gt; __sk_nulls_add_node_rcu
+        -&gt; sock_prot_inuse_add
+      -&gt; tcp_move_syn
+    -&gt; sock_rps_save_rxhash
+    -&gt; tcp_synack_rtt_meas
+      -&gt; skb_mstamp_us_delta
+      -&gt; tcp_ack_update_rtt
+        -&gt; tcp_update_rtt_min
+        -&gt; tcp_rtt_estimator
+        -&gt; tcp_set_rto
+    -&gt; inet_csk_complete_hashdance
+      -&gt; inet_csk_reqsk_queue_drop
+      -&gt; reqsk_queue_removed
+      -&gt; inet_csk_reqsk_queue_add
+        -&gt; sk_acceptq_added
+  -&gt; tcp_child_process
+    -&gt; tcp_rcv_state_process
+      -&gt; tcp_validate_incoming
+      -&gt; tcp_ack
+        -&gt; tcp_ack_update_window
+        -&gt; tcp_ecn_rcv_ecn_echo  // false
+        -&gt; tcp_in_ack_event
+        return 1
+      -&gt; sk_state == TCP_SYN_RECV
+      -&gt; inet_sk_rebuild_header  // icsk-&gt;icsk_af_ops-&gt;rebuild_header
+      -&gt; tcp_init_congestion_control -&gt; bictcp_init
+      -&gt; tcp_mtup_init
+      -&gt; tcp_init_buffer_space
+        -&gt; tcp_fixup_rcvbuf
+        -&gt; tcp_sndbuf_expand
+        -&gt; tcp_full_space
+      TCP_ESTABLISHED
+      sk-&gt;sk_state_change -&gt; sock_def_wakeup
+      -&gt; tcp_init_metrics
+      -&gt; tcp_update_pacing_rate
+      -&gt; tcp_initialize_rcv_mss
+      -&gt; tcp_fast_path_on
+      // out of switch
+      -&gt; tcp_urg
+      // switch TCP_ESTABLISHED
+      -&gt; tcp_data_queue
+      -&gt; tcp_data_snd_check
+      -&gt; tcp_ack_snd_check
+    -&gt; parent-&gt;sk_data_ready -&gt; sock_def_readable -&gt; wake_up_interruptible_sync_poll
+</code></pre>
+
+<h1 id="connect">connect</h1>
+<h1 id="tcp_v4_rcv">tcp_v4_rcv</h1>
+<h1 id="read">read</h1>
+<h1 id="write">write</h1></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

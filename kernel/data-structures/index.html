@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Data Structures - Shuo Chen's Notes</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../">Overview</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Data Structures</a>
+</li>
+                            
+<li >
+    <a href="../callgraph/">Call Graphs</a>
+</li>
+                        </ul>
+                    </li>
+                    <li >
+                        <a href="../../lua/">Lua</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../callgraph/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#net_proto_family">net_proto_family</a></li>
+        <li class="main "><a href="#inet_protosw">inet_protosw</a></li>
+        <li class="main "><a href="#skbuff">skbuff</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<table>
+<thead>
+<tr>
+<th>family</th>
+<th>type</th>
+<th>protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AF_UNIX=1</td>
+<td>SOCK_STREAM=1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>AF_UNIX</td>
+<td>SOCK_DGRAM=2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>AF_INET=2</td>
+<td>SOCK_STREAM</td>
+<td>IPPROTO_TCP=6</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_DGRAM</td>
+<td>IPPROTO_UDP=17</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_DGRAM</td>
+<td>IPPROTO_ICMP=1</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_RAW=3</td>
+<td>IPPROTO_IP=0</td>
+</tr>
+<tr>
+<td>NPROTO=AF_MAX=41</td>
+<td>SOCK_MAX=11</td>
+<td>no max?</td>
+</tr>
+</tbody>
+</table>
+<h1 id="net_proto_family">net_proto_family</h1>
+<pre><code class="c">// include/linux/net.h
+// How to create a socket for an address family
+struct net_proto_family {
+  int family;  // AF_INET, AF_UNIX, AF_INET6, etc. must: 0 &lt;= family &lt; NPROTO
+  int (*create)(struct net *net, struct socket *sock, int protocol, int kern);
+  struct module *owner;
+};
+
+</code></pre>
+
+<pre><code class="c">// net/socket.c
+static const struct net_proto_family *net_families[NPROTO];
+
+// net/ipv4/af_inet.c
+static int inet_create(struct net *net, struct socket *sock, int protocol, int kern);
+
+static const struct net_proto_family inet_family_ops = {
+  .family = PF_INET,
+  .create = inet_create,
+  .owner  = THIS_MODULE
+};
+
+// inet_init() calls sock_register():
+net_families[AF_INET] = &amp;inet_family_ops;
+</code></pre>
+
+<pre><code>int sys_socket(int family, int type, int protocol)
+  -&gt; struct socket* sock_create(family, type, protocol)
+    -&gt; __sock_create(family, type, protocol)
+      -&gt; struct socket* sock = sock_alloc()
+        -&gt; new_inode_pseudo(super_block of sockfs)      // fs/inode.c
+      -&gt; net_families[family]-&gt;create(sock, protocol)
+        -&gt; inet_create(sock, protocol)                  // net/ipv4/af_inet.c
+  -&gt; sock_map_fd()
+
+inet_create(sock, protocol)
+  -&gt; find inet_protosw for sock-&gt;type &amp; protocol
+  -&gt; struct sock* sk = sk_alloc()
+    -&gt; sk_prot_alloc -&gt; kmem_cache_alloc (tcp_prot is 1296B)
+  -&gt; sock_init_data
+  -&gt; sk-&gt;sk_prot-&gt;init(sk)
+    -&gt; tcp_v4_init_sock
+</code></pre>
+
+<h1 id="inet_protosw">inet_protosw</h1>
+<pre><code class="c">// include/net/protocol.h
+/* This is used to register socket interfaces for IP protocols.  */
+struct inet_protosw {
+  struct list_head list;
+
+  /* These two fields form the lookup key.  */
+  unsigned short   type;     /* This is the 2nd argument to socket(2).  eg. SOCK_STREAM, SOCK_DGRAM */
+  unsigned short   protocol; /* This is the L4 protocol number.  eg. IPPROTO_TCP, IPPROTO_TCP */
+
+  struct proto           *prot;
+  const struct proto_ops *ops;
+
+  unsigned char    flags;      /* See INET_PROTOSW_* below.  */
+};
+#define INET_PROTOSW_REUSE      0x01  /* Are ports automatically reusable? */
+#define INET_PROTOSW_PERMANENT  0x02  /* Permanent protocols are unremovable. */
+#define INET_PROTOSW_ICSK       0x04  /* Is this an inet_connection_sock? */
+</code></pre>
+
+<pre><code class="c">// net/ipv4/af_inet.c
+/* The inetsw table contains everything that inet_create needs to
+ * build a new socket.
+ */
+static struct list_head inetsw[SOCK_MAX];
+static DEFINE_SPINLOCK(inetsw_lock);
+
+/* Upon startup we insert all the elements in inetsw_array[] into
+ * the linked list inetsw.
+ */
+static struct inet_protosw inetsw_array[] =
+{
+  {
+    .type =       SOCK_STREAM,
+    .protocol =   IPPROTO_TCP,
+    .prot =       &amp;tcp_prot,
+    .ops =        &amp;inet_stream_ops,
+    .flags =      INET_PROTOSW_PERMANENT | INET_PROTOSW_ICSK,
+  },
+  {
+    .type =       SOCK_DGRAM,
+    .protocol =   IPPROTO_UDP,
+    .prot =       &amp;udp_prot,
+    .ops =        &amp;inet_dgram_ops,
+    .flags =      INET_PROTOSW_PERMANENT,
+  },
+  {
+    .type =       SOCK_DGRAM,
+    .protocol =   IPPROTO_ICMP,
+    .prot =       &amp;ping_prot,
+    .ops =        &amp;inet_dgram_ops,
+    .flags =      INET_PROTOSW_REUSE,
+  },
+  {
+    .type =       SOCK_RAW,
+    .protocol =   IPPROTO_IP,        /* wild card */
+    .prot =       &amp;raw_prot,
+    .ops =        &amp;inet_sockraw_ops,
+    .flags =      INET_PROTOSW_REUSE,
+  }
+};
+
+#define INETSW_ARRAY_LEN ARRAY_SIZE(inetsw_array)
+
+// inet_init()
+  sock_register(&amp;inet_family_ops);
+
+  /* Register the socket-side information for inet_create. */
+  for (struct list_head *r = &amp;inetsw[0]; r &lt; &amp;inetsw[SOCK_MAX]; ++r)
+    INIT_LIST_HEAD(r);
+
+  for (struct inet_protosw *q = inetsw_array; q &lt; &amp;inetsw_array[INETSW_ARRAY_LEN]; ++q)
+    inet_register_protosw(q);
+</code></pre>
+
+<p>After Initialization:
+<img alt="inetsw" src="../inetsw.png" /></p>
+<h1 id="skbuff">skbuff</h1>
+<p>A sample of receive skb for TCP SYN segment:
+<img alt="skbuff" src="../skbuff.png" /></p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

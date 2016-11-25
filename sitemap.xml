@@ -9,4 +9,34 @@
     </url>
     
 
+    
+        
+    <url>
+     <loc>/kernel/</loc>
+     <lastmod>2016-11-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/kernel/data-structures/</loc>
+     <lastmod>2016-11-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/kernel/callgraph/</loc>
+     <lastmod>2016-11-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+    <url>
+     <loc>/lua/</loc>
+     <lastmod>2016-11-25</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
 </urlset>
