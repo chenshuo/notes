@@ -7,3 +7,4 @@ pages:
     - 'Data Structures': kernel/data-structures.md
     - 'Call Graphs': kernel/callgraph.md
   - Lua: lua.md
+  - lcc: lcc.md
