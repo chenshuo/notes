@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>lcc - Shuo Chen's Notes</title>
+        <title>Bugs - Shuo Chen's Notes</title>
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
@@ -48,8 +48,8 @@
                     <li >
                         <a href="..">Home</a>
                     </li>
-                    <li >
-                        <a href="../bugs/">Bugs</a>
+                    <li class="active">
+                        <a href="./">Bugs</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
@@ -64,8 +64,8 @@
 </li>
                         </ul>
                     </li>
-                    <li class="active">
-                        <a href="./">lcc</a>
+                    <li >
+                        <a href="../lcc/">lcc</a>
                     </li>
                     <li >
                         <a href="../lua/">Lua</a>
@@ -79,12 +79,12 @@
                     </a>
                 </li>
                     <li >
-                        <a rel="next" href="../kernel/callgraph/">
+                        <a rel="next" href="..">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../lua/">
+                        <a rel="prev" href="../kernel/data-structures/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -96,26 +96,44 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#notes-on-lcc">Notes on LCC</a></li>
-            <li><a href="#callgraph-of-parsing-expressions">Callgraph of parsing expressions</a></li>
-            <li><a href="#callgraph-of-parsing-statements">Callgraph of parsing statements</a></li>
-            <li><a href="#calltree-of-compiling-an-empty-program">Calltree of compiling an empty program</a></li>
+        <li class="main active"><a href="#bugs">Bugs</a></li>
+            <li><a href="#gcc">GCC</a></li>
+            <li><a href="#glibc">Glibc</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="notes-on-lcc">Notes on LCC</h1>
-<h2 id="callgraph-of-parsing-expressions">Callgraph of parsing expressions</h2>
-<p><img alt="expr" src="../lcc/expr.png" /></p>
-<h2 id="callgraph-of-parsing-statements">Callgraph of parsing statements</h2>
-<p><img alt="statement" src="../lcc/stmt.png" /></p>
-<h2 id="calltree-of-compiling-an-empty-program">Calltree of compiling an empty program</h2>
-<p><a href="../lcc/calltree.html">Calltree of lcc 4.2</a> for following simple program:</p>
-<pre><code>int main()
+<h1 id="bugs">Bugs</h1>
+<h2 id="gcc">GCC</h2>
+<h3 id="bug-54812-private-default-destructor-is-public"><a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812">Bug 54812</a>: <code>private</code> <code>=default</code> destructor is <code>public</code></h3>
+<p>Delete expression doesn't respect access of defaulted destructor</p>
+<pre><code class="cpp">struct Base
 {
-  return 0;
+ private:
+  ~Base() = default;
+};
+
+int main()
+{
+  Base* p = new Base;
+  delete p;
 }
-</code></pre></div>
+</code></pre>
+
+<blockquote>
+<p><a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812#c10">Quote:</a> The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.</p>
+</blockquote>
+<p>Fixed in 4.9.0, by <a href="https://gcc.gnu.org/viewcvs/gcc?view=revision&amp;revision=203985">r203985</a>.
+Test case added by <a href="https://gcc.gnu.org/viewcvs/gcc?view=revision&amp;revision=204057">r204057</a>.</p>
+<h2 id="glibc">Glibc</h2>
+<h3 id="strstr3"><code>strstr(3)</code></h3>
+<p>Since glibc 2.9, strstr(3) may use <a href="http://www-igm.univ-mlv.fr/~lecroq/string/node26.html">Two Way algorithm</a> in some cases, but the impl. had several bugs:</p>
+<ul>
+<li><a href="https://sourceware.org/bugzilla/show_bug.cgi?id=12092">Bug 12092</a></li>
+<li><a href="https://sourceware.org/bugzilla/show_bug.cgi?id=12100">Bug 12100</a></li>
+<li><a href="https://sourceware.org/bugzilla/show_bug.cgi?id=14602">Bug 14602</a></li>
+<li>More?</li>
+</ul></div>
         </div>
 
         <footer class="col-md-12">

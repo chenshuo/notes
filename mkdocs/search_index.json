@@ -21,6 +21,36 @@
             "title": "Project layout"
         }, 
         {
+            "location": "/bugs/", 
+            "text": "Bugs\n\n\nGCC\n\n\nBug 54812\n: \nprivate\n \n=default\n destructor is \npublic\n\n\nDelete expression doesn't respect access of defaulted destructor\n\n\nstruct Base\n{\n private:\n  ~Base() = default;\n};\n\nint main()\n{\n  Base* p = new Base;\n  delete p;\n}\n\n\n\n\n\n\nQuote:\n The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.\n\n\n\n\nFixed in 4.9.0, by \nr203985\n.\nTest case added by \nr204057\n.\n\n\nGlibc\n\n\nstrstr(3)\n\n\nSince glibc 2.9, strstr(3) may use \nTwo Way algorithm\n in some cases, but the impl. had several bugs:\n\n\n\n\nBug 12092\n\n\nBug 12100\n\n\nBug 14602\n\n\nMore?", 
+            "title": "Bugs"
+        }, 
+        {
+            "location": "/bugs/#bugs", 
+            "text": "", 
+            "title": "Bugs"
+        }, 
+        {
+            "location": "/bugs/#gcc", 
+            "text": "", 
+            "title": "GCC"
+        }, 
+        {
+            "location": "/bugs/#bug-54812-private-default-destructor-is-public", 
+            "text": "Delete expression doesn't respect access of defaulted destructor  struct Base\n{\n private:\n  ~Base() = default;\n};\n\nint main()\n{\n  Base* p = new Base;\n  delete p;\n}   Quote:  The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.   Fixed in 4.9.0, by  r203985 .\nTest case added by  r204057 .", 
+            "title": "Bug 54812: private =default destructor is public"
+        }, 
+        {
+            "location": "/bugs/#glibc", 
+            "text": "", 
+            "title": "Glibc"
+        }, 
+        {
+            "location": "/bugs/#strstr3", 
+            "text": "Since glibc 2.9, strstr(3) may use  Two Way algorithm  in some cases, but the impl. had several bugs:   Bug 12092  Bug 12100  Bug 14602  More?", 
+            "title": "strstr(3)"
+        }, 
+        {
             "location": "/kernel/data-structures/", 
             "text": "family\n\n\ntype\n\n\nprotocol\n\n\n\n\n\n\n\n\n\n\nAF_UNIX=1\n\n\nSOCK_STREAM=1\n\n\n0\n\n\n\n\n\n\nAF_UNIX\n\n\nSOCK_DGRAM=2\n\n\n0\n\n\n\n\n\n\nAF_INET=2\n\n\nSOCK_STREAM\n\n\nIPPROTO_TCP=6\n\n\n\n\n\n\nAF_INET\n\n\nSOCK_DGRAM\n\n\nIPPROTO_UDP=17\n\n\n\n\n\n\nAF_INET\n\n\nSOCK_DGRAM\n\n\nIPPROTO_ICMP=1\n\n\n\n\n\n\nAF_INET\n\n\nSOCK_RAW=3\n\n\nIPPROTO_IP=0\n\n\n\n\n\n\nNPROTO=AF_MAX=41\n\n\nSOCK_MAX=11\n\n\nno max?\n\n\n\n\n\n\n\n\nnet_proto_family\n\n\n// include/linux/net.h\n// How to create a socket for an address family\nstruct net_proto_family {\n  int family;  // AF_INET, AF_UNIX, AF_INET6, etc. must: 0 \n= family \n NPROTO\n  int (*create)(struct net *net, struct socket *sock, int protocol, int kern);\n  struct module *owner;\n};\n\n\n\n\n\n// net/socket.c\nstatic const struct net_proto_family *net_families[NPROTO];\n\n// net/ipv4/af_inet.c\nstatic int inet_create(struct net *net, struct socket *sock, int protocol, int kern);\n\nstatic const struct net_proto_family inet_family_ops = {\n  .family = PF_INET,\n  .create = inet_create,\n  .owner  = THIS_MODULE\n};\n\n// inet_init() calls sock_register():\nnet_families[AF_INET] = \ninet_family_ops;\n\n\n\n\nint sys_socket(int family, int type, int protocol)\n  -\n struct socket* sock_create(family, type, protocol)\n    -\n __sock_create(family, type, protocol)\n      -\n struct socket* sock = sock_alloc()\n        -\n new_inode_pseudo(super_block of sockfs)      // fs/inode.c\n      -\n net_families[family]-\ncreate(sock, protocol)\n        -\n inet_create(sock, protocol)                  // net/ipv4/af_inet.c\n  -\n sock_map_fd()\n\ninet_create(sock, protocol)\n  -\n find inet_protosw for sock-\ntype \n protocol\n  -\n struct sock* sk = sk_alloc()\n    -\n sk_prot_alloc -\n kmem_cache_alloc (tcp_prot is 1296B)\n  -\n sock_init_data\n  -\n sk-\nsk_prot-\ninit(sk)\n    -\n tcp_v4_init_sock\n\n\n\n\ninet_protosw\n\n\n// include/net/protocol.h\n/* This is used to register socket interfaces for IP protocols.  */\nstruct inet_protosw {\n  struct list_head list;\n\n  /* These two fields form the lookup key.  */\n  unsigned short   type;     /* This is the 2nd argument to socket(2).  eg. SOCK_STREAM, SOCK_DGRAM */\n  unsigned short   protocol; /* This is the L4 protocol number.  eg. IPPROTO_TCP, IPPROTO_TCP */\n\n  struct proto           *prot;\n  const struct proto_ops *ops;\n\n  unsigned char    flags;      /* See INET_PROTOSW_* below.  */\n};\n#define INET_PROTOSW_REUSE      0x01  /* Are ports automatically reusable? */\n#define INET_PROTOSW_PERMANENT  0x02  /* Permanent protocols are unremovable. */\n#define INET_PROTOSW_ICSK       0x04  /* Is this an inet_connection_sock? */\n\n\n\n\n// net/ipv4/af_inet.c\n/* The inetsw table contains everything that inet_create needs to\n * build a new socket.\n */\nstatic struct list_head inetsw[SOCK_MAX];\nstatic DEFINE_SPINLOCK(inetsw_lock);\n\n/* Upon startup we insert all the elements in inetsw_array[] into\n * the linked list inetsw.\n */\nstatic struct inet_protosw inetsw_array[] =\n{\n  {\n    .type =       SOCK_STREAM,\n    .protocol =   IPPROTO_TCP,\n    .prot =       \ntcp_prot,\n    .ops =        \ninet_stream_ops,\n    .flags =      INET_PROTOSW_PERMANENT | INET_PROTOSW_ICSK,\n  },\n  {\n    .type =       SOCK_DGRAM,\n    .protocol =   IPPROTO_UDP,\n    .prot =       \nudp_prot,\n    .ops =        \ninet_dgram_ops,\n    .flags =      INET_PROTOSW_PERMANENT,\n  },\n  {\n    .type =       SOCK_DGRAM,\n    .protocol =   IPPROTO_ICMP,\n    .prot =       \nping_prot,\n    .ops =        \ninet_dgram_ops,\n    .flags =      INET_PROTOSW_REUSE,\n  },\n  {\n    .type =       SOCK_RAW,\n    .protocol =   IPPROTO_IP,        /* wild card */\n    .prot =       \nraw_prot,\n    .ops =        \ninet_sockraw_ops,\n    .flags =      INET_PROTOSW_REUSE,\n  }\n};\n\n#define INETSW_ARRAY_LEN ARRAY_SIZE(inetsw_array)\n\n// inet_init()\n  sock_register(\ninet_family_ops);\n\n  /* Register the socket-side information for inet_create. */\n  for (struct list_head *r = \ninetsw[0]; r \n \ninetsw[SOCK_MAX]; ++r)\n    INIT_LIST_HEAD(r);\n\n  for (struct inet_protosw *q = inetsw_array; q \n \ninetsw_array[INETSW_ARRAY_LEN]; ++q)\n    inet_register_protosw(q);\n\n\n\n\nAfter Initialization:\n\n\n\nskbuff\n\n\nA sample of receive skb for TCP SYN segment:", 
             "title": "Data Structures"
@@ -91,16 +121,6 @@
             "title": "write"
         }, 
         {
-            "location": "/lua/", 
-            "text": "Notes on Lua implementation\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\nx = 10\nprint(x)", 
-            "title": "Lua"
-        }, 
-        {
-            "location": "/lua/#notes-on-lua-implementation", 
-            "text": "Calltree of Lua 5.3  for following simple program:  x = 10\nprint(x)", 
-            "title": "Notes on Lua implementation"
-        }, 
-        {
             "location": "/lcc/", 
             "text": "Notes on LCC\n\n\nCallgraph of parsing expressions\n\n\n\n\nCallgraph of parsing statements\n\n\n\n\nCalltree of compiling an empty program\n\n\nCalltree of lcc 4.2\n for following simple program:\n\n\nint main()\n{\n  return 0;\n}", 
             "title": "lcc"
@@ -124,6 +144,16 @@
             "location": "/lcc/#calltree-of-compiling-an-empty-program", 
             "text": "Calltree of lcc 4.2  for following simple program:  int main()\n{\n  return 0;\n}", 
             "title": "Calltree of compiling an empty program"
+        }, 
+        {
+            "location": "/lua/", 
+            "text": "Notes on Lua implementation\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\nx = 10\nprint(x)", 
+            "title": "Lua"
+        }, 
+        {
+            "location": "/lua/#notes-on-lua-implementation", 
+            "text": "Calltree of Lua 5.3  for following simple program:  x = 10\nprint(x)", 
+            "title": "Notes on Lua implementation"
         }
     ]
 }
