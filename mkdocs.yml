@@ -2,9 +2,10 @@ site_name: Shuo Chen's Notes
 # theme: readthedocs
 pages:
   - Home: index.md
+  - Bugs: bugs.md
   - Kernel:
 #    - Overview: kernel.md
     - 'Data Structures': kernel/data-structures.md
     - 'Call Graphs': kernel/callgraph.md
-  - Lua: lua.md
   - lcc: lcc.md
+  - Lua: lua.md
