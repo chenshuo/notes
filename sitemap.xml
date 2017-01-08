@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>/bugs/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -21,13 +21,13 @@
         
     <url>
      <loc>/kernel/data-structures/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/kernel/callgraph/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -36,7 +36,7 @@
     
     <url>
      <loc>/lcc/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -44,7 +44,15 @@
     
     <url>
      <loc>/lua/</loc>
-     <lastmod>2016-11-30</lastmod>
+     <lastmod>2017-01-08</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/ssl/</loc>
+     <lastmod>2017-01-08</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
