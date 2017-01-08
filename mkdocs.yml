@@ -9,3 +9,4 @@ pages:
     - 'Call Graphs': kernel/callgraph.md
   - lcc: lcc.md
   - Lua: lua.md
+  - SSL: ssl.md
