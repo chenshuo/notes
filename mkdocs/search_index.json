@@ -156,6 +156,16 @@
             "title": "Notes on Lua implementation"
         }, 
         {
+            "location": "/mem/", 
+            "text": "Notes on C/C++ memory model\n\n\n\n\nThe C11 and C++11 Concurrency Model\n by Mark John Batty", 
+            "title": "mem"
+        }, 
+        {
+            "location": "/mem/#notes-on-cc-memory-model", 
+            "text": "The C11 and C++11 Concurrency Model  by Mark John Batty", 
+            "title": "Notes on C/C++ memory model"
+        }, 
+        {
             "location": "/ssl/", 
             "text": "Notes on SSL/TLS\n\n\n\n\nRFC7539\n defines ChaCha20 and Poly1305\n\n\nRFC7905\n adds TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256 (0xCCA8) etc to TLS 1.2\n\n\nThere is an old version of ECDHE_RSA_CHACHA20_POLY1305_OLD (0xCC13) exists in \ndraft\n and OpenSSL \ncode\n.\n\n\nOpenSSL will prefer AES if hardware supports it, otherwise prefer ChaCha20 over AES, in \nssl_create_cipher_list()\n.\n\n\nOpenSSL 1.1.0 provides \nSSL_SESSION_get_master_key()\n function.", 
             "title": "SSL"
