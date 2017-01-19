@@ -3,6 +3,7 @@ site_name: Shuo Chen's Notes
 pages:
   - Home: index.md
   - Bugs: bugs.md
+  - Git: git.md
   - Kernel:
 #    - Overview: kernel.md
     - 'Data Structures': kernel/data-structures.md
