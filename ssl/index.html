@@ -114,6 +114,53 @@
 <li>There is an old version of ECDHE_RSA_CHACHA20_POLY1305_OLD (0xCC13) exists in <a href="https://tools.ietf.org/html/draft-agl-tls-chacha20poly1305">draft</a> and OpenSSL <a href="https://boringssl.googlesource.com/boringssl/+/271777f5ac6c7f7d1aaf95b91c5a5bef86da6363">code</a>.</li>
 <li>OpenSSL will prefer AES if hardware supports it, otherwise prefer ChaCha20 over AES, in <a href="https://github.com/libressl-portable/openbsd/blob/master/src/lib/libssl/ssl_ciph.c#L1397">ssl_create_cipher_list()</a>.</li>
 <li>OpenSSL 1.1.0 provides <a href="https://www.openssl.org/docs/man1.1.0/ssl/SSL_get_client_random.html">SSL_SESSION_get_master_key()</a> function.</li>
+<li>Before OpenSSL 1.1.0, there is a free-list (~32k per SSL) unless disable with OPENSSL_NO_BUF_FREELISTS or set SSL_MODE_RELEASE_BUFFERS, the free list is freed in <code>SSL_CTX_free()</code> not <code>SSL_free()</code>.</li>
+</ul>
+<p><a href="https://github.com/openssl/openssl/commit/63c574f6a639cfa3f53476080054526e6bfa3bc9">commit 63c574f6</a> in OpenSSL:</p>
+<pre><code>commit 63c574f6a639cfa3f53476080054526e6bfa3bc9
+Author: Rich Salz &lt;rsalz@openssl.org&gt;
+Date:   Tue Jan 27 16:43:53 2015 -0500
+
+    OPENSSL_NO_XXX cleanup: OPENSSL_NO_BUF_FREELISTS
+
+    Remove OPENSSL_NO_BUF_FREELISTS. This was turned on by default,
+    so the work here is removing the 'maintain our own freelist' code.
+    Also removed a minor old Windows-multibyte/widechar conversion flag.
+</code></pre>
+
+<p><a href="https://github.com/libressl-portable/openbsd/commit/72e56bc4947e53cec535f2fc84e00a3c278edf29">commit 72e56bc4</a> in LibreSSL:</p>
+<pre><code>commit 72e56bc4947e53cec535f2fc84e00a3c278edf29
+Author: tedu &lt;&gt;
+Date:   Wed Apr 16 21:16:33 2014 +0000
+
+    TANSTAAFL - delete the buf freelist code. if you need a better malloc, get
+    a better malloc. ok beck deraadt
+
+diff --git a/src/lib/libssl/s3_both.c b/src/lib/libssl/s3_both.c
+</code></pre>
+
+<p><a href="https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch">TANSTAAFL - There ain't no such thing as a free lunch</a></p>
+<p><a href="https://boringssl.googlesource.com/boringssl/+/983f6bdb5888d7074d7ee67d5e3741bcf1027108%5E%21/">commit 983f6bdb</a> in BoringSSL:</p>
+<pre><code>commit 983f6bdb5888d7074d7ee67d5e3741bcf1027108
+Author: Alex Chernyakhovsky &lt;achernya@google.com&gt;
+Date:   Sun Aug 3 15:48:35 2014 -0400
+
+    Set OPENSSL_NO_BUF_FREELISTS
+
+    The memory freelist maintained by OpenSSL claims to be a performance
+    optimization for platforms that have a slow malloc/free
+    implementation. This should not be the case on modern
+    linux/glibc. Remove the freelist as it poses a potential security
+    hazard of buffer-reuse that is of &quot;initialized&quot; memory that will not
+    be caught be tools such as valgrind.
+
+    Change-Id: I3cfa6a05f9bdfbbba7820060bae5a673dee43014
+    Reviewed-on: https://boringssl-review.googlesource.com/1385
+    Reviewed-by: Adam Langley &lt;agl@google.com&gt;
+</code></pre>
+
+<ul>
+<li>After <a href="https://boringssl.googlesource.com/boringssl/+/b8d28cf532e6dde3d5684ededb3878b05e692e00">commit b8d28cf532</a> BoringSSL calls <code>ssl_write_buffer_flush()</code> and <code>ssl_write_buffer_clear()</code> for each <code>SSL_write()</code>, so its memory footprint is much smaller than other SSL libraries (~32k) when no data is pending.</li>
 </ul></div>
         </div>
 
