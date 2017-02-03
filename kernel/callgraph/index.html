@@ -247,22 +247,27 @@ struct inet_hashinfo {
             -&gt; reqsk_alloc
                req-&gt;rsk_listener = sk_listener;
             ireq-&gt;ireq_state = TCP_NEW_SYN_RECV;
+            ireq-&gt;ireq_family = sk_listener-&gt;sk_family;
           -&gt; tcp_parse_options
           -&gt; tcp_openreq_init
           -&gt; tcp_v4_init_req  // af_ops-&gt;init_req
             -&gt; tcp_v4_save_options
-          -&gt; tcp_v4_init_sequence  // af_ops-&gt;init_seq
+          -&gt; isn = tcp_v4_init_sequence  // af_ops-&gt;init_seq
           -&gt; tcp_v4_route_req  // af_ops-&gt;route_req
             -&gt; inet_csk_route_req
               -&gt; flowi4_init_output
               -&gt; ip_route_output_flow
           -&gt; tcp_ecn_create_request
+          -&gt; tcp_openreq_init_rwin
+            -&gt; tcp_select_initial_window
           -&gt; tcp_reqsk_record_syn
+          -&gt; tcp_try_fastopen
           -&gt; inet_csk_reqsk_queue_hash_add
-            -&gt; reqsk_queue_hash_req
+            -&gt; reqsk_queue_hash_req  //***
               -&gt; inet_ehash_insert
                 -&gt; __sk_nulls_add_node_rcu
             -&gt; inet_csk_reqsk_queue_added
+              inet_csk(sk)-&gt;icsk_accept_queue.qlen++
           -&gt; tcp_v4_send_synack  // af_ops-&gt;send_synack
             -&gt; tcp_make_synack
             -&gt; __tcp_v4_send_check
@@ -277,8 +282,9 @@ struct inet_hashinfo {
 <pre><code>tcp_v4_rcv
   -&gt; __inet_lookup_skb
     -&gt; __inet_lookup
-      -&gt; __inet_lookup_established  // found
+      -&gt; __inet_lookup_established  // found tcp_request_sock
   -&gt; sk-&gt;sk_state == TCP_NEW_SYN_RECV
+    sk = req-&gt;rsk_listener;
   -&gt; tcp_check_req
     -&gt; tcp_parse_options
       -&gt; tcp_paws_reject
@@ -287,24 +293,27 @@ struct inet_hashinfo {
       -&gt; tcp_create_openreq_child
         -&gt; inet_csk_clone_lock
           -&gt; sk_clone_lock
-            -&gt; sk_prot_alloc
+            -&gt; newsk = sk_prot_alloc  // new tcp_sock
+            -&gt; sock_copy
+          newsk-&gt;sk_state = TCP_SYN_RECV;
         -&gt; tcp_init_xmit_timers
       -&gt; inet_sk_rx_dst_set
       -&gt; inet_csk_route_child_sock
       -&gt; tcp_ca_openreq_child
         -&gt; tcp_assign_congestion_control
         -&gt; tcp_set_ca_state TCP_CA_Open
-          -&gt; bictcp_state
       -&gt; tcp_sync_mss -&gt; dst_mtu -&gt; ipv4_mtu
         -&gt; tcp_mtu_to_mss
         -&gt; tcp_bound_to_half_wnd
       -&gt; dst_metric_advmss -&gt; ipv4_default_advmss
       -&gt; tcp_initialize_rcv_mss
-      -&gt; __inet_inherit_port -&gt; inet_bind_hash
+      -&gt; __inet_inherit_port
+        -&gt; inet_bind_hash  // put newsk in bind_bucket
+        inet_csk(sk)-&gt;icsk_bind_hash = tb;
       -&gt; inet_ehash_nolisten
-        -&gt; inet_ehash_insert
-          -&gt; sk_nulls_del_node_init_rcu
-          -&gt; __sk_nulls_add_node_rcu
+        -&gt; inet_ehash_insert(newsk, reqsk)
+          -&gt; sk_nulls_del_node_init_rcu(osk)
+          -&gt; __sk_nulls_add_node_rcu(sk, list)
         -&gt; sock_prot_inuse_add
       -&gt; tcp_move_syn
     -&gt; sock_rps_save_rxhash
@@ -316,26 +325,32 @@ struct inet_hashinfo {
         -&gt; tcp_set_rto
     -&gt; inet_csk_complete_hashdance
       -&gt; inet_csk_reqsk_queue_drop
+        -&gt; reqsk_queue_unlink
+          -&gt; reqsk_put(req)
+          return found(false)
       -&gt; reqsk_queue_removed
+        &amp;inet_csk(sk)-&gt;icsk_accept_queue.qlen--
       -&gt; inet_csk_reqsk_queue_add
+        queue-&gt;rskq_accept_head = req  // first
         -&gt; sk_acceptq_added
+          sk-&gt;sk_ack_backlog++;  // listen_sk
   -&gt; tcp_child_process
-    -&gt; tcp_rcv_state_process
+    -&gt; tcp_rcv_state_process(child, skb)
       -&gt; tcp_validate_incoming
       -&gt; tcp_ack
         -&gt; tcp_ack_update_window
         -&gt; tcp_ecn_rcv_ecn_echo  // false
         -&gt; tcp_in_ack_event
         return 1
-      -&gt; sk_state == TCP_SYN_RECV
+      switch(sk_state) case TCP_SYN_RECV:
       -&gt; inet_sk_rebuild_header  // icsk-&gt;icsk_af_ops-&gt;rebuild_header
-      -&gt; tcp_init_congestion_control -&gt; bictcp_init
+      -&gt; tcp_init_congestion_control
       -&gt; tcp_mtup_init
       -&gt; tcp_init_buffer_space
         -&gt; tcp_fixup_rcvbuf
         -&gt; tcp_sndbuf_expand
         -&gt; tcp_full_space
-      TCP_ESTABLISHED
+      tcp_set_state(sk, TCP_ESTABLISHED)
       sk-&gt;sk_state_change -&gt; sock_def_wakeup
       -&gt; tcp_init_metrics
       -&gt; tcp_update_pacing_rate
@@ -343,8 +358,8 @@ struct inet_hashinfo {
       -&gt; tcp_fast_path_on
       // out of switch
       -&gt; tcp_urg
-      // switch TCP_ESTABLISHED
-      -&gt; tcp_data_queue
+      switch TCP_ESTABLISHED
+        -&gt; tcp_data_queue
       -&gt; tcp_data_snd_check
       -&gt; tcp_ack_snd_check
     -&gt; parent-&gt;sk_data_ready -&gt; sock_def_readable -&gt; wake_up_interruptible_sync_poll
@@ -474,9 +489,22 @@ struct inet_hashinfo {
 </code></pre>
 
 <h1 id="accept">accept</h1>
-<pre><code class="text">sys_accept
+<pre><code class="text">sys_accept4
+  -&gt; newsock = sock_alloc
+  -&gt; newfd = get_unused_fd_flags
+  -&gt; newfile = sock_alloc_file(newsock, ...)
   -&gt; inet_accept (sock-&gt;ops-&gt;accept)
-    -&gt; inet_csk_accept (sk1-&gt;sk_prot-&gt;accept)
+    -&gt; sk2 = inet_csk_accept (sk1-&gt;sk_prot-&gt;accept)
+      queue = &amp;icsk-&gt;icsk_accept_queue;
+      req = reqsk_queue_remove(queue, sk);
+        req = queue-&gt;rskq_accept_head;
+        -&gt; sk_acceptq_removed(parent);  // sk-&gt;sk_ack_backlog--;
+      newsk = req-&gt;sk
+      -&gt; release_sock(sk)
+      -&gt; reqsk_put(req) -&gt; reqsk_free
+      return newsk
+    -&gt; sock_graft(sk2, newsock)
+  -&gt; fd_install(newfd, newfile)
 </code></pre>
 
 <h1 id="read">read</h1>
