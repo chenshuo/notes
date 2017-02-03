@@ -105,88 +105,88 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#net_proto_family">net_proto_family</a></li>
-        <li class="main "><a href="#struct-socket">struct socket</a></li>
+        <li class="main active"><a href="#file-descriptor-table">File Descriptor Table</a></li>
+        <li class="main "><a href="#struct-socket">struct socket{}</a></li>
+        <li class="main "><a href="#socket2">socket(2)</a></li>
+        <li class="main "><a href="#memory-usage">Memory usage</a></li>
+        <li class="main "><a href="#net_proto_family">net_proto_family</a></li>
         <li class="main "><a href="#inet_protosw">inet_protosw</a></li>
         <li class="main "><a href="#skbuff">skbuff</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<table>
-<thead>
-<tr>
-<th>family</th>
-<th>type</th>
-<th>protocol</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>AF_UNIX=1</td>
-<td>SOCK_STREAM=1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>AF_UNIX</td>
-<td>SOCK_DGRAM=2</td>
-<td>0</td>
-</tr>
-<tr>
-<td>AF_INET=2</td>
-<td>SOCK_STREAM</td>
-<td>IPPROTO_TCP=6</td>
-</tr>
-<tr>
-<td>AF_INET</td>
-<td>SOCK_DGRAM</td>
-<td>IPPROTO_UDP=17</td>
-</tr>
-<tr>
-<td>AF_INET</td>
-<td>SOCK_DGRAM</td>
-<td>IPPROTO_ICMP=1</td>
-</tr>
-<tr>
-<td>AF_INET</td>
-<td>SOCK_RAW=3</td>
-<td>IPPROTO_IP=0</td>
-</tr>
-<tr>
-<td>NPROTO=AF_MAX=41</td>
-<td>SOCK_MAX=11</td>
-<td>no max?</td>
-</tr>
-</tbody>
-</table>
-<h1 id="net_proto_family">net_proto_family</h1>
-<pre><code class="c">// include/linux/net.h
-// How to create a socket for an address family
-struct net_proto_family {
-  int family;  // AF_INET, AF_UNIX, AF_INET6, etc. must: 0 &lt;= family &lt; NPROTO
-  int (*create)(struct net *net, struct socket *sock, int protocol, int kern);
-  struct module *owner;
+<h1 id="file-descriptor-table">File Descriptor Table</h1>
+<pre><code class="c">// include/linux/sched.h
+
+struct task_struct {
+  // ...
+  /* open file information */
+        struct files_struct *files;
+  // ...
+};
+
+// include/linux/fdtable.h
+
+struct fdtable {
+        unsigned int max_fds;
+        struct file __rcu **fd;      /* current fd array */
+        unsigned long *close_on_exec;
+        unsigned long *open_fds;
+        unsigned long *full_fds_bits;
+        struct rcu_head rcu;
+};
+
+/*
+ * Open file table structure
+ */
+struct files_struct {
+  /*
+   * read mostly part
+   */
+        atomic_t count;
+        bool resize_in_progress;
+        wait_queue_head_t resize_wait;
+
+        struct fdtable __rcu *fdt;
+        struct fdtable fdtab;
+  /*
+   * written part on a separate cache line in SMP
+   */
+        spinlock_t file_lock ____cacheline_aligned_in_smp;
+        unsigned int next_fd;
+        unsigned long close_on_exec_init[1];
+        unsigned long open_fds_init[1];
+        unsigned long full_fds_bits_init[1];
+        struct file __rcu * fd_array[NR_OPEN_DEFAULT];
+};
+
+// include/linux/fs.h
+
+struct file {
+        union {
+                struct llist_node       fu_llist;
+                struct rcu_head         fu_rcuhead;
+        } f_u;
+        struct path             f_path;
+        struct inode            *f_inode;       /* cached value */
+        const struct file_operations    *f_op;
+
+        // ...
+
+        /* needed for tty driver, and maybe others */
+        void                    *private_data;
+
+#ifdef CONFIG_EPOLL
+        /* Used by fs/eventpoll.c to link all the hooks to this file */
+        struct list_head        f_ep_links;
+        struct list_head        f_tfile_llink;
+#endif
 };
 
 </code></pre>
 
-<pre><code class="c">// net/socket.c
-static const struct net_proto_family *net_families[NPROTO];
-
-// net/ipv4/af_inet.c
-static int inet_create(struct net *net, struct socket *sock, int protocol, int kern);
-
-static const struct net_proto_family inet_family_ops = {
-  .family = PF_INET,
-  .create = inet_create,
-  .owner  = THIS_MODULE
-};
-
-// inet_init() calls sock_register():
-net_families[AF_INET] = &amp;inet_family_ops;
-</code></pre>
-
-<h1 id="struct-socket"><code>struct socket</code></h1>
+<h1 id="struct-socket"><code>struct socket{}</code></h1>
 <pre><code class="c">// include/linux/net.h
 
 struct socket_wq {
@@ -243,24 +243,16 @@ struct inode {
 // ...
         unsigned long           i_ino;      // sockfs_dname: &quot;socket:[%lu]&quot;
 // ...
-};
-
-struct file {
-// ...
-        struct inode            *f_inode;
-        const struct file_operations    *f_op;
-// ...
-        unsigned int            f_flags;
-// ...
-        void                    *private_data;
+        union {
+                struct hlist_head       i_dentry;
+                struct rcu_head         i_rcu;
+        };
 // ...
 };
+</code></pre>
 
-
-# `socket`
-
-```text
-int sys_socket(int family, int type, int protocol)
+<h1 id="socket2"><code>socket(2)</code></h1>
+<pre><code class="text">int sys_socket(int family, int type, int protocol)
   -&gt; struct socket* sock_create(family, type, protocol)
     -&gt; __sock_create(family, type, protocol)
       -&gt; struct socket* sock = sock_alloc()
@@ -303,6 +295,125 @@ inet_create(sock, protocol)
         -&gt; tcp_assign_congestion_control
         sk-&gt;sk_state = TCP_CLOSE;
       icsk-&gt;icsk_af_ops = &amp;ipv4_specific;
+</code></pre>
+
+<p>After <code>socket()</code>
+<img alt="inode" src="../inode.png" /></p>
+<h1 id="memory-usage">Memory usage</h1>
+<p>On Ubuntu 14.04, <code>/proc/slabinfo</code></p>
+<table>
+<thead>
+<tr>
+<th>struct</th>
+<th>size</th>
+<th>cache name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file</code></td>
+<td>216</td>
+<td>"filp"</td>
+</tr>
+<tr>
+<td><code>dentry</code></td>
+<td>192</td>
+<td>"dentry"</td>
+</tr>
+<tr>
+<td><code>socket_alloc</code></td>
+<td>640</td>
+<td>"sock_inode_cache"</td>
+</tr>
+<tr>
+<td><code>tcp_sock</code></td>
+<td>1792</td>
+<td>"TCP"</td>
+</tr>
+<tr>
+<td><code>socket_wq</code></td>
+<td>48</td>
+<td>"kmalloc-64"?</td>
+</tr>
+<tr>
+<td><code>inet_bind_bucket</code></td>
+<td>48</td>
+<td>"tcp_bind_bucket"?</td>
+</tr>
+</tbody>
+</table>
+<p>Total : 2888 bytes/socket, not including send/receive buffers. For client sockets, +48B for <code>inet_bind_bucket</code>.</p>
+<h1 id="net_proto_family">net_proto_family</h1>
+<table>
+<thead>
+<tr>
+<th>family</th>
+<th>type</th>
+<th>protocol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AF_UNIX=1</td>
+<td>SOCK_STREAM=1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>AF_UNIX</td>
+<td>SOCK_DGRAM=2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>AF_INET=2</td>
+<td>SOCK_STREAM</td>
+<td>IPPROTO_TCP=6</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_DGRAM</td>
+<td>IPPROTO_UDP=17</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_DGRAM</td>
+<td>IPPROTO_ICMP=1</td>
+</tr>
+<tr>
+<td>AF_INET</td>
+<td>SOCK_RAW=3</td>
+<td>IPPROTO_IP=0</td>
+</tr>
+<tr>
+<td>NPROTO=AF_MAX=41</td>
+<td>SOCK_MAX=11</td>
+<td>no max?</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="c">// include/linux/net.h
+// How to create a socket for an address family
+struct net_proto_family {
+  int family;  // AF_INET, AF_UNIX, AF_INET6, etc. must: 0 &lt;= family &lt; NPROTO
+  int (*create)(struct net *net, struct socket *sock, int protocol, int kern);
+  struct module *owner;
+};
+
+</code></pre>
+
+<pre><code class="c">// net/socket.c
+static const struct net_proto_family *net_families[NPROTO];
+
+// net/ipv4/af_inet.c
+static int inet_create(struct net *net, struct socket *sock, int protocol, int kern);
+
+static const struct net_proto_family inet_family_ops = {
+  .family = PF_INET,
+  .create = inet_create,
+  .owner  = THIS_MODULE
+};
+
+// inet_init() calls sock_register():
+net_families[AF_INET] = &amp;inet_family_ops;
 </code></pre>
 
 <h1 id="inet_protosw">inet_protosw</h1>
