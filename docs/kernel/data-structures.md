@@ -190,19 +190,18 @@ After `socket()`
 
 # Memory usage
 
-On Ubuntu 14.04, `/proc/slabinfo`
+On x86-64 Deiban 8, Linux 3.16, `/proc/slabinfo`
 
 | struct | size | cache name |
 | --- | --- | --- |
-| `file` | 216 | "filp" |
+| `file` | 256 | "filp" |
 | `dentry` | 192 | "dentry" |
 | `socket_alloc` | 640 | "sock_inode_cache" |
 | `tcp_sock` | 1792 | "TCP" |
-| `socket_wq` | 48 | "kmalloc-64"? |
-| `inet_bind_bucket` | 48 | "tcp_bind_bucket"? |
+| `socket_wq` | 64 | "kmalloc-64"? |
+| `inet_bind_bucket` | 64 | "tcp_bind_bucket" |
 
-Total : 2888 bytes/socket, not including send/receive buffers. For client sockets, +48B for `inet_bind_bucket`.
-
+Total : 2944 bytes/socket, not including send/receive buffers. For client sockets, +64B for `inet_bind_bucket`.
 
 # net_proto_family
 
