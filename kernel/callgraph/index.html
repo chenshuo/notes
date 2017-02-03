@@ -105,7 +105,8 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#bind">bind</a></li>
+        <li class="main active"><a href="#tcp_hashinfo">tcp_hashinfo</a></li>
+        <li class="main "><a href="#bind">bind</a></li>
         <li class="main "><a href="#listen">listen</a></li>
         <li class="main "><a href="#passive-open">Passive open</a></li>
             <li><a href="#receive-syn">Receive SYN</a></li>
@@ -113,11 +114,86 @@
         <li class="main "><a href="#active-open">Active open</a></li>
             <li><a href="#connect">connect</a></li>
             <li><a href="#receive-synack">Receive SYN+ACK</a></li>
+        <li class="main "><a href="#accept">accept</a></li>
         <li class="main "><a href="#read">read</a></li>
         <li class="main "><a href="#write">write</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
+
+<h1 id="tcp_hashinfo"><code>tcp_hashinfo</code></h1>
+<pre><code class="c">// include/linux/types.h
+struct hlist_head {
+        struct hlist_node *first;
+};
+
+struct hlist_node {
+        struct hlist_node *next, **pprev;
+};
+
+// include/linux/list_nulls.h
+struct hlist_nulls_head {
+        struct hlist_nulls_node *first;
+};
+
+struct hlist_nulls_node {
+        struct hlist_nulls_node *next, **pprev;
+};
+
+// include/net/inet_hashtables.h
+struct inet_ehash_bucket {
+        struct hlist_nulls_head chain;
+};
+
+struct inet_bind_hashbucket {
+        spinlock_t              lock;  // empty
+        struct hlist_head       chain;
+};
+
+struct inet_listen_hashbucket {
+        spinlock_t              lock;  // empty
+        struct hlist_head       head;
+};
+
+#define INET_LHTABLE_SIZE       32      /* Yes, really, this is all you need. */
+
+struct inet_hashinfo {
+        /* This is for sockets with full identity only.  Sockets here will
+         * always be without wildcards and will have the following invariant:
+         *
+         *          TCP_ESTABLISHED &lt;= sk-&gt;sk_state &lt; TCP_CLOSE
+         *
+         */
+        struct inet_ehash_bucket        *ehash;
+        spinlock_t                      *ehash_locks;
+        unsigned int                    ehash_mask;
+        unsigned int                    ehash_locks_mask;
+
+        /* Ok, let's try this, I give up, we do need a local binding
+         * TCP hash as well as the others for fast bind/connect.
+         */
+        struct inet_bind_hashbucket     *bhash;
+
+        unsigned int                    bhash_size;
+        /* 4 bytes hole on 64 bit */
+
+        struct kmem_cache               *bind_bucket_cachep;
+
+        /* All the above members are written once at bootup and
+         * never written again _or_ are predominantly read-access.
+         *
+         * Now align to a new cache line as all the following members
+         * might be often dirty.
+         */
+        /* All sockets in TCP_LISTEN state will be in here.  This is the only
+         * table where wildcard'd TCP sockets can exist.  Hash function here
+         * is just local port number.
+         */
+        struct inet_listen_hashbucket   listening_hash[INET_LHTABLE_SIZE]
+                                        ____cacheline_aligned_in_smp;
+};
+
+</code></pre>
 
 <h1 id="bind"><code>bind</code></h1>
 <pre><code class="text">sys_bind
@@ -130,6 +206,7 @@
         -&gt; inet_bind_hash
           -&gt; sk_add_bind_node
   -&gt; fput_light
+// tcp_hashinfo.bhash -&gt; inet_bind_hashbucket -&gt; inet_bind_bucket[port=2222] -&gt; tcp_sock
 </code></pre>
 
 <h1 id="listen"><code>listen</code></h1>
@@ -148,7 +225,8 @@
         -&gt; __inet_hash  // tcp_hashinfo.listening_hash[X] add node
 </code></pre>
 
-<p><img alt="after bind() and listen()" src="../bhash.png" /></p>
+<p>after bind() and listen()
+<img alt="bhash" src="../bhash.png" /></p>
 <h1 id="passive-open">Passive open</h1>
 <h2 id="receive-syn">Receive SYN</h2>
 <pre><code>tcp_v4_rcv
@@ -287,6 +365,10 @@
             -&gt; sk_add_bind_node
           -&gt; inet_ehash_nolisten
             -&gt; inet_ehash_insert
+              -&gt; sk_ehashfn
+                -&gt; inet_ehashfn
+                  -&gt; __inet_ehashfn
+                    -&gt; jhash_3words
             -&gt; sock_prot_inuse_add
       -&gt; ip_route_newports
         -&gt; ip_route_output_flow
@@ -329,7 +411,8 @@
     return err
 </code></pre>
 
-<p>FIXME: add a diagram after <code>connect()</code></p>
+<p>After <code>connect()</code>
+<img alt="ehash" src="../ehash.png" /></p>
 <h2 id="receive-synack">Receive SYN+ACK</h2>
 <pre><code class="text">tcp_v4_rcv
   -&gt; __inet_lookup_skb
@@ -384,6 +467,12 @@
       -&gt; __kfree_skb
       -&gt; tcp_data_snd_check
       return 0;
+</code></pre>
+
+<h1 id="accept">accept</h1>
+<pre><code class="text">sys_accept
+  -&gt; inet_accept (sock-&gt;ops-&gt;accept)
+    -&gt; inet_csk_accept (sk1-&gt;sk_prot-&gt;accept)
 </code></pre>
 
 <h1 id="read">read</h1>
