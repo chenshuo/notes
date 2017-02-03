@@ -5,9 +5,9 @@ pages:
   - Bugs: bugs.md
   - Git: git.md
   - Kernel:
-#    - Overview: kernel.md
     - 'Data Structures': kernel/data-structures.md
     - 'Call Graphs': kernel/callgraph.md
+    - 'Changes': kernel/changes.md
   - lcc: lcc.md
   - Lua: lua.md
   - mem: mem.md
