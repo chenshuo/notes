@@ -39,6 +39,12 @@
      <changefreq>daily</changefreq>
     </url>
         
+    <url>
+     <loc>/kernel/changes/</loc>
+     <lastmod>2017-02-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
     

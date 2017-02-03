@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Changes - Shuo Chen's Notes</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+	
+	<script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                    <li >
+                        <a href="../../bugs/">Bugs</a>
+                    </li>
+                    <li >
+                        <a href="../../git/">Git</a>
+                    </li>
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            
+<li >
+    <a href="../data-structures/">Data Structures</a>
+</li>
+                            
+<li >
+    <a href="../callgraph/">Call Graphs</a>
+</li>
+                            
+<li class="active">
+    <a href="./">Changes</a>
+</li>
+                        </ul>
+                    </li>
+                    <li >
+                        <a href="../../lcc/">lcc</a>
+                    </li>
+                    <li >
+                        <a href="../../lua/">Lua</a>
+                    </li>
+                    <li >
+                        <a href="../../mem/">mem</a>
+                    </li>
+                    <li >
+                        <a href="../../ssl/">SSL</a>
+                    </li>
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                    <li >
+                        <a rel="next" href="../callgraph/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../lcc/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#49-2016-12-11">4.9 - 2016-12-11</a></li>
+        <li class="main "><a href="#46-2016-05-15">4.6 - 2016-05-15</a></li>
+        <li class="main "><a href="#45-2016-03-13">4.5 - 2016-03-13</a></li>
+        <li class="main "><a href="#44-2016-01-10">4.4 - 2016-01-10</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="49-2016-12-11">4.9 - 2016-12-11</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.9">Linux 4.9</a></p>
+<ul>
+<li>BBR congestion control algorithm</li>
+</ul>
+<h1 id="46-2016-05-15">4.6 - 2016-05-15</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.6">Linux 4.6</a></p>
+<ul>
+<li>Faster SO_REUSEPORT for TCP</li>
+</ul>
+<h1 id="45-2016-03-13">4.5 - 2016-03-13</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.5">Linux 4.5</a></p>
+<ul>
+<li>Faster SO_REUSEPORT for UDP</li>
+<li><a href="https://lwn.net/Articles/633422">Better epoll multithread scalability</a></li>
+</ul>
+<h1 id="44-2016-01-10">4.4 - 2016-01-10</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.4">Linux 4.4</a></p>
+<ul>
+<li>TCP scalability<ul>
+<li>Lockless TCP listener</li>
+<li>SO_INCOMING_CPU</li>
+<li>TCP_NEW_SYN_RECV</li>
+</ul>
+</li>
+</ul>
+<pre><code class="text">commit ca6fb06518836ef9b65dc0aac02ff97704d52a05
+Author: Eric Dumazet &lt;edumazet@google.com&gt;
+Date:   Fri Oct 2 11:43:35 2015 -0700
+
+    tcp: attach SYNACK messages to request sockets instead of listener
+
+    If a listen backlog is very big (to avoid syncookies), then
+    the listener sk-&gt;sk_wmem_alloc is the main source of false
+    sharing, as we need to touch it twice per SYNACK re-transmit
+    and TX completion.
+
+    (One SYN packet takes listener lock once, but up to 6 SYNACK
+    are generated)
+
+    By attaching the skb to the request socket, we remove this
+    source of contention.
+
+    Tested:
+
+     listen(fd, 10485760); // single listener (no SO_REUSEPORT)
+     16 RX/TX queue NIC
+     Sustain a SYNFLOOD attack of ~320,000 SYN per second,
+     Sending ~1,400,000 SYNACK per second.
+     Perf profiles now show listener spinlock being next bottleneck.
+
+        20.29%  [kernel]  [k] queued_spin_lock_slowpath
+        10.06%  [kernel]  [k] __inet_lookup_established
+         5.12%  [kernel]  [k] reqsk_timer_handler
+         3.22%  [kernel]  [k] get_next_timer_interrupt
+         3.00%  [kernel]  [k] tcp_make_synack
+         2.77%  [kernel]  [k] ipt_do_table
+         2.70%  [kernel]  [k] run_timer_softirq
+         2.50%  [kernel]  [k] ip_finish_output
+         2.04%  [kernel]  [k] cascade
+
+    Signed-off-by: Eric Dumazet &lt;edumazet@google.com&gt;
+    Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+</code></pre>
+
+<pre><code class="text">commit 079096f103faca2dd87342cca6f23d4b34da8871
+Author: Eric Dumazet &lt;edumazet@google.com&gt;
+Date:   Fri Oct 2 11:43:32 2015 -0700
+
+    tcp/dccp: install syn_recv requests into ehash table
+
+    In this patch, we insert request sockets into TCP/DCCP
+    regular ehash table (where ESTABLISHED and TIMEWAIT sockets
+    are) instead of using the per listener hash table.
+
+    ACK packets find SYN_RECV pseudo sockets without having
+    to find and lock the listener.
+
+    In nominal conditions, this halves pressure on listener lock.
+
+    Note that this will allow for SO_REUSEPORT refinements,
+    so that we can select a listener using cpu/numa affinities instead
+    of the prior 'consistent hash', since only SYN packets will
+    apply this selection logic.
+
+    We will shrink listen_sock in the following patch to ease
+    code review.
+
+    Signed-off-by: Eric Dumazet &lt;edumazet@google.com&gt;
+    Cc: Ying Cai &lt;ycai@google.com&gt;
+    Cc: Willem de Bruijn &lt;willemb@google.com&gt;
+    Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script><div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
