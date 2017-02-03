@@ -127,22 +127,27 @@ tcp_v4_rcv
             -> reqsk_alloc
                req->rsk_listener = sk_listener;
             ireq->ireq_state = TCP_NEW_SYN_RECV;
+            ireq->ireq_family = sk_listener->sk_family;
           -> tcp_parse_options
           -> tcp_openreq_init
           -> tcp_v4_init_req  // af_ops->init_req
             -> tcp_v4_save_options
-          -> tcp_v4_init_sequence  // af_ops->init_seq
+          -> isn = tcp_v4_init_sequence  // af_ops->init_seq
           -> tcp_v4_route_req  // af_ops->route_req
             -> inet_csk_route_req
               -> flowi4_init_output
               -> ip_route_output_flow
           -> tcp_ecn_create_request
+          -> tcp_openreq_init_rwin
+            -> tcp_select_initial_window
           -> tcp_reqsk_record_syn
+          -> tcp_try_fastopen
           -> inet_csk_reqsk_queue_hash_add
-            -> reqsk_queue_hash_req
+            -> reqsk_queue_hash_req  //***
               -> inet_ehash_insert
                 -> __sk_nulls_add_node_rcu
             -> inet_csk_reqsk_queue_added
+              inet_csk(sk)->icsk_accept_queue.qlen++
           -> tcp_v4_send_synack  // af_ops->send_synack
             -> tcp_make_synack
             -> __tcp_v4_send_check
@@ -158,8 +163,9 @@ tcp_v4_rcv
 tcp_v4_rcv
   -> __inet_lookup_skb
     -> __inet_lookup
-      -> __inet_lookup_established  // found
+      -> __inet_lookup_established  // found tcp_request_sock
   -> sk->sk_state == TCP_NEW_SYN_RECV
+    sk = req->rsk_listener;
   -> tcp_check_req
     -> tcp_parse_options
       -> tcp_paws_reject
@@ -168,24 +174,27 @@ tcp_v4_rcv
       -> tcp_create_openreq_child
         -> inet_csk_clone_lock
           -> sk_clone_lock
-            -> sk_prot_alloc
+            -> newsk = sk_prot_alloc  // new tcp_sock
+            -> sock_copy
+          newsk->sk_state = TCP_SYN_RECV;
         -> tcp_init_xmit_timers
       -> inet_sk_rx_dst_set
       -> inet_csk_route_child_sock
       -> tcp_ca_openreq_child
         -> tcp_assign_congestion_control
         -> tcp_set_ca_state TCP_CA_Open
-          -> bictcp_state
       -> tcp_sync_mss -> dst_mtu -> ipv4_mtu
         -> tcp_mtu_to_mss
         -> tcp_bound_to_half_wnd
       -> dst_metric_advmss -> ipv4_default_advmss
       -> tcp_initialize_rcv_mss
-      -> __inet_inherit_port -> inet_bind_hash
+      -> __inet_inherit_port
+        -> inet_bind_hash  // put newsk in bind_bucket
+        inet_csk(sk)->icsk_bind_hash = tb;
       -> inet_ehash_nolisten
-        -> inet_ehash_insert
-          -> sk_nulls_del_node_init_rcu
-          -> __sk_nulls_add_node_rcu
+        -> inet_ehash_insert(newsk, reqsk)
+          -> sk_nulls_del_node_init_rcu(osk)
+          -> __sk_nulls_add_node_rcu(sk, list)
         -> sock_prot_inuse_add
       -> tcp_move_syn
     -> sock_rps_save_rxhash
@@ -197,26 +206,32 @@ tcp_v4_rcv
         -> tcp_set_rto
     -> inet_csk_complete_hashdance
       -> inet_csk_reqsk_queue_drop
+        -> reqsk_queue_unlink
+          -> reqsk_put(req)
+          return found(false)
       -> reqsk_queue_removed
+        &inet_csk(sk)->icsk_accept_queue.qlen--
       -> inet_csk_reqsk_queue_add
+        queue->rskq_accept_head = req  // first
         -> sk_acceptq_added
+          sk->sk_ack_backlog++;  // listen_sk
   -> tcp_child_process
-    -> tcp_rcv_state_process
+    -> tcp_rcv_state_process(child, skb)
       -> tcp_validate_incoming
       -> tcp_ack
         -> tcp_ack_update_window
         -> tcp_ecn_rcv_ecn_echo  // false
         -> tcp_in_ack_event
         return 1
-      -> sk_state == TCP_SYN_RECV
+      switch(sk_state) case TCP_SYN_RECV:
       -> inet_sk_rebuild_header  // icsk->icsk_af_ops->rebuild_header
-      -> tcp_init_congestion_control -> bictcp_init
+      -> tcp_init_congestion_control
       -> tcp_mtup_init
       -> tcp_init_buffer_space
         -> tcp_fixup_rcvbuf
         -> tcp_sndbuf_expand
         -> tcp_full_space
-      TCP_ESTABLISHED
+      tcp_set_state(sk, TCP_ESTABLISHED)
       sk->sk_state_change -> sock_def_wakeup
       -> tcp_init_metrics
       -> tcp_update_pacing_rate
@@ -224,8 +239,8 @@ tcp_v4_rcv
       -> tcp_fast_path_on
       // out of switch
       -> tcp_urg
-      // switch TCP_ESTABLISHED
-      -> tcp_data_queue
+      switch TCP_ESTABLISHED
+        -> tcp_data_queue
       -> tcp_data_snd_check
       -> tcp_ack_snd_check
     -> parent->sk_data_ready -> sock_def_readable -> wake_up_interruptible_sync_poll
@@ -359,10 +374,24 @@ tcp_v4_rcv
 
 # accept
 ```text
-sys_accept
+sys_accept4
+  -> newsock = sock_alloc
+  -> newfd = get_unused_fd_flags
+  -> newfile = sock_alloc_file(newsock, ...)
   -> inet_accept (sock->ops->accept)
-    -> inet_csk_accept (sk1->sk_prot->accept)
+    -> sk2 = inet_csk_accept (sk1->sk_prot->accept)
+      queue = &icsk->icsk_accept_queue;
+      req = reqsk_queue_remove(queue, sk);
+        req = queue->rskq_accept_head;
+        -> sk_acceptq_removed(parent);  // sk->sk_ack_backlog--;
+      newsk = req->sk
+      -> release_sock(sk)
+      -> reqsk_put(req) -> reqsk_free
+      return newsk
+    -> sock_graft(sk2, newsock)
+  -> fd_install(newfd, newfile)
 ```
+
 # read
 
 # write
