@@ -1,3 +1,79 @@
+# `tcp_hashinfo`
+
+```c
+// include/linux/types.h
+struct hlist_head {
+        struct hlist_node *first;
+};
+
+struct hlist_node {
+        struct hlist_node *next, **pprev;
+};
+
+// include/linux/list_nulls.h
+struct hlist_nulls_head {
+        struct hlist_nulls_node *first;
+};
+
+struct hlist_nulls_node {
+        struct hlist_nulls_node *next, **pprev;
+};
+
+// include/net/inet_hashtables.h
+struct inet_ehash_bucket {
+        struct hlist_nulls_head chain;
+};
+
+struct inet_bind_hashbucket {
+        spinlock_t              lock;  // empty
+        struct hlist_head       chain;
+};
+
+struct inet_listen_hashbucket {
+        spinlock_t              lock;  // empty
+        struct hlist_head       head;
+};
+
+#define INET_LHTABLE_SIZE       32      /* Yes, really, this is all you need. */
+
+struct inet_hashinfo {
+        /* This is for sockets with full identity only.  Sockets here will
+         * always be without wildcards and will have the following invariant:
+         *
+         *          TCP_ESTABLISHED <= sk->sk_state < TCP_CLOSE
+         *
+         */
+        struct inet_ehash_bucket        *ehash;
+        spinlock_t                      *ehash_locks;
+        unsigned int                    ehash_mask;
+        unsigned int                    ehash_locks_mask;
+
+        /* Ok, let's try this, I give up, we do need a local binding
+         * TCP hash as well as the others for fast bind/connect.
+         */
+        struct inet_bind_hashbucket     *bhash;
+
+        unsigned int                    bhash_size;
+        /* 4 bytes hole on 64 bit */
+
+        struct kmem_cache               *bind_bucket_cachep;
+
+        /* All the above members are written once at bootup and
+         * never written again _or_ are predominantly read-access.
+         *
+         * Now align to a new cache line as all the following members
+         * might be often dirty.
+         */
+        /* All sockets in TCP_LISTEN state will be in here.  This is the only
+         * table where wildcard'd TCP sockets can exist.  Hash function here
+         * is just local port number.
+         */
+        struct inet_listen_hashbucket   listening_hash[INET_LHTABLE_SIZE]
+                                        ____cacheline_aligned_in_smp;
+};
+
+```
+
 # `bind`
 ```text
 sys_bind
@@ -10,6 +86,7 @@ sys_bind
         -> inet_bind_hash
           -> sk_add_bind_node
   -> fput_light
+// tcp_hashinfo.bhash -> inet_bind_hashbucket -> inet_bind_bucket[port=2222] -> tcp_sock
 ```
 
 # `listen`
@@ -29,7 +106,8 @@ sys_listen
         -> __inet_hash  // tcp_hashinfo.listening_hash[X] add node
 ```
 
-![after bind() and listen()](bhash.png)
+after bind() and listen()
+![bhash](bhash.png)
 
 # Passive open
 
@@ -173,6 +251,10 @@ sys_connect
             -> sk_add_bind_node
           -> inet_ehash_nolisten
             -> inet_ehash_insert
+              -> sk_ehashfn
+                -> inet_ehashfn
+                  -> __inet_ehashfn
+                    -> jhash_3words
             -> sock_prot_inuse_add
       -> ip_route_newports
         -> ip_route_output_flow
@@ -215,7 +297,8 @@ sys_connect
     return err
 ```
 
-FIXME: add a diagram after `connect()`
+After `connect()`
+![ehash](ehash.png)
 
 ## Receive SYN+ACK
 ```text
@@ -274,6 +357,12 @@ tcp_v4_rcv
       return 0;
 ```
 
+# accept
+```text
+sys_accept
+  -> inet_accept (sock->ops->accept)
+    -> inet_csk_accept (sk1->sk_prot->accept)
+```
 # read
 
 # write
