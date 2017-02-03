@@ -300,7 +300,7 @@ inet_create(sock, protocol)
 <p>After <code>socket()</code>
 <img alt="inode" src="../inode.png" /></p>
 <h1 id="memory-usage">Memory usage</h1>
-<p>On Ubuntu 14.04, <code>/proc/slabinfo</code></p>
+<p>On x86-64 Deiban 8, Linux 3.16, <code>/proc/slabinfo</code></p>
 <table>
 <thead>
 <tr>
@@ -312,7 +312,7 @@ inet_create(sock, protocol)
 <tbody>
 <tr>
 <td><code>file</code></td>
-<td>216</td>
+<td>256</td>
 <td>"filp"</td>
 </tr>
 <tr>
@@ -332,17 +332,17 @@ inet_create(sock, protocol)
 </tr>
 <tr>
 <td><code>socket_wq</code></td>
-<td>48</td>
+<td>64</td>
 <td>"kmalloc-64"?</td>
 </tr>
 <tr>
 <td><code>inet_bind_bucket</code></td>
-<td>48</td>
-<td>"tcp_bind_bucket"?</td>
+<td>64</td>
+<td>"tcp_bind_bucket"</td>
 </tr>
 </tbody>
 </table>
-<p>Total : 2888 bytes/socket, not including send/receive buffers. For client sockets, +48B for <code>inet_bind_bucket</code>.</p>
+<p>Total : 2944 bytes/socket, not including send/receive buffers. For client sockets, +64B for <code>inet_bind_bucket</code>.</p>
 <h1 id="net_proto_family">net_proto_family</h1>
 <table>
 <thead>
