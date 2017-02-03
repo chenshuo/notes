@@ -177,3 +177,9 @@ Date:   Tue Nov 3 14:02:04 2015 -0800
 ```
 
 None of them are available in LibreSSL as of Jan 19, 2017. [Issue 259](https://github.com/libressl-portable/portable/issues/259).
+
+## Cryptography
+
+* [cs387 Applied Cryptography on udacity](https://www.udacity.com/course/applied-cryptography--cs387)
+* [Elliptic Curve Cryptography: ECDH and ECDSA](http://andrea.corbellini.name/2015/05/30/elliptic-curve-cryptography-ecdh-and-ecdsa/)
+* [Everything you need to know about cryptography in 1 hour](http://www.bsdcan.org/2010/schedule/attachments/135_crypto1hr.pdf)
