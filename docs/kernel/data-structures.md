@@ -41,23 +41,124 @@ static const struct net_proto_family inet_family_ops = {
 net_families[AF_INET] = &inet_family_ops;
 ```
 
-```
+# `struct socket`
+```c
+// include/linux/net.h
+
+struct socket_wq {
+        /* Note: wait MUST be first field of socket_wq */
+        wait_queue_head_t       wait;
+        struct fasync_struct    *fasync_list;
+        unsigned long           flags; /* %SOCKWQ_ASYNC_NOSPACE, etc */
+        struct rcu_head         rcu;
+} ____cacheline_aligned_in_smp;
+
+/**
+ *  struct socket - general BSD socket
+ *  @state: socket state (%SS_CONNECTED, etc)
+ *  @type: socket type (%SOCK_STREAM, etc)
+ *  @flags: socket flags (%SOCK_NOSPACE, etc)
+ *  @ops: protocol specific socket operations
+ *  @file: File back pointer for gc
+ *  @sk: internal networking protocol agnostic socket representation
+ *  @wq: wait queue for several uses
+ */
+struct socket {
+        socket_state            state;
+
+        kmemcheck_bitfield_begin(type);
+        short                   type;
+        kmemcheck_bitfield_end(type);
+
+        unsigned long           flags;
+
+        struct socket_wq __rcu  *wq;
+
+        struct file             *file;
+        struct sock             *sk;
+        const struct proto_ops  *ops;
+};
+
+// include/net/sock.h
+
+struct socket_alloc {
+        struct socket socket;
+        struct inode vfs_inode;
+};
+
+// include/linux/fs.h
+struct inode {
+        umode_t                 i_mode;     // S_IFSOCK | S_IRWXUGO;
+        unsigned short          i_opflags;
+        kuid_t                  i_uid;
+        kgid_t                  i_gid;
+        unsigned int            i_flags;
+// ...
+        const struct inode_operations   *i_op;
+        struct super_block      *i_sb;
+// ...
+        unsigned long           i_ino;      // sockfs_dname: "socket:[%lu]"
+// ...
+};
+
+struct file {
+// ...
+        struct inode            *f_inode;
+        const struct file_operations    *f_op;
+// ...
+        unsigned int            f_flags;
+// ...
+        void                    *private_data;
+// ...
+};
+
+
+# `socket`
+
+```text
 int sys_socket(int family, int type, int protocol)
   -> struct socket* sock_create(family, type, protocol)
     -> __sock_create(family, type, protocol)
       -> struct socket* sock = sock_alloc()
-        -> new_inode_pseudo(super_block of sockfs)      // fs/inode.c
+        -> inode = new_inode_pseudo(super_block of sockfs)      // fs/inode.c
+          -> alloc_inode
+            -> sock_alloc_inode (sb->s_op->alloc_inod)
+              -> socket_alloc *ei = kmem_cache_alloc(sock_inode_cachep)  // 306B
+              -> socket_wq *wq = kmalloc(sizeof(*wq))  // 24B
+              ei->socket.wq = wq;
+              ei->socket.state = SS_UNCONNECTED;
+            -> inode_init_always
+        sock = SOCKET_I(inode);
+        inode->i_op = &sockfs_inode_ops;  // .listxattr = sockfs_listxattr,
       -> net_families[family]->create(sock, protocol)
         -> inet_create(sock, protocol)                  // net/ipv4/af_inet.c
   -> sock_map_fd()
+    -> get_unused_fd_flags
+    -> sock_alloc_file
+      -> d_alloc_pseudo  // sizeof(struct dentry) == 128
+      -> file = alloc_file(..., &socket_file_ops);  // sizeof(struct file) == 140
+        -> get_empty_filp
+        file.f_op = &socket_file_ops
+      sock->file = file;
+      file->private_data = sock;
+    -> fd_install
 
 inet_create(sock, protocol)
   -> find inet_protosw for sock->type & protocol
   -> struct sock* sk = sk_alloc()
-    -> sk_prot_alloc -> kmem_cache_alloc (tcp_prot is 1296B)
+    -> sk_prot_alloc -> kmem_cache_alloc (tcp_prot is 1360B)
   -> sock_init_data
+    sk->sk_socket = sock;
+    sock->sk = sk;
   -> sk->sk_prot->init(sk)
     -> tcp_v4_init_sock
+      -> tcp_init_sock
+        -> tcp_init_xmit_timers
+        -> tcp_prequeue_init
+        -> tcp_enable_early_retrans
+        -> tcp_assign_congestion_control
+        sk->sk_state = TCP_CLOSE;
+      icsk->icsk_af_ops = &ipv4_specific;
 ```
 
 # inet_protosw
