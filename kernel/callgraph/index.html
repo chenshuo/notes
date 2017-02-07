@@ -110,16 +110,17 @@
         <li class="main "><a href="#passive-open">Passive open</a></li>
             <li><a href="#receive-syn">Receive SYN</a></li>
             <li><a href="#receive-ack">Receive ACK</a></li>
-        <li class="main "><a href="#connect">connect</a></li>
-        <li class="main "><a href="#tcp_v4_rcv">tcp_v4_rcv</a></li>
+        <li class="main "><a href="#active-open">Active open</a></li>
+            <li><a href="#connect">connect</a></li>
+            <li><a href="#receive-synack">Receive SYN+ACK</a></li>
         <li class="main "><a href="#read">read</a></li>
         <li class="main "><a href="#write">write</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="bind">bind</h1>
-<pre><code>sys_bind
+<h1 id="bind"><code>bind</code></h1>
+<pre><code class="text">sys_bind
   -&gt; inet_bind
     -&gt; inet_csk_get_port
       -&gt; goto have_snum:
@@ -131,8 +132,8 @@
   -&gt; fput_light
 </code></pre>
 
-<h1 id="listen">listen</h1>
-<pre><code>sys_listen
+<h1 id="listen"><code>listen</code></h1>
+<pre><code class="text">sys_listen
   -&gt; inet_listen
     -&gt; inet_csk_listen_start
       -&gt; reqsk_queue_alloc
@@ -267,8 +268,124 @@
     -&gt; parent-&gt;sk_data_ready -&gt; sock_def_readable -&gt; wake_up_interruptible_sync_poll
 </code></pre>
 
-<h1 id="connect">connect</h1>
-<h1 id="tcp_v4_rcv">tcp_v4_rcv</h1>
+<h1 id="active-open">Active open</h1>
+<h2 id="connect">connect</h2>
+<pre><code class="text">sys_connect
+  -&gt; inet_stream_connect -&gt; __inet_stream_connect
+    -&gt; tcp_v4_connect (sk-&gt;sk_prot-&gt;connect)
+      -&gt; ip_route_connect
+      tcp_set_state(sk, TCP_SYN_SENT)
+      -&gt; inet_hash_connect
+        -&gt; port_offset = inet_sk_port_offset(sk)
+          -&gt; secure_ipv4_port_ephemeral(saddr, daddr, dport)
+            -&gt; md5_transform
+        -&gt; __inet_hash_connect(..., port_offset, __inet_check_established)
+          static uint32_t hint // counter
+          -&gt; inet_get_local_port_range
+          -&gt; inet_bind_bucket_create
+          -&gt; inet_bind_hash
+            -&gt; sk_add_bind_node
+          -&gt; inet_ehash_nolisten
+            -&gt; inet_ehash_insert
+            -&gt; sock_prot_inuse_add
+      -&gt; ip_route_newports
+        -&gt; ip_route_output_flow
+      -&gt; secure_tcp_sequence_number(saddr, daddr, sport, dport)
+        -&gt; md5_transform
+      -&gt; tcp_connect
+        -&gt; tcp_connect_init
+        -&gt; sk_stream_alloc_skb
+        -&gt; tcp_init_nondata_skb
+        -&gt; tcp_connect_queue_skb
+        -&gt; tcp_ecn_send_syn
+        -&gt; tcp_transmit_skb
+          -&gt; tcp_options_size = tcp_syn_options
+          tcp_header_size = tcp_options_size + sizeof(struct tcphdr);
+          -&gt; skb_push(skb, tcp_header_size)
+          -&gt; skb_reset_transport_header
+          -&gt; skb_orphan
+          skb-&gt;destructor = tcp_wfree;
+          -&gt; tcp_options_write
+          -&gt; tcp_v4_send_check (icsk-&gt;icsk_af_ops-&gt;send_check)
+            -&gt; __tcp_v4_send_check
+              skb-&gt;ip_summed == CHECKSUM_PARTIAL
+          -&gt; ip_queue_xmit (icsk-&gt;icsk_af_ops-&gt;queue_xmit)
+            -&gt; skb_push
+            -&gt; skb_reset_network_header
+            iph-&gt;frag_off = htons(IP_DF);
+            -&gt; ip_copy_addrs
+            -&gt; ip_select_ident_segs
+            -&gt; ip_local_out
+              -&gt; __ip_local_out
+                -&gt; ip_send_check
+                  -&gt; ip_fast_csum
+                -&gt; nf_hook { return 1; }
+              -&gt; dst_output
+                -&gt; ip_output (skb_dst(skb)-&gt;output)
+        -&gt; inet_csk_reset_xmit_timer
+    sock-&gt;state = SS_CONNECTING;
+    err = -EINPROGRESS;
+    timeo = sock_sndtimeo() // NULL
+    return err
+</code></pre>
+
+<p>FIXME: add a diagram after <code>connect()</code></p>
+<h2 id="receive-synack">Receive SYN+ACK</h2>
+<pre><code class="text">tcp_v4_rcv
+  -&gt; __inet_lookup_skb
+    -&gt; __inet_lookup
+      -&gt; __inet_lookup_established  // found
+  -&gt; tcp_v4_do_rcv  // sk_state == TCP_SYN_SENT
+    -&gt; tcp_rcv_state_process
+      case TCP_SYN_SENT:
+      -&gt; tcp_rcv_synsent_state_process
+        -&gt; tcp_parse_options
+        if (th-&gt;ack)  // true
+        -&gt; tcp_ecn_rcv_synack
+        -&gt; tcp_init_wl
+        -&gt; tcp_ack(FLAG_SLOWPATH)
+          // FLAG_SLOWPATH
+          -&gt; tcp_ack_update_window
+            -&gt; tcp_may_update_window  // true
+            -&gt; tcp_update_wln
+            -&gt; tcp_fast_path_check
+            -&gt; tcp_sync_mss
+            -&gt; tcp_snd_una_update
+          -&gt; tcp_ecn_rcv_ecn_echo  // false
+          -&gt; tcp_in_ack_event
+          -&gt; tcp_clean_rtx_queue
+            -&gt; tcp_ack_update_rtt
+            -&gt; tcp_rearm_rto
+          -&gt; tcp_rate_gen
+          -&gt; tcp_cong_control
+          -&gt; tcp_xmit_recovery
+        -&gt; tcp_mtup_init
+        -&gt; tcp_sync_mss
+        -&gt; tcp_initialize_rcv_mss
+        -&gt; tcp_finish_connect
+          -&gt; tcp_set_state(sk, TCP_ESTABLISHED);
+          -&gt; inet_sk_rx_dst_set (icsk-&gt;icsk_af_ops-&gt;sk_rx_dst_set)
+          -&gt; inet_sk_rebuild_header (icsk-&gt;icsk_af_ops-&gt;rebuild_header)
+          -&gt; tcp_init_metrics
+          -&gt; tcp_init_congestion_control
+          -&gt; tcp_init_buffer_space
+            -&gt; tcp_fixup_rcvbuf
+            -&gt; tcp_sndbuf_expand
+            -&gt; tcp_full_space
+        -&gt; tcp_send_ack
+          -&gt; skb_reserve
+          -&gt; tcp_init_nondata_skb
+          -&gt; skb_set_tcp_pure_ack
+          -&gt; skb_mstamp_get
+          -&gt; tcp_transmit_skb
+            -&gt; tcp_options_size = tcp_established_options  // 12
+            ...
+      -&gt; tcp_urg
+      -&gt; __kfree_skb
+      -&gt; tcp_data_snd_check
+      return 0;
+</code></pre>
+
 <h1 id="read">read</h1>
 <h1 id="write">write</h1></div>
         </div>
