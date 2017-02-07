@@ -1,5 +1,5 @@
-# bind
-```
+# `bind`
+```text
 sys_bind
   -> inet_bind
     -> inet_csk_get_port
@@ -12,8 +12,8 @@ sys_bind
   -> fput_light
 ```
 
-# listen
-```
+# `listen`
+```text
 sys_listen
   -> inet_listen
     -> inet_csk_listen_start
@@ -153,9 +153,126 @@ tcp_v4_rcv
     -> parent->sk_data_ready -> sock_def_readable -> wake_up_interruptible_sync_poll
 ```
 
-# connect
+# Active open
+## connect
+```text
+sys_connect
+  -> inet_stream_connect -> __inet_stream_connect
+    -> tcp_v4_connect (sk->sk_prot->connect)
+      -> ip_route_connect
+      tcp_set_state(sk, TCP_SYN_SENT)
+      -> inet_hash_connect
+        -> port_offset = inet_sk_port_offset(sk)
+          -> secure_ipv4_port_ephemeral(saddr, daddr, dport)
+            -> md5_transform
+        -> __inet_hash_connect(..., port_offset, __inet_check_established)
+          static uint32_t hint // counter
+          -> inet_get_local_port_range
+          -> inet_bind_bucket_create
+          -> inet_bind_hash
+            -> sk_add_bind_node
+          -> inet_ehash_nolisten
+            -> inet_ehash_insert
+            -> sock_prot_inuse_add
+      -> ip_route_newports
+        -> ip_route_output_flow
+      -> secure_tcp_sequence_number(saddr, daddr, sport, dport)
+        -> md5_transform
+      -> tcp_connect
+        -> tcp_connect_init
+        -> sk_stream_alloc_skb
+        -> tcp_init_nondata_skb
+        -> tcp_connect_queue_skb
+        -> tcp_ecn_send_syn
+        -> tcp_transmit_skb
+          -> tcp_options_size = tcp_syn_options
+          tcp_header_size = tcp_options_size + sizeof(struct tcphdr);
+          -> skb_push(skb, tcp_header_size)
+          -> skb_reset_transport_header
+          -> skb_orphan
+          skb->destructor = tcp_wfree;
+          -> tcp_options_write
+          -> tcp_v4_send_check (icsk->icsk_af_ops->send_check)
+            -> __tcp_v4_send_check
+              skb->ip_summed == CHECKSUM_PARTIAL
+          -> ip_queue_xmit (icsk->icsk_af_ops->queue_xmit)
+            -> skb_push
+            -> skb_reset_network_header
+            iph->frag_off = htons(IP_DF);
+            -> ip_copy_addrs
+            -> ip_select_ident_segs
+            -> ip_local_out
+              -> __ip_local_out
+                -> ip_send_check
+                  -> ip_fast_csum
+                -> nf_hook { return 1; }
+              -> dst_output
+                -> ip_output (skb_dst(skb)->output)
+        -> inet_csk_reset_xmit_timer
+    sock->state = SS_CONNECTING;
+    err = -EINPROGRESS;
+    timeo = sock_sndtimeo() // NULL
+    return err
+```
 
-# tcp_v4_rcv
+FIXME: add a diagram after `connect()`
+
+## Receive SYN+ACK
+```text
+tcp_v4_rcv
+  -> __inet_lookup_skb
+    -> __inet_lookup
+      -> __inet_lookup_established  // found
+  -> tcp_v4_do_rcv  // sk_state == TCP_SYN_SENT
+    -> tcp_rcv_state_process
+      case TCP_SYN_SENT:
+      -> tcp_rcv_synsent_state_process
+        -> tcp_parse_options
+        if (th->ack)  // true
+        -> tcp_ecn_rcv_synack
+        -> tcp_init_wl
+        -> tcp_ack(FLAG_SLOWPATH)
+          // FLAG_SLOWPATH
+          -> tcp_ack_update_window
+            -> tcp_may_update_window  // true
+            -> tcp_update_wln
+            -> tcp_fast_path_check
+            -> tcp_sync_mss
+            -> tcp_snd_una_update
+          -> tcp_ecn_rcv_ecn_echo  // false
+          -> tcp_in_ack_event
+          -> tcp_clean_rtx_queue
+            -> tcp_ack_update_rtt
+            -> tcp_rearm_rto
+          -> tcp_rate_gen
+          -> tcp_cong_control
+          -> tcp_xmit_recovery
+        -> tcp_mtup_init
+        -> tcp_sync_mss
+        -> tcp_initialize_rcv_mss
+        -> tcp_finish_connect
+          -> tcp_set_state(sk, TCP_ESTABLISHED);
+          -> inet_sk_rx_dst_set (icsk->icsk_af_ops->sk_rx_dst_set)
+          -> inet_sk_rebuild_header (icsk->icsk_af_ops->rebuild_header)
+          -> tcp_init_metrics
+          -> tcp_init_congestion_control
+          -> tcp_init_buffer_space
+            -> tcp_fixup_rcvbuf
+            -> tcp_sndbuf_expand
+            -> tcp_full_space
+        -> tcp_send_ack
+          -> skb_reserve
+          -> tcp_init_nondata_skb
+          -> skb_set_tcp_pure_ack
+          -> skb_mstamp_get
+          -> tcp_transmit_skb
+            -> tcp_options_size = tcp_established_options  // 12
+            ...
+      -> tcp_urg
+      -> __kfree_skb
+      -> tcp_data_snd_check
+      return 0;
+```
 
 # read
 
