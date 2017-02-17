@@ -110,6 +110,7 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
         <li class="main active"><a href="#tcp_hashinfo">tcp_hashinfo</a></li>
+        <li class="main "><a href="#tcp-state-diagram-in-linux-44">TCP state diagram in Linux 4.4+</a></li>
         <li class="main "><a href="#bind">bind</a></li>
         <li class="main "><a href="#listen">listen</a></li>
         <li class="main "><a href="#passive-open">Passive open</a></li>
@@ -199,6 +200,8 @@ struct inet_hashinfo {
 
 </code></pre>
 
+<h1 id="tcp-state-diagram-in-linux-44">TCP state diagram in Linux 4.4+</h1>
+<p><img alt="tcp" src="../tcp.png" /></p>
 <h1 id="bind"><code>bind</code></h1>
 <pre><code class="text">sys_bind
   -&gt; inet_bind
@@ -229,7 +232,7 @@ struct inet_hashinfo {
         -&gt; __inet_hash  // tcp_hashinfo.listening_hash[X] add node
 </code></pre>
 
-<p>after bind() and listen()
+<p>After bind() and listen()
 <img alt="bhash" src="../bhash.png" /></p>
 <h1 id="passive-open">Passive open</h1>
 <h2 id="receive-syn">Receive SYN</h2>
@@ -278,6 +281,8 @@ struct inet_hashinfo {
                     -&gt; ip_output
 </code></pre>
 
+<p>After receiving SYN
+<img alt="syn" src="../syn.png" /></p>
 <h2 id="receive-ack">Receive ACK</h2>
 <pre><code>tcp_v4_rcv
   -&gt; __inet_lookup_skb
@@ -365,6 +370,8 @@ struct inet_hashinfo {
     -&gt; parent-&gt;sk_data_ready -&gt; sock_def_readable -&gt; wake_up_interruptible_sync_poll
 </code></pre>
 
+<p>After receiving ACK
+<img alt="ack" src="../ack.png" /></p>
 <h1 id="active-open">Active open</h1>
 <h2 id="connect">connect</h2>
 <pre><code class="text">sys_connect
