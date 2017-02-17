@@ -74,6 +74,9 @@ struct inet_hashinfo {
 
 ```
 
+# TCP state diagram in Linux 4.4+
+![tcp](tcp.png)
+
 # `bind`
 ```text
 sys_bind
@@ -106,7 +109,7 @@ sys_listen
         -> __inet_hash  // tcp_hashinfo.listening_hash[X] add node
 ```
 
-after bind() and listen()
+After bind() and listen()
 ![bhash](bhash.png)
 
 # Passive open
@@ -157,6 +160,8 @@ tcp_v4_rcv
                   -> dst_output
                     -> ip_output
 ```
+After receiving SYN
+![syn](syn.png)
 
 ## Receive ACK
 ```
@@ -245,6 +250,8 @@ tcp_v4_rcv
       -> tcp_ack_snd_check
     -> parent->sk_data_ready -> sock_def_readable -> wake_up_interruptible_sync_poll
 ```
+After receiving ACK
+![ack](ack.png)
 
 # Active open
 ## connect
