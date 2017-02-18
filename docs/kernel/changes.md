@@ -3,6 +3,7 @@
 [Linux 4.9](https://kernelnewbies.org/Linux_4.9)
 
 * BBR congestion control algorithm
+* tcp: use an RB tree for ooo receive queue [commit 9f5afeae51](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a)
 
 # 4.6 - 2016-05-15
 
