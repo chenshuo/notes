@@ -192,14 +192,17 @@ After `socket()`
 
 On x86-64 Deiban 8, Linux 3.16, `/proc/slabinfo`
 
-| struct | size | cache name |
-| --- | --- | --- |
-| `file` | 256 | "filp" |
-| `dentry` | 192 | "dentry" |
-| `socket_alloc` | 640 | "sock_inode_cache" |
-| `tcp_sock` | 1792 | "TCP" |
-| `socket_wq` | 64 | "kmalloc-64"? |
-| `inet_bind_bucket` | 64 | "tcp_bind_bucket" |
+| struct           | size | slab cache name    |
+| ---------------- | ---- | ------------------ |
+| `file`             |  256 | "filp"             |
+| `dentry`           |  192 | "dentry"           |
+| `socket_alloc`     |  640 | "sock_inode_cache" |
+| `tcp_sock`         | 1792 | "TCP"              |
+| `socket_wq`        |   64 | "kmalloc-64"       |
+| `inet_bind_bucket`   |   64 | "tcp_bind_bucket"  |
+| `tcp_request_sock`   |  256 | "request_sock_TCP" |
+| `inet_timewait_sock` |  192 | "tw_sock_TCP" |
+| `epitem`           |  128 | "eventpoll_epi"    |
 
 Total : 2944 bytes/socket, not including send/receive buffers. For client sockets, +64B for `inet_bind_bucket`.
 
