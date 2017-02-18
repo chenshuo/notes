@@ -310,7 +310,7 @@ inet_create(sock, protocol)
 <tr>
 <th>struct</th>
 <th>size</th>
-<th>cache name</th>
+<th>slab cache name</th>
 </tr>
 </thead>
 <tbody>
@@ -337,12 +337,27 @@ inet_create(sock, protocol)
 <tr>
 <td><code>socket_wq</code></td>
 <td>64</td>
-<td>"kmalloc-64"?</td>
+<td>"kmalloc-64"</td>
 </tr>
 <tr>
 <td><code>inet_bind_bucket</code></td>
 <td>64</td>
 <td>"tcp_bind_bucket"</td>
+</tr>
+<tr>
+<td><code>tcp_request_sock</code></td>
+<td>256</td>
+<td>"request_sock_TCP"</td>
+</tr>
+<tr>
+<td><code>inet_timewait_sock</code></td>
+<td>192</td>
+<td>"tw_sock_TCP"</td>
+</tr>
+<tr>
+<td><code>epitem</code></td>
+<td>128</td>
+<td>"eventpoll_epi"</td>
 </tr>
 </tbody>
 </table>

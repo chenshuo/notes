@@ -109,7 +109,8 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#tcp_hashinfo">tcp_hashinfo</a></li>
+        <li class="main active"><a href="#tcp_sock">tcp_sock</a></li>
+        <li class="main "><a href="#tcp_hashinfo">tcp_hashinfo</a></li>
         <li class="main "><a href="#tcp-state-diagram-in-linux-44">TCP state diagram in Linux 4.4+</a></li>
         <li class="main "><a href="#bind">bind</a></li>
         <li class="main "><a href="#listen">listen</a></li>
@@ -126,6 +127,8 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
+<h1 id="tcp_sock"><code>tcp_sock</code></h1>
+<p><img alt="sock" src="../sock.png" /></p>
 <h1 id="tcp_hashinfo"><code>tcp_hashinfo</code></h1>
 <pre><code class="c">// include/linux/types.h
 struct hlist_head {
