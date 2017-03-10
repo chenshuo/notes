@@ -7,6 +7,7 @@ pages:
   - Kernel:
     - 'Data Structures': kernel/data-structures.md
     - 'Call Graphs': kernel/callgraph.md
+    - 'SO_REUSEPRT': kernel/reuseport.md
     - 'Changes': kernel/changes.md
   - lcc: lcc.md
   - Lua: lua.md
