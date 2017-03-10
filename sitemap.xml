@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>/bugs/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>/git/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -29,19 +29,25 @@
         
     <url>
      <loc>/kernel/data-structures/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/kernel/callgraph/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/kernel/reuseport/</loc>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/kernel/changes/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -50,7 +56,7 @@
     
     <url>
      <loc>/lcc/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -58,7 +64,7 @@
     
     <url>
      <loc>/lua/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -66,7 +72,7 @@
     
     <url>
      <loc>/mem/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -74,7 +80,7 @@
     
     <url>
      <loc>/ssl/</loc>
-     <lastmod>2017-02-18</lastmod>
+     <lastmod>2017-03-10</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
