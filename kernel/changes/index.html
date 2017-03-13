@@ -117,6 +117,7 @@
         <li class="main "><a href="#46-2016-05-15">4.6 - 2016-05-15</a></li>
         <li class="main "><a href="#45-2016-03-13">4.5 - 2016-03-13</a></li>
         <li class="main "><a href="#44-2016-01-10">4.4 - 2016-01-10</a></li>
+        <li class="main "><a href="#43-2015-11-01">4.3 - 2015-11-01</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -214,6 +215,39 @@ Date:   Fri Oct 2 11:43:32 2015 -0700
     Cc: Ying Cai &lt;ycai@google.com&gt;
     Cc: Willem de Bruijn &lt;willemb@google.com&gt;
     Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
+</code></pre>
+
+<h1 id="43-2015-11-01">4.3 - 2015-11-01</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.3">Linux 4.3</a></p>
+<pre><code class="text">commit 9dea5dc921b5f4045a18c63eb92e84dc274d17eb
+Author: Andy Lutomirski &lt;luto@kernel.org&gt;
+Date:   Tue Jul 14 15:24:24 2015 -0700
+
+    x86/entry/syscalls: Wire up 32-bit direct socket calls
+
+    On x86_64, there's no socketcall syscall; instead all of the
+    socket calls are real syscalls.  For 32-bit programs, we're
+    stuck offering the socketcall syscall, but it would be nice to
+    expose the direct calls as well.  This will enable seccomp to
+    filter socket calls (for new userspace only, but that's fine for
+    some applications) and it will provide a tiny performance boost.
+</code></pre>
+
+<p><a href="https://www.sourceware.org/ml/libc-alpha/2016-02/msg00502.html">glibc 2.23</a> 2016-02-19.
+Ubuntu 16.04 supports it, Debian 8 doesn't.</p>
+<pre><code class="text">commit e5a5315e2d290fe34e0fb80996c713b8b802dcc9
+Author: Joseph Myers &lt;joseph@codesourcery.com&gt;
+Date:   Wed Dec 9 20:59:43 2015 +0000
+
+    Use direct socket syscalls for new kernels on i386, m68k, microblaze, sh.
+
+    Now that we have __ASSUME_* macros for direct socket syscalls to use
+    them instead of socketcall when they can be assumed to be available on
+    socketcall architectures, this patch defines those macros when
+    appropriate for i386, m68k, microblaze and sh (for 4.3, 4.3, all
+    supported kernels and 2.6.37, respectively; the only use of socketcall
+    support on microblaze is it allows accept4 and sendmmsg to be
+    supported on a wider range of kernel versions).
 </code></pre></div>
         </div>
 
