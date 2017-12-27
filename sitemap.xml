@@ -3,24 +3,24 @@
 
     
     <url>
-     <loc>/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/bugs/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/bugs/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/git/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/git/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -28,26 +28,26 @@
     
         
     <url>
-     <loc>/kernel/data-structures/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/kernel/data-structures/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/kernel/callgraph/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/kernel/callgraph/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/kernel/reuseport/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/kernel/reuseport/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>/kernel/changes/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/kernel/changes/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -55,32 +55,32 @@
 
     
     <url>
-     <loc>/lcc/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/lcc/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/lua/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/lua/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/mem/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/mem/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
 
     
     <url>
-     <loc>/ssl/</loc>
-     <lastmod>2017-03-13</lastmod>
+     <loc>None/ssl/</loc>
+     <lastmod>2017-12-27</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
