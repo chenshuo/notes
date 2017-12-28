@@ -1,6 +1,6 @@
 # Notes on Lua implementation
 
-Callgraph of parsing expressions
+Releases:
 
 ![releases](lua/releases.png)
 
