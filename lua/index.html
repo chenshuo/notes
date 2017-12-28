@@ -170,8 +170,19 @@
 <p>Callgraph of parsing expressions</p>
 <p><img alt="releases" src="../lua/releases.png" /></p>
 <p><a href="../lua/calltree.html">Calltree of Lua 5.3</a> for following simple program:</p>
-<pre><code>x = 10
-print(x)
+<pre><code class="c++">#include &quot;lua.hpp&quot;
+
+int main()
+{
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L);  // open standard libraries
+  luaL_loadstring(L, R&quot;(
+      x = 10 * 5
+      print(x)
+      )&quot;);
+  lua_pcall(L, 0, LUA_MULTRET, 0);
+  lua_close(L);
+}
 </code></pre></div>
             
         </div>
