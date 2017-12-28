@@ -267,12 +267,12 @@
         },
         {
             "location": "/lua/",
-            "text": "Notes on Lua implementation\n\n\nCallgraph of parsing expressions\n\n\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\n#include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
+            "text": "Notes on Lua implementation\n\n\nReleases:\n\n\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\n#include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
             "title": "Lua"
         },
         {
             "location": "/lua/#notes-on-lua-implementation",
-            "text": "Callgraph of parsing expressions   Calltree of Lua 5.3  for following simple program:  #include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
+            "text": "Releases:   Calltree of Lua 5.3  for following simple program:  #include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
             "title": "Notes on Lua implementation"
         },
         {
