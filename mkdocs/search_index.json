@@ -277,12 +277,12 @@
         },
         {
             "location": "/mem/",
-            "text": "Notes on C/C++ memory model\n\n\n\n\nThe C11 and C++11 Concurrency Model\n by Mark John Batty",
+            "text": "Notes on C/C++ memory model\n\n\n\n\nThe C11 and C++11 Concurrency Model\n by Mark John Batty\n\n\nC/C++11 mappings to processors\n by Alexander Terekhov, Paul McKenney, et al.",
             "title": "mem"
         },
         {
             "location": "/mem/#notes-on-cc-memory-model",
-            "text": "The C11 and C++11 Concurrency Model  by Mark John Batty",
+            "text": "The C11 and C++11 Concurrency Model  by Mark John Batty  C/C++11 mappings to processors  by Alexander Terekhov, Paul McKenney, et al.",
             "title": "Notes on C/C++ memory model"
         },
         {
