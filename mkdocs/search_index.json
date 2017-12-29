@@ -27,33 +27,18 @@
         },
         {
             "location": "/bugs/#gcc",
-            "text": "",
+            "text": "Bug 54812 :  private   =default  destructor is  public  Delete expression doesn't respect access of defaulted destructor  struct Base\n{\n private:\n  ~Base() = default;\n};\n\nint main()\n{\n  Base* p = new Base;\n  delete p;\n}   Quote:  The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.   Fixed in 4.9.0, by  r203985 .\nTest case added by  r204057 .",
             "title": "GCC"
         },
         {
-            "location": "/bugs/#bug-54812-private-default-destructor-is-public",
-            "text": "Delete expression doesn't respect access of defaulted destructor  struct Base\n{\n private:\n  ~Base() = default;\n};\n\nint main()\n{\n  Base* p = new Base;\n  delete p;\n}   Quote:  The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.   Fixed in 4.9.0, by  r203985 .\nTest case added by  r204057 .",
-            "title": "Bug 54812: private =default destructor is public"
-        },
-        {
             "location": "/bugs/#glibc",
-            "text": "",
+            "text": "strstr(3)  Since glibc 2.9, strstr(3) may use  Two Way algorithm  in some cases, but the impl. had several bugs:   Bug 12092  Bug 12100  Bug 14602  More?",
             "title": "Glibc"
         },
         {
-            "location": "/bugs/#strstr3",
-            "text": "Since glibc 2.9, strstr(3) may use  Two Way algorithm  in some cases, but the impl. had several bugs:   Bug 12092  Bug 12100  Bug 14602  More?",
-            "title": "strstr(3)"
-        },
-        {
             "location": "/bugs/#kernel",
-            "text": "",
+            "text": "write(2)  not thread-safe  Fixed in v3.14, released in 2014-03-30. Ubuntu 14.04 has this bug, Debian 8 doesn't.  commit 9c225f2655e36a470c4f58dbbc99244c5fc7f2d4\nAuthor: Linus Torvalds <torvalds@linux-foundation.org>\nDate:   Mon Mar 3 09:36:58 2014 -0800\n\n    vfs: atomic f_pos accesses as per POSIX\n\n    Our write() system call has always been atomic in the sense that you get\n    the expected thread-safe contiguous write, but we haven't actually\n    guaranteed that concurrent writes are serialized wrt f_pos accesses, so\n    threads (or processes) that share a file descriptor and use \"write()\"\n    concurrently would quite likely overwrite each others data.\n\n    This violates POSIX.1-2008/SUSv4 Section XSI 2.9.7 that says:\n\n     \"2.9.7 Thread Interactions with Regular File Operations\n\n      All of the following functions shall be atomic with respect to each\n      other in the effects specified in POSIX.1-2008 when they operate on\n      regular files or symbolic links: [...]\"\n\n    and one of the effects is the file position update.\n\n    This unprotected file position behavior is not new behavior, and nobody\n    has ever cared.  Until now.  Yongzhi Pan reported unexpected behavior to\n    Michael Kerrisk that was due to this.\n\n    This resolves the issue with a f_pos-specific lock that is taken by\n    read/write/lseek on file descriptors that may be shared across threads\n    or processes.\n\n    Reported-by: Yongzhi Pan <panyongzhi@gmail.com>\n    Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>\n    Cc: Al Viro <viro@zeniv.linux.org.uk>\n    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>\n    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>  $ man 2 write  BUGS\n       According  to  POSIX.1-2008/SUSv4  Section XSI 2.9.7 (\"Thread Interactions\n       with Regular File Operations\"):\n\n           All of the following functions shall be atomic with  respect  to  each\n           other  in  the  effects specified in POSIX.1-2008 when they operate on\n           regular files or symbolic links: ...\n\n       Among the APIs subsequently listed are write() and writev(2).   And  among\n       the  effects  that  should  be  atomic  across threads (and processes) are\n       updates of the file offset.  However, on Linux before version  3.14,  this\n       was  not  the  case:  if two processes that share an open file description\n       (see open(2)) perform a write() (or writev(2)) at the same time, then  the\n       I/O operations were not atomic with respect updating the file offset, with\n       the result that the blocks of data  output  by  the  two  processes  might\n       (incorrectly) overlap.  This problem was fixed in Linux 3.14.",
             "title": "Kernel"
-        },
-        {
-            "location": "/bugs/#write2-not-thread-safe",
-            "text": "Fixed in v3.14, released in 2014-03-30. Ubuntu 14.04 has this bug, Debian 8 doesn't.  commit 9c225f2655e36a470c4f58dbbc99244c5fc7f2d4\nAuthor: Linus Torvalds <torvalds@linux-foundation.org>\nDate:   Mon Mar 3 09:36:58 2014 -0800\n\n    vfs: atomic f_pos accesses as per POSIX\n\n    Our write() system call has always been atomic in the sense that you get\n    the expected thread-safe contiguous write, but we haven't actually\n    guaranteed that concurrent writes are serialized wrt f_pos accesses, so\n    threads (or processes) that share a file descriptor and use \"write()\"\n    concurrently would quite likely overwrite each others data.\n\n    This violates POSIX.1-2008/SUSv4 Section XSI 2.9.7 that says:\n\n     \"2.9.7 Thread Interactions with Regular File Operations\n\n      All of the following functions shall be atomic with respect to each\n      other in the effects specified in POSIX.1-2008 when they operate on\n      regular files or symbolic links: [...]\"\n\n    and one of the effects is the file position update.\n\n    This unprotected file position behavior is not new behavior, and nobody\n    has ever cared.  Until now.  Yongzhi Pan reported unexpected behavior to\n    Michael Kerrisk that was due to this.\n\n    This resolves the issue with a f_pos-specific lock that is taken by\n    read/write/lseek on file descriptors that may be shared across threads\n    or processes.\n\n    Reported-by: Yongzhi Pan <panyongzhi@gmail.com>\n    Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>\n    Cc: Al Viro <viro@zeniv.linux.org.uk>\n    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>\n    Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>  $ man 2 write  BUGS\n       According  to  POSIX.1-2008/SUSv4  Section XSI 2.9.7 (\"Thread Interactions\n       with Regular File Operations\"):\n\n           All of the following functions shall be atomic with  respect  to  each\n           other  in  the  effects specified in POSIX.1-2008 when they operate on\n           regular files or symbolic links: ...\n\n       Among the APIs subsequently listed are write() and writev(2).   And  among\n       the  effects  that  should  be  atomic  across threads (and processes) are\n       updates of the file offset.  However, on Linux before version  3.14,  this\n       was  not  the  case:  if two processes that share an open file description\n       (see open(2)) perform a write() (or writev(2)) at the same time, then  the\n       I/O operations were not atomic with respect updating the file offset, with\n       the result that the blocks of data  output  by  the  two  processes  might\n       (incorrectly) overlap.  This problem was fixed in Linux 3.14.",
-            "title": "write(2) not thread-safe"
         },
         {
             "location": "/git/",
@@ -72,13 +57,8 @@
         },
         {
             "location": "/git/#pack-file-format",
-            "text": "",
+            "text": "Delta",
             "title": "Pack file format"
-        },
-        {
-            "location": "/git/#delta",
-            "text": "",
-            "title": "Delta"
         },
         {
             "location": "/git/#pack-index-format",
@@ -267,13 +247,28 @@
         },
         {
             "location": "/lua/",
-            "text": "Notes on Lua implementation\n\n\nReleases:\n\n\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\n#include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
+            "text": "Notes on Lua implementation\n\n\nParser\n\n\nLua uses a recursive descent parser, which generates code on-the-fly, similar to PL/0.\n\n\nCallgraph:\n\n\n\nCalltree\n\n\nCalltree of Lua 5.3\n for following simple program:\n\n\n#include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}\n\n\n\n\nReleases",
             "title": "Lua"
         },
         {
             "location": "/lua/#notes-on-lua-implementation",
-            "text": "Releases:   Calltree of Lua 5.3  for following simple program:  #include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
+            "text": "",
             "title": "Notes on Lua implementation"
+        },
+        {
+            "location": "/lua/#parser",
+            "text": "Lua uses a recursive descent parser, which generates code on-the-fly, similar to PL/0.  Callgraph:",
+            "title": "Parser"
+        },
+        {
+            "location": "/lua/#calltree",
+            "text": "Calltree of Lua 5.3  for following simple program:  #include \"lua.hpp\"\n\nint main()\n{\n  lua_State *L = luaL_newstate();\n  luaL_openlibs(L);  // open standard libraries\n  luaL_loadstring(L, R\"(\n      x = 10 * 5\n      print(x)\n      )\");\n  lua_pcall(L, 0, LUA_MULTRET, 0);\n  lua_close(L);\n}",
+            "title": "Calltree"
+        },
+        {
+            "location": "/lua/#releases",
+            "text": "",
+            "title": "Releases"
         },
         {
             "location": "/mem/",

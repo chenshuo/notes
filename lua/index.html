@@ -12,7 +12,7 @@
 	<title>Lua - Shuo Chen's Notes</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/highlight.css">
 
@@ -161,14 +161,23 @@
     
         <li class="main active"><a href="#notes-on-lua-implementation">Notes on Lua implementation</a></li>
         
+            <li><a href="#parser">Parser</a></li>
+        
+            <li><a href="#calltree">Calltree</a></li>
+        
+            <li><a href="#releases">Releases</a></li>
+        
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
 <h1 id="notes-on-lua-implementation">Notes on Lua implementation</h1>
-<p>Releases:</p>
-<p><img alt="releases" src="../lua/releases.png" /></p>
+<h2 id="parser">Parser</h2>
+<p>Lua uses a recursive descent parser, which generates code on-the-fly, similar to PL/0.</p>
+<p>Callgraph:
+<img alt="Parser" src="../lua/parser.png" /></p>
+<h2 id="calltree">Calltree</h2>
 <p><a href="../lua/calltree.html">Calltree of Lua 5.3</a> for following simple program:</p>
 <pre><code class="c++">#include &quot;lua.hpp&quot;
 
@@ -183,7 +192,10 @@ int main()
   lua_pcall(L, 0, LUA_MULTRET, 0);
   lua_close(L);
 }
-</code></pre></div>
+</code></pre>
+
+<h2 id="releases">Releases</h2>
+<p><img alt="releases" src="../lua/releases.png" /></p></div>
             
         </div>
 
