@@ -1,8 +1,12 @@
 # Notes on Lua implementation
 
-Releases:
+## Parser
+Lua uses a recursive descent parser, which generates code on-the-fly, similar to PL/0.
 
-![releases](lua/releases.png)
+Callgraph:
+![Parser](lua/parser.png)
+
+## Calltree
 
 [Calltree of Lua 5.3](lua/calltree.html) for following simple program:
 
@@ -21,3 +25,8 @@ int main()
   lua_close(L);
 }
 ```
+
+## Releases
+
+![releases](lua/releases.png)
+
