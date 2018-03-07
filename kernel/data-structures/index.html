@@ -83,6 +83,12 @@
                         
                             
 <li >
+    <a href="../file-descriptor-table/">File Descriptor Table</a>
+</li>
+
+                        
+                            
+<li >
     <a href="../callgraph/">Call Graphs</a>
 </li>
 
@@ -143,7 +149,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../callgraph/">
+                        <a rel="prev" href="../file-descriptor-table/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -239,6 +245,10 @@ struct file {
         struct path             f_path;
         struct inode            *f_inode;       /* cached value */
         const struct file_operations    *f_op;
+
+        // ...
+
+        atomic_long_t           f_count;
 
         // ...
 
