@@ -58,6 +58,10 @@ struct file {
 
         // ...
 
+        atomic_long_t           f_count;
+
+        // ...
+
         /* needed for tty driver, and maybe others */
         void                    *private_data;
 
