@@ -72,7 +72,7 @@ struct task_struct {
 ## 2.1.90 to 2.6.13
 
 Change fixed-length array `fd` to dynamic array.
-2.0.0 was released in 1999/01.
+2.2.0 was released in 1999/01.
 
 ```diff
 // include/linux/sched.h of linux-2.2.0
