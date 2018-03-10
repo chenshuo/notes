@@ -1,5 +1,7 @@
 # Envolution of File Descriptor Table in Linux Kernel
 
+![releases](releases.png)
+
 ## 0.01 to 1.1.10
 
 A fixed length array in `struct task_struct`.
@@ -32,8 +34,12 @@ struct files_struct {
 struct task_struct {
         // ...
 
+/* filesystem information */
+        struct fs_struct fs[1];
 /* open file information */
         struct files_struct files[1];
+/* memory management info */
+        struct mm_struct mm[1];
 
         // ...
 
@@ -59,7 +65,13 @@ struct files_struct {
 struct task_struct {
         // ...
 
-/* open file information */
+ /* filesystem information */
+-       struct fs_struct fs[1];
++       struct fs_struct *fs;
+ /* open file information */
+-       struct files_struct files[1];
++       struct files_struct *files;
+ /* open file information */
 -       struct files_struct files[1];
 +       struct files_struct *files;
 
