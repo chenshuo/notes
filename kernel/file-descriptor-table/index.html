@@ -186,6 +186,7 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="envolution-of-file-descriptor-table-in-linux-kernel">Envolution of File Descriptor Table in Linux Kernel</h1>
+<p><img alt="releases" src="../releases.png" /></p>
 <h2 id="001-to-1110">0.01 to 1.1.10</h2>
 <p>A fixed length array in <code>struct task_struct</code>.</p>
 <pre><code class="c">// include/linux/sched.h of linux-1.1.10
@@ -212,8 +213,12 @@ struct files_struct {
 struct task_struct {
         // ...
 
+/* filesystem information */
+        struct fs_struct fs[1];
 /* open file information */
         struct files_struct files[1];
+/* memory management info */
+        struct mm_struct mm[1];
 
         // ...
 
@@ -236,7 +241,13 @@ struct files_struct {
 struct task_struct {
         // ...
 
-/* open file information */
+ /* filesystem information */
+-       struct fs_struct fs[1];
++       struct fs_struct *fs;
+ /* open file information */
+-       struct files_struct files[1];
++       struct files_struct *files;
+ /* open file information */
 -       struct files_struct files[1];
 +       struct files_struct *files;
 
