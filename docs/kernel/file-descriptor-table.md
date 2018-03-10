@@ -1,4 +1,4 @@
-# Envolution of File Descriptor Table in Linux Kernel
+# Evolution of File Descriptor Table in Linux Kernel
 
 ![releases](releases.png)
 
@@ -16,6 +16,29 @@ struct task_struct {
         // ...
 }
 ```
+
+Note 1: `file_table` and `inode_table` were made dynamic in 0.99.10.
+
+| Version | `NR_OPEN` | `NR_FILE` | `NR_INODE` |
+| ------- | --------- | --------- | ---------- |
+| 0.01    |    20     |     64    |     32     |
+| 0.12    |    20     |     64    |     64     |
+| 0.95    |    20     |     64    |    128     |
+|0.96a-patch3| 32     |     64    |    128     |
+|0.96c-patch1| 32     |    128    |    128     |
+| 0.96pre |    32     |     64    |    128     |
+| 0.97    |    32     |    128    |    128     |
+| 0.98.4  |   256     |    128    |    128     |
+| 0.99.10 |   256     |   1024    |   2048     |
+
+```diff
+// fs/file_table.c of linux-0.99.10
+
+-struct file file_table[NR_FILE];
++struct file * first_file;
+```
+
+Note 2: ext2 file system was added 0.99.7.
 
 ## 1.1.11 to 1.3.21
 
