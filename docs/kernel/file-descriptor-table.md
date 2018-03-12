@@ -14,7 +14,7 @@ struct task_struct {
         struct file * filp[NR_OPEN];
         fd_set close_on_exec;
         // ...
-}
+};
 ```
 
 Note 1: `file_table` and `inode_table` were made dynamic in 0.99.10.
@@ -66,7 +66,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 ```
 
 ## 1.3.22 to 2.1.89
@@ -94,14 +94,12 @@ struct task_struct {
  /* open file information */
 -       struct files_struct files[1];
 +       struct files_struct *files;
- /* open file information */
--       struct files_struct files[1];
-+       struct files_struct *files;
-
+ /* memory management info */
+-       struct mm_struct mm[1];
++       struct mm_struct *mm;
 
         // ...
-
-}
+};
 ```
 
 ## 2.1.90 to 2.6.13
@@ -132,7 +130,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 ```
 
 ![fdt](fdt.png)
@@ -181,7 +179,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 ```
 
 `struct file` itself.
@@ -289,5 +287,5 @@ struct file {
         // ...
         off_t           f_offset;
         // ...
-}
+};
 ```
