@@ -196,7 +196,7 @@ struct task_struct {
         struct file * filp[NR_OPEN];
         fd_set close_on_exec;
         // ...
-}
+};
 </code></pre>
 
 <p>Note 1: <code>file_table</code> and <code>inode_table</code> were made dynamic in 0.99.10.</p>
@@ -296,7 +296,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 </code></pre>
 
 <h2 id="1322-to-2189">1.3.22 to 2.1.89</h2>
@@ -321,14 +321,12 @@ struct task_struct {
  /* open file information */
 -       struct files_struct files[1];
 +       struct files_struct *files;
- /* open file information */
--       struct files_struct files[1];
-+       struct files_struct *files;
-
+ /* memory management info */
+-       struct mm_struct mm[1];
++       struct mm_struct *mm;
 
         // ...
-
-}
+};
 </code></pre>
 
 <h2 id="2190-to-2613">2.1.90 to 2.6.13</h2>
@@ -356,7 +354,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 </code></pre>
 
 <p><img alt="fdt" src="../fdt.png" /></p>
@@ -401,7 +399,7 @@ struct task_struct {
 
         // ...
 
-}
+};
 </code></pre>
 
 <p><code>struct file</code> itself.</p>
@@ -501,7 +499,7 @@ struct file {
         // ...
         off_t           f_offset;
         // ...
-}
+};
 </code></pre></div>
             
         </div>
