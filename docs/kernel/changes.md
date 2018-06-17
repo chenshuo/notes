@@ -33,26 +33,26 @@ Author: Eric Dumazet <edumazet@google.com>
 Date:   Fri Oct 2 11:43:35 2015 -0700
 
     tcp: attach SYNACK messages to request sockets instead of listener
-    
+
     If a listen backlog is very big (to avoid syncookies), then
     the listener sk->sk_wmem_alloc is the main source of false
     sharing, as we need to touch it twice per SYNACK re-transmit
     and TX completion.
-    
+
     (One SYN packet takes listener lock once, but up to 6 SYNACK
     are generated)
-    
+
     By attaching the skb to the request socket, we remove this
     source of contention.
-    
+
     Tested:
-    
+
      listen(fd, 10485760); // single listener (no SO_REUSEPORT)
      16 RX/TX queue NIC
      Sustain a SYNFLOOD attack of ~320,000 SYN per second,
      Sending ~1,400,000 SYNACK per second.
      Perf profiles now show listener spinlock being next bottleneck.
-    
+
         20.29%  [kernel]  [k] queued_spin_lock_slowpath
         10.06%  [kernel]  [k] __inet_lookup_established
          5.12%  [kernel]  [k] reqsk_timer_handler
@@ -62,7 +62,7 @@ Date:   Fri Oct 2 11:43:35 2015 -0700
          2.70%  [kernel]  [k] run_timer_softirq
          2.50%  [kernel]  [k] ip_finish_output
          2.04%  [kernel]  [k] cascade
-    
+
     Signed-off-by: Eric Dumazet <edumazet@google.com>
     Signed-off-by: David S. Miller <davem@davemloft.net>
 ```
@@ -73,24 +73,24 @@ Author: Eric Dumazet <edumazet@google.com>
 Date:   Fri Oct 2 11:43:32 2015 -0700
 
     tcp/dccp: install syn_recv requests into ehash table
-    
+
     In this patch, we insert request sockets into TCP/DCCP
     regular ehash table (where ESTABLISHED and TIMEWAIT sockets
     are) instead of using the per listener hash table.
-    
+
     ACK packets find SYN_RECV pseudo sockets without having
     to find and lock the listener.
-    
+
     In nominal conditions, this halves pressure on listener lock.
-    
+
     Note that this will allow for SO_REUSEPORT refinements,
     so that we can select a listener using cpu/numa affinities instead
     of the prior 'consistent hash', since only SYN packets will
     apply this selection logic.
-    
+
     We will shrink listen_sock in the following patch to ease
     code review.
-    
+
     Signed-off-by: Eric Dumazet <edumazet@google.com>
     Cc: Ying Cai <ycai@google.com>
     Cc: Willem de Bruijn <willemb@google.com>
@@ -133,4 +133,39 @@ Date:   Wed Dec 9 20:59:43 2015 +0000
     supported kernels and 2.6.37, respectively; the only use of socketcall
     support on microblaze is it allows accept4 and sendmmsg to be
     supported on a wider range of kernel versions).
+```
+
+# 4.2 - 2015-08-30
+
+[Linux 4.2](https://kernelnewbies.org/Linux_4.2)
+
+```text
+commit 90c337da1524863838658078ec34241f45d8394d
+Author: Eric Dumazet <edumazet@google.com>
+Date:   Sat Jun 6 21:17:57 2015 -0700
+
+    inet: add IP_BIND_ADDRESS_NO_PORT to overcome bind(0) limitations
+
+    When an application needs to force a source IP on an active TCP socket
+    it has to use bind(IP, port=x).
+
+    As most applications do not want to deal with already used ports, x is
+    often set to 0, meaning the kernel is in charge to find an available
+    port.
+    But kernel does not know yet if this socket is going to be a listener or
+    be connected.
+    It has very limited choices (no full knowledge of final 4-tuple for a
+    connect())
+
+    With limited ephemeral port range (about 32K ports), it is very easy to
+    fill the space.
+
+    This patch adds a new SOL_IP socket option, asking kernel to ignore
+    the 0 port provided by application in bind(IP, port=0) and only
+    remember the given IP address.
+
+    The port will be automatically chosen at connect() time, in a way
+    that allows sharing a source port as long as the 4-tuples are unique.
+
+    This new feature is available for both IPv4 and IPv6 (Thanks Neal)
 ```
