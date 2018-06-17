@@ -186,6 +186,9 @@
         <li class="main "><a href="#43-2015-11-01">4.3 - 2015-11-01</a></li>
         
     
+        <li class="main "><a href="#42-2015-08-30">4.2 - 2015-08-30</a></li>
+        
+    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
@@ -316,6 +319,38 @@ Date:   Wed Dec 9 20:59:43 2015 +0000
     supported kernels and 2.6.37, respectively; the only use of socketcall
     support on microblaze is it allows accept4 and sendmmsg to be
     supported on a wider range of kernel versions).
+</code></pre>
+
+<h1 id="42-2015-08-30">4.2 - 2015-08-30</h1>
+<p><a href="https://kernelnewbies.org/Linux_4.2">Linux 4.2</a></p>
+<pre><code class="text">commit 90c337da1524863838658078ec34241f45d8394d
+Author: Eric Dumazet &lt;edumazet@google.com&gt;
+Date:   Sat Jun 6 21:17:57 2015 -0700
+
+    inet: add IP_BIND_ADDRESS_NO_PORT to overcome bind(0) limitations
+
+    When an application needs to force a source IP on an active TCP socket
+    it has to use bind(IP, port=x).
+
+    As most applications do not want to deal with already used ports, x is
+    often set to 0, meaning the kernel is in charge to find an available
+    port.
+    But kernel does not know yet if this socket is going to be a listener or
+    be connected.
+    It has very limited choices (no full knowledge of final 4-tuple for a
+    connect())
+
+    With limited ephemeral port range (about 32K ports), it is very easy to
+    fill the space.
+
+    This patch adds a new SOL_IP socket option, asking kernel to ignore
+    the 0 port provided by application in bind(IP, port=0) and only
+    remember the given IP address.
+
+    The port will be automatically chosen at connect() time, in a way
+    that allows sharing a source port as long as the 4-tuples are unique.
+
+    This new feature is available for both IPv4 and IPv6 (Thanks Neal)
 </code></pre></div>
             
         </div>
