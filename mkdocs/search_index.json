@@ -362,12 +362,12 @@
         },
         {
             "location": "/mem/",
-            "text": "Notes on C/C++ memory model\n\n\n\n\nThe C11 and C++11 Concurrency Model\n by Mark John Batty\n\n\nC/C++11 mappings to processors\n by Alexander Terekhov, Paul McKenney, et al.",
+            "text": "Notes on C/C++ memory model\n\n\n\n\nThreads and memory model for C++\n by Hans Boehm\n\n\nGCC 4.7 and above does the right thing!\n\n\n\n\n\n\nThe C11 and C++11 Concurrency Model\n by Mark John Batty\n\n\nC/C++11 mappings to processors\n by Alexander Terekhov, Paul McKenney, et al.\n\n\nAwesome Lock-Free",
             "title": "mem"
         },
         {
             "location": "/mem/#notes-on-cc-memory-model",
-            "text": "The C11 and C++11 Concurrency Model  by Mark John Batty  C/C++11 mappings to processors  by Alexander Terekhov, Paul McKenney, et al.",
+            "text": "Threads and memory model for C++  by Hans Boehm  GCC 4.7 and above does the right thing!    The C11 and C++11 Concurrency Model  by Mark John Batty  C/C++11 mappings to processors  by Alexander Terekhov, Paul McKenney, et al.  Awesome Lock-Free",
             "title": "Notes on C/C++ memory model"
         },
         {
@@ -404,6 +404,16 @@
             "location": "/ssl/#cryptography",
             "text": "cs387 Applied Cryptography on udacity  Elliptic Curve Cryptography: ECDH and ECDSA  Everything you need to know about cryptography in 1 hour",
             "title": "Cryptography"
+        },
+        {
+            "location": "/links/",
+            "text": "Links\n\n\n\n\nTheory and Applications of Markov Chains to Finance\n by Kevin Atteson",
+            "title": "Links"
+        },
+        {
+            "location": "/links/#links",
+            "text": "Theory and Applications of Markov Chains to Finance  by Kevin Atteson",
+            "title": "Links"
         }
     ]
 }
