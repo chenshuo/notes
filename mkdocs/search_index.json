@@ -407,13 +407,28 @@
         },
         {
             "location": "/links/",
-            "text": "Links\n\n\n\n\nTheory and Applications of Markov Chains to Finance\n by Kevin Atteson",
+            "text": "Links\n\n\nMaths\n\n\n\n\nTheory and Applications of Markov Chains to Finance\n by Kevin Atteson\n\n\n\n\nDFT/FFT\n\n\n\n\n X_k = \\sum_{n=0}^{N-1} x_n e^{-j 2 \\pi k n / N} \n\n\n\n\n\n\nWiki\n\n\nDFT matrix\n\n\nSmith's Guide to DSP, ch.8\n by Steven W. Smith\n\n\nMathematics of the Discrete Fourier Transform\n by Julius O. Smith\n\n\nThe Discrete Fourier Transform\n by Ivan W. Selenick and Gerald Schuller.  From chapter 2 of \nThe Transform and Data Compression Handbook\n ed. by \nKamisetty Ramam Rao\n and Patrick C. Yip\n\n\n\n\nDigital Sinusoid Generators\n\n\n\n\nDTMF Tone Generation and Detection\n by Gunter Schmer\n\n\nDigital Waveguide Oscillator\n by Julius O. Smith\n\n\nEffect Design Part 3 Oscillators: Sinusoidal and Pseudonoise\n by Jon Dattorro\n\n\nA sine generation algorithm for VLSI applications\n by John W. Gordon and Julius O. Smith\n\n\nThe Second-Order Digital Waveguide Oscillator\n by Julius O. Smith and Perry R. Cook\n\n\nAN-263 Sine Wave Generation Techniques\n\n\n5 ways to generate a sine wave",
             "title": "Links"
         },
         {
             "location": "/links/#links",
-            "text": "Theory and Applications of Markov Chains to Finance  by Kevin Atteson",
+            "text": "",
             "title": "Links"
+        },
+        {
+            "location": "/links/#maths",
+            "text": "Theory and Applications of Markov Chains to Finance  by Kevin Atteson",
+            "title": "Maths"
+        },
+        {
+            "location": "/links/#dftfft",
+            "text": "X_k = \\sum_{n=0}^{N-1} x_n e^{-j 2 \\pi k n / N}     Wiki  DFT matrix  Smith's Guide to DSP, ch.8  by Steven W. Smith  Mathematics of the Discrete Fourier Transform  by Julius O. Smith  The Discrete Fourier Transform  by Ivan W. Selenick and Gerald Schuller.  From chapter 2 of  The Transform and Data Compression Handbook  ed. by  Kamisetty Ramam Rao  and Patrick C. Yip",
+            "title": "DFT/FFT"
+        },
+        {
+            "location": "/links/#digital-sinusoid-generators",
+            "text": "DTMF Tone Generation and Detection  by Gunter Schmer  Digital Waveguide Oscillator  by Julius O. Smith  Effect Design Part 3 Oscillators: Sinusoidal and Pseudonoise  by Jon Dattorro  A sine generation algorithm for VLSI applications  by John W. Gordon and Julius O. Smith  The Second-Order Digital Waveguide Oscillator  by Julius O. Smith and Perry R. Cook  AN-263 Sine Wave Generation Techniques  5 ways to generate a sine wave",
+            "title": "Digital Sinusoid Generators"
         }
     ]
 }
