@@ -1,5 +1,9 @@
 site_name: Shuo Chen's Notes
 # theme: readthedocs
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML
+markdown_extensions:
+  - mdx_math
 pages:
   - Home: index.md
   - Bugs: bugs.md
