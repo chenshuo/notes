@@ -1,3 +1,8 @@
+# 4.12 - 2017-07-02
+
+* Removed `net.ipv4.tcp_tw_recycle` option from Kernel [commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc).
+Ref. [Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux) by Vincent Bernat.
+
 # 4.9 - 2016-12-11
 
 [Linux 4.9](https://kernelnewbies.org/Linux_4.9)
