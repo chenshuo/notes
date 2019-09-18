@@ -7,11 +7,11 @@
         
         
         
-        <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Links - Shuo Chen's Notes</title>
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
-        <link href="../css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>epoll - Shuo Chen's Notes</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="..">Shuo Chen's Notes</a>
+                    <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -47,57 +47,57 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="..">Home</a>
+                                <a href="../..">Home</a>
                             </li>
                             <li >
-                                <a href="../bugs/">Bugs</a>
+                                <a href="../../bugs/">Bugs</a>
                             </li>
                             <li >
-                                <a href="../git/">Git</a>
+                                <a href="../../git/">Git</a>
                             </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="../kernel/data-structures/">Data Structures</a>
+    <a href="../data-structures/">Data Structures</a>
 </li>
                                     
 <li >
-    <a href="../kernel/file-descriptor-table/">File Descriptor Table</a>
+    <a href="../file-descriptor-table/">File Descriptor Table</a>
 </li>
                                     
 <li >
-    <a href="../kernel/epoll/">Epoll</a>
+    <a href="../epoll/">Epoll</a>
 </li>
                                     
 <li >
-    <a href="../kernel/callgraph/">Call Graphs</a>
+    <a href="../callgraph/">Call Graphs</a>
 </li>
                                     
 <li >
-    <a href="../kernel/reuseport/">SO_REUSEPRT</a>
+    <a href="../reuseport/">SO_REUSEPRT</a>
 </li>
                                     
 <li >
-    <a href="../kernel/changes/">Changes</a>
+    <a href="../changes/">Changes</a>
 </li>
                                 </ul>
                             </li>
                             <li >
-                                <a href="../lcc/">lcc</a>
+                                <a href="../../lcc/">lcc</a>
                             </li>
                             <li >
-                                <a href="../lua/">Lua</a>
+                                <a href="../../lua/">Lua</a>
                             </li>
                             <li >
-                                <a href="../mem/">mem</a>
+                                <a href="../../mem/">mem</a>
                             </li>
                             <li >
-                                <a href="../ssl/">SSL</a>
+                                <a href="../../ssl/">SSL</a>
                             </li>
-                            <li class="active">
-                                <a href="./">Links</a>
+                            <li >
+                                <a href="../../links/">Links</a>
                             </li>
                         </ul>
 
@@ -107,16 +107,6 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../ssl/">
-                                    <i class="fa fa-arrow-left"></i> Previous
-                                </a>
-                            </li>
-                            <li class="disabled">
-                                <a rel="prev" >
-                                    Next <i class="fa fa-arrow-right"></i>
-                                </a>
-                            </li>
                     </ul>
                 </div>
             </div>
@@ -125,75 +115,94 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#links">Links</a></li>
-            <li><a href="#maths">Maths</a></li>
-            <li><a href="#dftfft">DFT/FFT</a></li>
-            <li><a href="#digital-sinusoid-generators">Digital Sinusoid Generators</a></li>
+        <li class="main active"><a href="#epoll">epoll</a></li>
+            <li><a href="#data-structures">Data structures</a></li>
+            <li><a href="#epoll_create">epoll_create()</a></li>
+            <li><a href="#close">close()</a></li>
+            <li><a href="#epoll_ctladddelmod">epoll_ctl(ADD/DEL/MOD)</a></li>
+            <li><a href="#ep_insert">ep_insert</a></li>
+            <li><a href="#ep_remove">ep_remove</a></li>
+            <li><a href="#ep_modify">ep_modify</a></li>
+            <li><a href="#epoll_wait">epoll_wait()</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="links">Links</h1>
-<ul>
-<li><a href="https://www.karlrupp.net/2018/02/42-years-of-microprocessor-trend-data/">42 Years of Microprocessor Trend Data</a> by Karl Rupp
-<img alt="42cpu" src="42-years-processor-trend.png" /></li>
-</ul>
-<h2 id="maths">Maths</h2>
-<ul>
-<li><a href="http://www.atteson.com/Markov/">Theory and Applications of Markov Chains to Finance</a> by Kevin Atteson</li>
-<li><a href="http://web.eecs.utk.edu/~plank/plank/papers/CS-05-569.html">Reed-Solomon</a> by James S. Plank,
-also <a href="http://web.eecs.utk.edu/~plank/plank/www/software.html">tutorials</a> and
-<a href="http://cgi.di.uoa.gr/~ad/M155/Papers/RS-Tutorial.pdf">SPE97</a></li>
-</ul>
-<h2 id="dftfft">DFT/FFT</h2>
-<p>
-<script type="math/tex; mode=display"> X_k = \sum_{n=0}^{N-1} x_n e^{-j 2 \pi k n / N} </script>
-</p>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Discrete_Fourier_transform">Wikipedia</a></li>
-<li><a href="https://en.wikibooks.org/wiki/Digital_Signal_Processing/Discrete_Fourier_Transform">Wikibooks</a></li>
-<li><a href="https://en.wikipedia.org/wiki/DFT_matrix">DFT matrix</a></li>
-<li><a href="http://www.dspguide.com/ch8/1.htm">Smith's Guide to DSP, ch.8</a> by Steven W. Smith</li>
-<li><a href="http://ccrma.stanford.edu/~jos/mdft/">Mathematics of the Discrete Fourier Transform</a> by Julius O. Smith</li>
-<li><a href="http://dsp-book.narod.ru/TDCH/CH-02.PDF">The Discrete Fourier Transform</a> by Ivan W. Selenick and Gerald Schuller.  From chapter 2 of <em>The Transform and Data Compression Handbook</em> ed. by <a href="https://en.wikipedia.org/wiki/K._R._Rao">Kamisetty Ramam Rao</a> and Patrick C. Yip</li>
-<li><a href="https://web.eecs.umich.edu/~fessler/course/451/l/pdf/c5.pdf">The Discrete Fourier Transform</a> by prof. <a href="http://web.eecs.umich.edu/~fessler/">Jeffrey A. Fessler</a> from <a href="https://web.eecs.umich.edu/~fessler/course/451/">EECS 451, Digital Signal Processing and Analysis</a></li>
-<li><a href="http://www.robots.ox.ac.uk/~sjrob/Teaching/SP/l7.pdf">The Discrete Fourier Transform</a> by prof. <a href="http://www.robots.ox.ac.uk/~sjrob/">Stephen Roberts</a> from <a href="http://www.robots.ox.ac.uk/~sjrob/Teaching/sp_course.html">Signal Processing &amp; Filter Design</a></li>
-</ul>
-<h2 id="digital-sinusoid-generators">Digital Sinusoid Generators</h2>
-<ul>
-<li><a href="http://www.ti.com/lit/an/spra096a/spra096a.pdf">DTMF Tone Generation and Detection</a> by Gunter Schmer</li>
-</ul>
-<p>Second-order digital resonator in Python:</p>
-<pre><code class="python">fs = 8000  # sampling frequency
-fo = 700   # output frequency
-A = 1.0    # amplitude
-w = 2*pi*fo/fs    # angular frequency of fo
-c = 2.0 * cos(w)  # coefficient, controls the frequency, 1.70528
-x = -A * sin(w)   # initial value, controls the amplitude and phase, -0.522498
-y = 0.0
-for ever:
-    emit(x)
-    x, y = c*x - y, x
+<h1 id="epoll">epoll</h1>
+<h2 id="data-structures">Data structures</h2>
+<h3 id="eventpoll">eventpoll{}</h3>
+<h3 id="epitem">epitem{}</h3>
+<h3 id="eppoll_entry">eppoll_entry</h3>
+<h2 id="epoll_create">epoll_create()</h2>
+<pre><code class="text">epoll_create1(flags)
+  CHECK(only valid flags is O_CLOEXEC)
+  struct eventpool* ep = ep_alloc();
+  int fd = get_unused_fd_flags()
+    -&gt; __alloc_fd
+      fd = find_next_fd()
+      __set_open_fd(fd, fdt)
+  struct file* file = anon_inode_getfile(name, fops, ep)
+    path.dentry = d_alloc_pseudo()
+    path.mnt = mntget()
+    d_instantiate(path.dentry)
+    file = alloc_file(&amp;path, flags, fops)
+    file-&gt;private_data = ep
+
+  ep-&gt;file = file
+  fd_install(fd, file)
+  return fd
 </code></pre>
 
-<p>First 100 data points:</p>
-<p><img alt="wave" src="resonator-wave.png" /></p>
-<pre><code class="python">N = 4096
-f = fft(signal[:N])
-p = np.argmax(abs(f)[:N//2])
-print(p*fs/N) =&gt; 699.21895 Hz
+<h2 id="close">close()</h2>
+<pre><code class="text">close(fd)
+  -&gt; __close_fd(current-&gt;files, fd)
+    struct fdtable* fdt = files_fdtable(files)
+    struct file* file = fdt-&gt;fd[fd]
+    fdt-&gt;fd[fd] = NULL
+    -&gt; __put_unused_fd(files, fd)
+      -&gt; __clear_open_fd(fd, fdt)  // clear bit masks
+    -&gt; filp_close(file, files)
+      -&gt; fput(file)
+        if (file_count(file) == 0) return 0
+        if (--file-&gt;f_count == 0)
+          __fput(file)  // delayed
+            -&gt; file-&gt;f_op-&gt;release(inode, file)
+              struct eventpoll *ep = file-&gt;private_data
+              if (ep) ep_free(ep)
+                -&gt; ep_remove(ep, epi)
+                  -&gt; epi_rcu_free
+
 </code></pre>
 
-<p>FFT:
-<img alt="fft" src="resonator-fft.png" /></p>
-<ul>
-<li><a href="https://ccrma.stanford.edu/~jos/pasp/Digital_Waveguide_Oscillator.html">Digital Waveguide Oscillator</a> by Julius O. Smith</li>
-<li><a href="https://ccrma.stanford.edu/~dattorro/EffectDesignPart3.pdf">Effect Design Part 3 Oscillators: Sinusoidal and Pseudonoise</a> by Jon Dattorro</li>
-<li><a href="https://ccrma.stanford.edu/~jos/pdf/GordonAndSmith86.pdf">A sine generation algorithm for VLSI applications</a> by John W. Gordon and Julius O. Smith</li>
-<li><a href="https://ccrma.stanford.edu/~jos/wgo/wgo.pdf">The Second-Order Digital Waveguide Oscillator</a> by Julius O. Smith and Perry R. Cook</li>
-<li><a href="http://www.ti.com/lit/an/snoa665c/snoa665c.pdf">AN-263 Sine Wave Generation Techniques</a></li>
-<li><a href="https://www.analogictips.com/sine-wave-generation/">5 ways to generate a sine wave</a></li>
-</ul></div>
+<h2 id="epoll_ctladddelmod">epoll_ctl(ADD/DEL/MOD)</h2>
+<pre><code class="text">epoll_ctl(epfd, op, fd event)
+  f = fdget(epfd)  // epoll itself
+  tf = fdget(fd)   // target
+  eventpoll* ep = f.file-&gt;private_data
+  if (ADD)
+    -&gt; ep_look_check(ep, tf.file)
+  epitem* epi = ep_find(ep, tf.file, fd)
+  if (ADD &amp;&amp; epi == NULL)
+    -&gt; ep_insert(ep, event, tf.file, fd, )
+  if (DEL &amp;&amp; epi != NULL)
+    -&gt; ep_remove(ep, epi)
+  if (MOD &amp;&amp; epi != NULL &amp;&amp; !(event &amp; EXCLUSIVE))
+    -&gt; ep_modify(ep, epi, event)
+</code></pre>
+
+<h2 id="ep_insert"><code>ep_insert</code></h2>
+<pre><code class="text">  -&gt; ep_insert
+</code></pre>
+
+<h2 id="ep_remove"><code>ep_remove</code></h2>
+<pre><code class="text">  -&gt; ep_remove
+</code></pre>
+
+<h2 id="ep_modify"><code>ep_modify</code></h2>
+<pre><code class="text">  -&gt; ep_modify
+</code></pre>
+
+<h2 id="epoll_wait">epoll_wait()</h2></div>
         </div>
 
         <footer class="col-md-12">
@@ -201,12 +210,12 @@ print(p*fs/N) =&gt; 699.21895 Hz
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "..",
+            var base_url = "../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="../js/base.js" defer></script>
+        <script src="../../js/base.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML" defer></script>
-        <script src="../search/main.js" defer></script>
+        <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
