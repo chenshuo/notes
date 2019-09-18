@@ -14,6 +14,11 @@ also [tutorials](http://web.eecs.utk.edu/~plank/plank/www/software.html) and
 
 $$ X_k = \sum_{n=0}^{N-1} x_n e^{-j 2 \pi k n / N} $$
 
+<video controls="controls">
+  <source type="video/mp4" src="../media/dft-basis.mp4"></source>
+  <p>Your browser does not support the video element.</p>
+</video>
+
 * [Wikipedia](https://en.wikipedia.org/wiki/Discrete_Fourier_transform)
 * [Wikibooks](https://en.wikibooks.org/wiki/Digital_Signal_Processing/Discrete_Fourier_Transform)
 * [DFT matrix](https://en.wikipedia.org/wiki/DFT_matrix)
