@@ -9,111 +9,98 @@
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
         <title>Call Graphs - Shuo Chen's Notes</title>
-        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
-                </div>
+                <a class="navbar-brand" href="../..">Shuo Chen's Notes</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="../..">Home</a>
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
                             </li>
-                            <li >
-                                <a href="../../bugs/">Bugs</a>
+                            <li class="navitem">
+                                <a href="../../bugs/" class="nav-link">Bugs</a>
                             </li>
-                            <li >
-                                <a href="../../git/">Git</a>
+                            <li class="navitem">
+                                <a href="../../git/" class="nav-link">Git</a>
                             </li>
                             <li class="dropdown active">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../data-structures/">Data Structures</a>
+<li>
+    <a href="../data-structures/" class="dropdown-item">Data Structures</a>
 </li>
                                     
-<li >
-    <a href="../file-descriptor-table/">File Descriptor Table</a>
+<li>
+    <a href="../file-descriptor-table/" class="dropdown-item">File Descriptor Table</a>
 </li>
                                     
-<li >
-    <a href="../epoll/">Epoll</a>
+<li>
+    <a href="../epoll/" class="dropdown-item">Epoll</a>
 </li>
                                     
-<li class="active">
-    <a href="./">Call Graphs</a>
+<li>
+    <a href="./" class="dropdown-item active">Call Graphs</a>
 </li>
                                     
-<li >
-    <a href="../reuseport/">SO_REUSEPRT</a>
+<li>
+    <a href="../reuseport/" class="dropdown-item">SO_REUSEPRT</a>
 </li>
                                     
-<li >
-    <a href="../changes/">Changes</a>
+<li>
+    <a href="../changes/" class="dropdown-item">Changes</a>
 </li>
                                 </ul>
                             </li>
-                            <li >
-                                <a href="../../lcc/">lcc</a>
+                            <li class="navitem">
+                                <a href="../../lcc/" class="nav-link">lcc</a>
                             </li>
-                            <li >
-                                <a href="../../lua/">Lua</a>
+                            <li class="navitem">
+                                <a href="../../lua/" class="nav-link">Lua</a>
                             </li>
-                            <li >
-                                <a href="../../mem/">mem</a>
+                            <li class="navitem">
+                                <a href="../../mem/" class="nav-link">mem</a>
                             </li>
-                            <li >
-                                <a href="../../ssl/">SSL</a>
+                            <li class="navitem">
+                                <a href="../../ssl/" class="nav-link">SSL</a>
                             </li>
-                            <li >
-                                <a href="../../links/">Links</a>
+                            <li class="navitem">
+                                <a href="../../links/" class="nav-link">Links</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../epoll/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../epoll/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../reuseport/">
+                            <li class="nav-item">
+                                <a rel="next" href="../reuseport/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -123,25 +110,97 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#tcp_sock">tcp_sock</a></li>
-        <li class="main "><a href="#tcp_hashinfo">tcp_hashinfo</a></li>
-        <li class="main "><a href="#tcp-state-diagram-in-linux-44">TCP state diagram in Linux 4.4+</a></li>
-        <li class="main "><a href="#bind">bind</a></li>
-        <li class="main "><a href="#listen">listen</a></li>
-        <li class="main "><a href="#passive-open">Passive open</a></li>
-            <li><a href="#receive-syn">Receive SYN</a></li>
-            <li><a href="#receive-ack">Receive ACK</a></li>
-        <li class="main "><a href="#active-open">Active open</a></li>
-            <li><a href="#connect">connect</a></li>
-            <li><a href="#receive-synack">Receive SYN+ACK</a></li>
-        <li class="main "><a href="#accept">accept</a></li>
-        <li class="main "><a href="#read">read</a></li>
-        <li class="main "><a href="#write">write</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#tcp_sock" class="nav-link">tcp_sock</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#tcp_hashinfo" class="nav-link">tcp_hashinfo</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#tcp-state-diagram-in-linux-44" class="nav-link">TCP state diagram in Linux 4.4+</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#bind" class="nav-link">bind</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#listen" class="nav-link">listen</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#passive-open" class="nav-link">Passive open</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#receive-syn" class="nav-link">Receive SYN</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#receive-ack" class="nav-link">Receive ACK</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#active-open" class="nav-link">Active open</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#connect" class="nav-link">connect</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#receive-synack" class="nav-link">Receive SYN+ACK</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#accept" class="nav-link">accept</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#read" class="nav-link">read</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#write" class="nav-link">write</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#receive" class="nav-link">Receive</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#transmit" class="nav-link">transmit</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="tcp_sock"><code>tcp_sock</code></h1>
 <p><img alt="sock" src="../sock.png" /></p>
@@ -534,7 +593,34 @@ struct inet_hashinfo {
 </code></pre>
 
 <h1 id="read">read</h1>
-<h1 id="write">write</h1></div>
+<h1 id="write">write</h1>
+<pre><code class="text">do_syscall_64 -&gt; __x64_sys_write -&gt; ksys_write -&gt; vfs_write -&gt; __vfs_write -&gt; new_sync_write
+  -&gt; sock_write_iter -&gt; sock_sendmsg -&gt; inet_sendmsg -&gt; tcp_sendmsg
+  -&gt; tcp_sendmsg_locked -&gt; tcp_push_one -&gt; tcp_write_xmit
+
+tcp_sendmsg_locked -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
+tcp_sendmsg_locked -&gt; tcp_push -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
+</code></pre>
+
+<h1 id="receive">Receive</h1>
+<pre><code class="text">net_rx_action -&gt; napi_poll -&gt; mlx4_en_poll_rx_cq -&gt; napi_complete_done -&gt; gro_normal_list
+  -&gt; netif_receive_skb_list_internal -&gt; __netif_receive_skb_list -&gt; __netif_receive_skb_list_core
+  -&gt; __netif_receive_skb_list_ptype
+  -&gt; ip_list_rcv -&gt; ip_sublist_rcv -&gt; ip_list_rcv_finish -&gt; ip_sublist_rcv_finish -&gt; dst_input
+  -&gt; ip_local_deliver -&gt; NF_HOOK -&gt; ip_local_deliver_finish -&gt; ip_protocol_deliver_rcu -&gt; tcp_v4_rcv
+
+netif_receive_skb -&gt; __netif_receive_skb -&gt; __netif_receive_skb_one_core -&gt; ip_rcv_finish_core
+  -&gt; ip_rcv -&gt; ip_rcv_finish -&gt; ip_protocol_deliver_rcu -&gt; ip_local_deliver -&gt; ip_local_deliver_finish
+  -&gt; ip_protocol_deliver_rcu _&gt; tcp_v4_rcv
+</code></pre>
+
+<h1 id="transmit">transmit</h1>
+<pre><code class="text">tcp_v4_rcv -&gt; tcp_v4_do_rcv -&gt; tcp_rcv_established -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
+
+tcp_write_xmit -&gt; tcp_transmit_skb -&gt; __tcp_transmit_skb -&gt; ip_queue_xmit -&gt; __ip_queue_xmit -&gt; ip_local_out
+  -&gt; __ip_local_out -&gt; ip_output
+</code></pre></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -549,21 +635,21 @@ struct inet_hashinfo {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML" defer></script>
         <script src="../../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -572,12 +658,12 @@ struct inet_hashinfo {
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">

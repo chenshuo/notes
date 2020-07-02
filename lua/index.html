@@ -9,111 +9,98 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Lua - Shuo Chen's Notes</title>
-        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/font-awesome.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
 
         <script src="../js/jquery-1.10.2.min.js" defer></script>
-        <script src="../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
 
     <body>
-
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-
-                <!-- Collapsed navigation -->
-                <div class="navbar-header">
-                    <!-- Expander button -->
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="..">Shuo Chen's Notes</a>
-                </div>
+                <a class="navbar-brand" href="..">Shuo Chen's Notes</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Expanded navigation -->
-                <div class="navbar-collapse collapse">
+                <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li >
-                                <a href="..">Home</a>
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
                             </li>
-                            <li >
-                                <a href="../bugs/">Bugs</a>
+                            <li class="navitem">
+                                <a href="../bugs/" class="nav-link">Bugs</a>
                             </li>
-                            <li >
-                                <a href="../git/">Git</a>
+                            <li class="navitem">
+                                <a href="../git/" class="nav-link">Git</a>
                             </li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Kernel <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
-<li >
-    <a href="../kernel/data-structures/">Data Structures</a>
+<li>
+    <a href="../kernel/data-structures/" class="dropdown-item">Data Structures</a>
 </li>
                                     
-<li >
-    <a href="../kernel/file-descriptor-table/">File Descriptor Table</a>
+<li>
+    <a href="../kernel/file-descriptor-table/" class="dropdown-item">File Descriptor Table</a>
 </li>
                                     
-<li >
-    <a href="../kernel/epoll/">Epoll</a>
+<li>
+    <a href="../kernel/epoll/" class="dropdown-item">Epoll</a>
 </li>
                                     
-<li >
-    <a href="../kernel/callgraph/">Call Graphs</a>
+<li>
+    <a href="../kernel/callgraph/" class="dropdown-item">Call Graphs</a>
 </li>
                                     
-<li >
-    <a href="../kernel/reuseport/">SO_REUSEPRT</a>
+<li>
+    <a href="../kernel/reuseport/" class="dropdown-item">SO_REUSEPRT</a>
 </li>
                                     
-<li >
-    <a href="../kernel/changes/">Changes</a>
+<li>
+    <a href="../kernel/changes/" class="dropdown-item">Changes</a>
 </li>
                                 </ul>
                             </li>
-                            <li >
-                                <a href="../lcc/">lcc</a>
+                            <li class="navitem">
+                                <a href="../lcc/" class="nav-link">lcc</a>
                             </li>
-                            <li class="active">
-                                <a href="./">Lua</a>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Lua</a>
                             </li>
-                            <li >
-                                <a href="../mem/">mem</a>
+                            <li class="navitem">
+                                <a href="../mem/" class="nav-link">mem</a>
                             </li>
-                            <li >
-                                <a href="../ssl/">SSL</a>
+                            <li class="navitem">
+                                <a href="../ssl/" class="nav-link">SSL</a>
                             </li>
-                            <li >
-                                <a href="../links/">Links</a>
+                            <li class="navitem">
+                                <a href="../links/" class="nav-link">Links</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
-                            <li >
-                                <a rel="next" href="../lcc/">
+                            <li class="nav-item">
+                                <a rel="prev" href="../lcc/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
-                            <li >
-                                <a rel="prev" href="../mem/">
+                            <li class="nav-item">
+                                <a rel="next" href="../mem/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -123,15 +110,38 @@
         </div>
 
         <div class="container">
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#notes-on-lua-implementation">Notes on Lua implementation</a></li>
-            <li><a href="#parser">Parser</a></li>
-            <li><a href="#calltree">Calltree</a></li>
-            <li><a href="#releases">Releases</a></li>
-    </ul>
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#notes-on-lua-implementation" class="nav-link">Notes on Lua implementation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#parser" class="nav-link">Parser</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#calltree" class="nav-link">Calltree</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#releases" class="nav-link">Releases</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
 </div></div>
-                <div class="col-md-9" role="main">
+                    <div class="col-md-9" role="main">
 
 <h1 id="notes-on-lua-implementation">Notes on Lua implementation</h1>
 <h2 id="parser">Parser</h2>
@@ -157,6 +167,7 @@ int main()
 
 <h2 id="releases">Releases</h2>
 <p><img alt="releases" src="releases.png" /></p></div>
+            </div>
         </div>
 
         <footer class="col-md-12">
@@ -171,21 +182,21 @@ int main()
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML" defer></script>
         <script src="../search/main.js" defer></script>
 
-        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
-    <div class="modal-dialog">
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
             </div>
             <div class="modal-body">
                 <p>
                     From here you can search these documents. Enter
                     your search terms below.
                 </p>
-                <form role="form">
+                <form>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
                     </div>
                 </form>
                 <div id="mkdocs-search-results"></div>
@@ -194,12 +205,12 @@ int main()
             </div>
         </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
             </div>
             <div class="modal-body">
               <table class="table">
