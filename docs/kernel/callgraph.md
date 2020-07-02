@@ -406,3 +406,32 @@ sys_accept4
 # read
 
 # write
+```text
+do_syscall_64 -> __x64_sys_write -> ksys_write -> vfs_write -> __vfs_write -> new_sync_write
+  -> sock_write_iter -> sock_sendmsg -> inet_sendmsg -> tcp_sendmsg
+  -> tcp_sendmsg_locked -> tcp_push_one -> tcp_write_xmit
+
+tcp_sendmsg_locked -> __tcp_push_pending_frames -> tcp_write_xmit
+tcp_sendmsg_locked -> tcp_push -> __tcp_push_pending_frames -> tcp_write_xmit
+```
+
+# Receive
+```text
+net_rx_action -> napi_poll -> mlx4_en_poll_rx_cq -> napi_complete_done -> gro_normal_list
+  -> netif_receive_skb_list_internal -> __netif_receive_skb_list -> __netif_receive_skb_list_core
+  -> __netif_receive_skb_list_ptype
+  -> ip_list_rcv -> ip_sublist_rcv -> ip_list_rcv_finish -> ip_sublist_rcv_finish -> dst_input
+  -> ip_local_deliver -> NF_HOOK -> ip_local_deliver_finish -> ip_protocol_deliver_rcu -> tcp_v4_rcv
+
+netif_receive_skb -> __netif_receive_skb -> __netif_receive_skb_one_core -> ip_rcv_finish_core
+  -> ip_rcv -> ip_rcv_finish -> ip_protocol_deliver_rcu -> ip_local_deliver -> ip_local_deliver_finish
+  -> ip_protocol_deliver_rcu _> tcp_v4_rcv
+```
+
+# transmit
+```text
+tcp_v4_rcv -> tcp_v4_do_rcv -> tcp_rcv_established -> __tcp_push_pending_frames -> tcp_write_xmit
+
+tcp_write_xmit -> tcp_transmit_skb -> __tcp_transmit_skb -> ip_queue_xmit -> __ip_queue_xmit -> ip_local_out
+  -> __ip_local_out -> ip_output
+```
