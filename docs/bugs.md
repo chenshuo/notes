@@ -1,4 +1,6 @@
-# GCC
+# Interesting bugs in open source projects
+
+## GCC
 
 ### [Bug 54812](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812): `private` `=default` destructor is `public`
 
@@ -23,7 +25,7 @@ int main()
 Fixed in 4.9.0, by [r203985](https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=203985).
 Test case added by [r204057](https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=204057).
 
-# Glibc
+## Glibc
 
 ### `strstr(3)`
 
@@ -34,7 +36,7 @@ Since glibc 2.9, strstr(3) may use [Two Way algorithm](http://www-igm.univ-mlv.f
 - [Bug 14602](https://sourceware.org/bugzilla/show_bug.cgi?id=14602)
 - More?
 
-# Kernel
+## Kernel
 
 ### `write(2)` not thread-safe
 
@@ -98,3 +100,11 @@ BUGS
        the result that the blocks of data  output  by  the  two  processes  might
        (incorrectly) overlap.  This problem was fixed in Linux 3.14.
 ```
+
+## Java
+
+### ["+=" applied to String operands can provoke side effects](https://bugs.openjdk.java.net/browse/JDK-8204322)
+
+Introduced in JDK9, fixed in JDK10 but not JDK9.
+
+[Why does array[idx++]+=“a” increase idx once in Java 8 but twice in Java 9 and 10?](https://stackoverflow.com/questions/50683786/why-does-arrayidx-a-increase-idx-once-in-java-8-but-twice-in-java-9-and-1)

@@ -1,13 +1,15 @@
 site_name: Shuo Chen's Notes
-# theme: readthedocs
+theme: readthedocs
+extra_css: [extra.css]
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML
+google_analytics: ['UA-1220141-6', 'chenshuo.com']
 markdown_extensions:
-  - mdx_math
+  - mdx_math:
+      enable_dollar_delimiter: True
 pages:
   - Home: index.md
   - Bugs: bugs.md
-  - Git: git.md
   - Kernel:
     - 'Data Structures': kernel/data-structures.md
     - 'File Descriptor Table': kernel/file-descriptor-table.md
@@ -15,8 +17,11 @@ pages:
     - 'Call Graphs': kernel/callgraph.md
     - 'SO_REUSEPRT': kernel/reuseport.md
     - 'Changes': kernel/changes.md
-  - lcc: lcc.md
-  - Lua: lua.md
-  - mem: mem.md
+  - Languages:
+    - lcc: lcc.md
+    - Lua: lua.md
+  - Git: git.md
+  - Memory Model: mem.md
   - SSL: ssl.md
+  - DSP: dsp.md
   - Links: links.md

@@ -1,6 +1,11 @@
-# Notes on Git
+# Git data model
 
-## Data model
+Essentially, [Git is a content-addressable filesystem](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects),
+Linus's [one page explanation](https://github.com/git/git/tree/e83c5163316f89bfbde7d9ab23ca2e25604af290),
+correction: the SHA1 hash is **NOT** the hash of the _compressed_ object.
+
+[Git from the Bottom Up](https://jwiegley.github.io/git-from-the-bottom-up/) by John Wiegley,
+[discuss](https://news.ycombinator.com/item?id=10199391).
 
 * `blob` is content of file
 ```text
