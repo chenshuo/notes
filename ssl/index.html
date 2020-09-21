@@ -198,7 +198,7 @@ Date:   Tue Oct 11 15:08:35 2016 -0700
 
 <h2 id="api-changes">API changes</h2>
 <ul>
-<li>OpenSSL 1.0.2 has an undocumented <code>SSL_get_server_tmp_key()</code> function to get the curve used in handshaking, this is for <code>openssl s_client</code> command. http://crypto.stackexchange.com/questions/11310/with-openssl-and-ecdhe-how-to-show-the-actual-curve-being-used</li>
+<li>OpenSSL 1.0.2 has an undocumented <code>SSL_get_server_tmp_key()</code> function to get the curve used in handshaking, this is for <code>openssl s_client</code> command. <a href="http://crypto.stackexchange.com/questions/11310/with-openssl-and-ecdhe-how-to-show-the-actual-curve-being-used">http://crypto.stackexchange.com/questions/11310/with-openssl-and-ecdhe-how-to-show-the-actual-curve-being-used</a></li>
 <li>OpenSSL 1.0.1 only allows setting one curve with <code>SSL_CTX_set_tmp_ecdh()</code> (or use callbacks), OpenSSL 1.0.2 allows setting curve list with <code>SSL_CTX_set1_curves()</code> and <code>SSL_CTX_set1_curves_list()</code></li>
 <li>OpenSSL 1.0.2 adds <code>SSL_CTX_set_ecdh_auto()</code>, but OpenSSL 1.1.0 makes it a no-op.</li>
 <li>
