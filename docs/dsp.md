@@ -2,8 +2,8 @@
 
 ## DFT/FFT
 
-DFT is a matrix multiplication, the naive implementation is $O(N^2)$.
-FFT is a much faster multiplication in $O(N \log N)$, which makes it practical.
+DFT is a matrix multiplication, the naive implementation is \(O(N^2)\).
+FFT is a much faster multiplication in \(O(N \log N)\), which makes it practical.
 
 $$ X_k = \sum_{n=0}^{N-1} x_n e^{-j 2 \pi k n / N} $$
 

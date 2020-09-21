@@ -5,8 +5,7 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML
 google_analytics: ['UA-1220141-6', 'chenshuo.com']
 markdown_extensions:
-  - mdx_math:
-      enable_dollar_delimiter: True
+  - mdx_math
 pages:
   - Home: index.md
   - Bugs: bugs.md
