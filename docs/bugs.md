@@ -20,7 +20,7 @@ int main()
 }
 ```
 
-> [Quote:](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812#c10) The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.
+> [Quote:](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812#c10) _The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base._
 
 Fixed in 4.9.0, by [r203985](https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=203985).
 Test case added by [r204057](https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=204057).
@@ -35,6 +35,19 @@ Since glibc 2.9, strstr(3) may use [Two Way algorithm](http://www-igm.univ-mlv.f
 - [Bug 12100](https://sourceware.org/bugzilla/show_bug.cgi?id=12100)
 - [Bug 14602](https://sourceware.org/bugzilla/show_bug.cgi?id=14602)
 - More?
+
+### `getpid(2)` no longer caches PID
+
+Since [glibc 2.25](https://sourceware.org/glibc/wiki/Release/2.25), `getpid(2)` no longer caches PID,
+released on 2017-02-05.  Ubuntu 18.04, Debian 10 and CentOS 8 contain this change.
+
+> Quote from [`man 2 getpid`](https://man7.org/linux/man-pages/man2/getpid.2.html):
+    _From glibc version 2.3.4 up to and including version 2.24, the glibc wrapper function for getpid() cached PIDs,
+    with the goal of avoiding additional system calls when a process calls getpid() repeatedly.
+    ..._
+
+> _Because of the aforementioned problems, since glibc version 2.25, the PID cache is removed:
+    calls to getpid() always invoke the actual system call, rather than returning a cached value._
 
 ## Kernel
 
