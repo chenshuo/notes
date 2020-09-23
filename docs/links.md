@@ -8,6 +8,10 @@
 * [Excuse me son, but your code is leaking !!!](https://danwalsh.livejournal.com/53603.html) on Dan Walsh's Blog, about `FD_CLOEXEC` and `O_CLOEXEC`
 * [Secure File Descriptor Handling](https://udrepper.livejournal.com/20407.html) by Ulrich Drepper, about `O_CLOEXEC`, `O_NONBLOCK`.
 
+## Time-keeping
+
+* [Leap Smear](https://developers.google.com/time/smear) for applying leap seconds smoothly.
+
 ## Maths
 
 * [Theory and Applications of Markov Chains to Finance](http://www.atteson.com/Markov/) by Kevin Atteson
