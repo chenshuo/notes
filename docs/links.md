@@ -3,6 +3,11 @@
 * [42 Years of Microprocessor Trend Data](https://www.karlrupp.net/2018/02/42-years-of-microprocessor-trend-data/) by Karl Rupp
 ![42cpu](links/42-years-processor-trend.png)
 
+* [The Architecture of Open Source Applications](aosabook.org)
+    1. Volumn I and II
+    1. The Performance of Open Source Applications
+    1. 500 Lines or Less
+
 ## System programming
 
 * [Excuse me son, but your code is leaking !!!](https://danwalsh.livejournal.com/53603.html) on Dan Walsh's Blog, about `FD_CLOEXEC` and `O_CLOEXEC`
