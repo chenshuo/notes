@@ -16,6 +16,7 @@ pages:
     - 'Call Graphs': kernel/callgraph.md
     - 'SO_REUSEPRT': kernel/reuseport.md
     - 'Changes': kernel/changes.md
+    - 'Links': kernel/links.md
   - Languages:
     - lcc: lcc.md
     - Lua: lua.md
