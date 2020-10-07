@@ -80,6 +80,30 @@
                     </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Changes</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#56-2020-03-29">5.6 - 2020-03-29</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#54-2019-11-24">5.4 - 2019-11-24</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#53-2019-09-15">5.3 - 2019-09-15</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#52-2019-07-07">5.2 - 2019-07-07</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#51-2019-05-05">5.1 - 2019-05-05</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#412-2017-07-02">4.12 - 2017-07-02</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#49-2016-12-11">4.9 - 2016-12-11</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#46-2016-05-15">4.6 - 2016-05-15</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#45-2016-03-13">4.5 - 2016-03-13</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#44-2016-01-10">4.4 - 2016-01-10</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#43-2015-11-01">4.3 - 2015-11-01</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#42-2015-08-30">4.2 - 2015-08-30</a>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../links/">Links</a>
@@ -148,29 +172,56 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="412-2017-07-02">4.12 - 2017-07-02</h1>
+                <h1 id="kernel-changes">Kernel changes</h1>
+<h2 id="56-2020-03-29">5.6 - 2020-03-29</h2>
+<p><a href="https://kernelnewbies.org/Linux_5.6">Linux 5.6</a></p>
+<ul>
+<li>Adds <code>pidfd_getfd(2)</code> syscall.  <a href="https://lwn.net/Articles/808997/">Grabbing file descriptors with pidfd_getfd()</a></li>
+</ul>
+<h2 id="54-2019-11-24">5.4 - 2019-11-24</h2>
+<p><a href="https://kernelnewbies.org/Linux_5.4">Linux 5.4</a></p>
+<ul>
+<li><code>waitid()</code> syscall supports <code>P_PIDFD</code> flag.  <a href="https://lwn.net/Articles/801319/">Adding the pidfd abstraction to the kernel</a></li>
+</ul>
+<h2 id="53-2019-09-15">5.3 - 2019-09-15</h2>
+<p><a href="https://kernelnewbies.org/Linux_5.3">Linux 5.3</a></p>
+<ul>
+<li>Adds new <code>pidfd_open(2)</code> syscall.  <a href="https://lwn.net/Articles/789023/">New system calls: pidfd_open() and close_range()</a></li>
+</ul>
+<h2 id="52-2019-07-07">5.2 - 2019-07-07</h2>
+<p><a href="https://kernelnewbies.org/Linux_5.2">Linux 5.2</a></p>
+<ul>
+<li>Adds the <code>CLONE_PIDFD</code> flag to <code>clone(2)</code>. <a href="https://lwn.net/Articles/784831/">Rethinking race-free process signaling</a></li>
+</ul>
+<h2 id="51-2019-05-05">5.1 - 2019-05-05</h2>
+<p><a href="https://kernelnewbies.org/Linux_5.1">Linux 5.1</a></p>
+<ul>
+<li>Adds <code>pidfd_send_signal(2)</code> syscall.  <a href="https://lwn.net/Articles/773459/">Toward race-free process signaling</a></li>
+</ul>
+<h2 id="412-2017-07-02">4.12 - 2017-07-02</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.12">Linux 4.12</a></p>
 <ul>
 <li>Removed <code>net.ipv4.tcp_tw_recycle</code> option from Kernel <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc">commit</a>.
 Ref. <a href="https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux">Coping with the TCP TIME-WAIT state on busy Linux servers</a> by Vincent Bernat.</li>
 </ul>
-<h1 id="49-2016-12-11">4.9 - 2016-12-11</h1>
+<h2 id="49-2016-12-11">4.9 - 2016-12-11</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.9">Linux 4.9</a></p>
 <ul>
 <li>BBR congestion control algorithm</li>
 <li>tcp: use an RB tree for ooo receive queue <a href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a">commit 9f5afeae51</a></li>
 </ul>
-<h1 id="46-2016-05-15">4.6 - 2016-05-15</h1>
+<h2 id="46-2016-05-15">4.6 - 2016-05-15</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.6">Linux 4.6</a></p>
 <ul>
 <li>Faster SO_REUSEPORT for TCP</li>
 </ul>
-<h1 id="45-2016-03-13">4.5 - 2016-03-13</h1>
+<h2 id="45-2016-03-13">4.5 - 2016-03-13</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.5">Linux 4.5</a></p>
 <ul>
 <li>Faster SO_REUSEPORT for UDP</li>
 <li><a href="https://lwn.net/Articles/633422">Better epoll multithread scalability</a></li>
 </ul>
-<h1 id="44-2016-01-10">4.4 - 2016-01-10</h1>
+<h2 id="44-2016-01-10">4.4 - 2016-01-10</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.4">Linux 4.4</a></p>
 <ul>
 <li>TCP scalability<ul>
@@ -248,7 +299,7 @@ Date:   Fri Oct 2 11:43:32 2015 -0700
     Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
 </code></pre>
 
-<h1 id="43-2015-11-01">4.3 - 2015-11-01</h1>
+<h2 id="43-2015-11-01">4.3 - 2015-11-01</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.3">Linux 4.3</a></p>
 <pre><code class="text">commit 9dea5dc921b5f4045a18c63eb92e84dc274d17eb
 Author: Andy Lutomirski &lt;luto@kernel.org&gt;
@@ -281,7 +332,7 @@ Date:   Wed Dec 9 20:59:43 2015 +0000
     supported on a wider range of kernel versions).
 </code></pre>
 
-<h1 id="42-2015-08-30">4.2 - 2015-08-30</h1>
+<h2 id="42-2015-08-30">4.2 - 2015-08-30</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.2">Linux 4.2</a></p>
 <pre><code class="text">commit 90c337da1524863838658078ec34241f45d8394d
 Author: Eric Dumazet &lt;edumazet@google.com&gt;
