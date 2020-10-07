@@ -1,29 +1,63 @@
-# 4.12 - 2017-07-02
+# Kernel changes
+
+## 5.6 - 2020-03-29
+
+[Linux 5.6](https://kernelnewbies.org/Linux_5.6)
+
+* Adds `pidfd_getfd(2)` syscall.  [Grabbing file descriptors with pidfd_getfd()](https://lwn.net/Articles/808997/)
+
+## 5.4 - 2019-11-24
+
+[Linux 5.4](https://kernelnewbies.org/Linux_5.4)
+
+* `waitid()` syscall supports `P_PIDFD` flag.  [Adding the pidfd abstraction to the kernel](https://lwn.net/Articles/801319/)
+
+## 5.3 - 2019-09-15
+
+[Linux 5.3](https://kernelnewbies.org/Linux_5.3)
+
+* Adds new `pidfd_open(2)` syscall.  [New system calls: pidfd_open() and close_range()](https://lwn.net/Articles/789023/)
+
+## 5.2 - 2019-07-07
+
+[Linux 5.2](https://kernelnewbies.org/Linux_5.2)
+
+* Adds the `CLONE_PIDFD` flag to `clone(2)`. [Rethinking race-free process signaling](https://lwn.net/Articles/784831/)
+
+## 5.1 - 2019-05-05
+
+[Linux 5.1](https://kernelnewbies.org/Linux_5.1)
+
+* Adds `pidfd_send_signal(2)` syscall.  [Toward race-free process signaling](https://lwn.net/Articles/773459/)
+
+## 4.12 - 2017-07-02
+
+[Linux 4.12](https://kernelnewbies.org/Linux_4.12)
 
 * Removed `net.ipv4.tcp_tw_recycle` option from Kernel [commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc).
 Ref. [Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux) by Vincent Bernat.
 
-# 4.9 - 2016-12-11
+## 4.9 - 2016-12-11
 
 [Linux 4.9](https://kernelnewbies.org/Linux_4.9)
 
 * BBR congestion control algorithm
 * tcp: use an RB tree for ooo receive queue [commit 9f5afeae51](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a)
 
-# 4.6 - 2016-05-15
+## 4.6 - 2016-05-15
 
 [Linux 4.6](https://kernelnewbies.org/Linux_4.6)
 
 * Faster SO_REUSEPORT for TCP
 
-# 4.5 - 2016-03-13
+## 4.5 - 2016-03-13
 
 [Linux 4.5](https://kernelnewbies.org/Linux_4.5)
 
 * Faster SO_REUSEPORT for UDP
 * [Better epoll multithread scalability](https://lwn.net/Articles/633422)
 
-# 4.4 - 2016-01-10
+## 4.4 - 2016-01-10
 
 [Linux 4.4](https://kernelnewbies.org/Linux_4.4)
 
@@ -102,7 +136,7 @@ Date:   Fri Oct 2 11:43:32 2015 -0700
     Signed-off-by: David S. Miller <davem@davemloft.net>
 ```
 
-# 4.3 - 2015-11-01
+## 4.3 - 2015-11-01
 
 [Linux 4.3](https://kernelnewbies.org/Linux_4.3)
 
@@ -140,7 +174,7 @@ Date:   Wed Dec 9 20:59:43 2015 +0000
     supported on a wider range of kernel versions).
 ```
 
-# 4.2 - 2015-08-30
+## 4.2 - 2015-08-30
 
 [Linux 4.2](https://kernelnewbies.org/Linux_4.2)
 
