@@ -140,6 +140,8 @@ Date:   Fri Oct 2 11:43:32 2015 -0700
 
 [Linux 4.3](https://kernelnewbies.org/Linux_4.3)
 
+* Adds direct Sockets syscalls to i386.
+
 ```text
 commit 9dea5dc921b5f4045a18c63eb92e84dc274d17eb
 Author: Andy Lutomirski <luto@kernel.org>
@@ -157,6 +159,8 @@ Date:   Tue Jul 14 15:24:24 2015 -0700
 
 [glibc 2.23](https://www.sourceware.org/ml/libc-alpha/2016-02/msg00502.html) 2016-02-19.
 Ubuntu 16.04 supports it, Debian 8 doesn't.
+
+<https://github.com/bminor/glibc/commit/e5a5315e2d290fe34e0fb80996c713b8b802dcc9>
 
 ```text
 commit e5a5315e2d290fe34e0fb80996c713b8b802dcc9
