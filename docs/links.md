@@ -16,6 +16,8 @@
 ## Time-keeping
 
 * [Leap Smear](https://developers.google.com/time/smear) for applying leap seconds smoothly.
+* Day of the weekday: [Zeller's congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence),
+  [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-B)
 
 ## Maths
 
