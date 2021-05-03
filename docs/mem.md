@@ -5,3 +5,5 @@
 * [The C11 and C++11 Concurrency Model](https://www.cs.kent.ac.uk/people/staff/mjb211/docs/toc.pdf) by Mark John Batty
 * [C/C++11 mappings to processors](https://www.cl.cam.ac.uk/~pes20/cpp/cpp0xmappings.html) by Alexander Terekhov, Paul McKenney, et al.
 * [Awesome Lock-Free](https://github.com/rigtorp/awesome-lockfree)
+* [Lockless algorithms](https://lwn.net/Kernel/Index/#Lockless_algorithms) on LWN.net
+* [Linux-Kernel Memory Model](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r5.html)

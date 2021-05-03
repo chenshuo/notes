@@ -19,6 +19,16 @@
 * Day of the weekday: [Zeller's congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence),
   [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-B)
 
+## LZ77 and zlib
+* <http://zlib.net>
+    * <http://www.zlib.net/feldspar.html>
+    * M$'s IIS <http://www.zlib.net/zlib_faq.html#faq39>
+* [RFC1951](https://tools.ietf.org/html/rfc1951)
+* Mark Adler's post: <https://stackoverflow.com/questions/20762094/how-are-zlib-gzip-and-zip-related-what-do-they-have-in-common-and-how-are-they>
+* <https://en.wikipedia.org/wiki/Canonical_Huffman_code>
+* <https://jvns.ca/blog/2013/10/24/day-16-gzip-plus-poetry-equals-awesome/>
+* [Dissecting the GZIP format](http://www.infinitepartitions.com/art001.html)
+
 ## Maths
 
 * [Theory and Applications of Markov Chains to Finance](http://www.atteson.com/Markov/) by Kevin Atteson
