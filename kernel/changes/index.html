@@ -90,6 +90,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#51-2019-05-05">5.1 - 2019-05-05</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#415-2018-01-28">4.15 - 2018-01-28</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#412-2017-07-02">4.12 - 2017-07-02</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#49-2016-12-11">4.9 - 2016-12-11</a>
@@ -198,6 +200,32 @@
 <ul>
 <li>Adds <code>pidfd_send_signal(2)</code> syscall.  <a href="https://lwn.net/Articles/773459/">Toward race-free process signaling</a></li>
 </ul>
+<h2 id="415-2018-01-28">4.15 - 2018-01-28</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.15">Linux 4.15</a></p>
+<ul>
+<li>tcp: implement rb-tree based retransmit queue <a href="http://git.kernel.org/linus/75c119afe14f74b4dd967d75ed9f57ab6c0ef045">commit 75c119afe14f7</a></li>
+</ul>
+<pre><code class="language-diff">diff --git a/include/net/sock.h b/include/net/sock.h
+index a6b9a8d1a6df..4827094f1db4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -397,7 +397,10 @@ struct sock {
+        int                     sk_wmem_queued;
+        refcount_t              sk_wmem_alloc;
+        unsigned long           sk_tsq_flags;
+-       struct sk_buff          *sk_send_head;
++       union {
++               struct sk_buff  *sk_send_head;   // Front of stuff to transmit
++               struct rb_root  tcp_rtx_queue;   // TCP re-transmit queue
++       };
+        struct sk_buff_head     sk_write_queue;  // Packet sending queue
+        __s32                   sk_peek_off;
+        int                     sk_write_pending;
+</code></pre>
+<ul>
+<li>TUN: enable NAPI for TUN/TAP driver <a href="http://git.kernel.org/linus/943170998b200190f99d3fe7e771437e2c51f319">commit 1</a>,
+    <a href="http://git.kernel.org/linus/90e33d45940793def6f773b2d528e9f3c84ffdc7">commit 2</a></li>
+</ul>
 <h2 id="412-2017-07-02">4.12 - 2017-07-02</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.12">Linux 4.12</a></p>
 <ul>
@@ -208,8 +236,24 @@ Ref. <a href="https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux">
 <p><a href="https://kernelnewbies.org/Linux_4.9">Linux 4.9</a></p>
 <ul>
 <li>BBR congestion control algorithm</li>
-<li>tcp: use an RB tree for ooo receive queue <a href="https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a">commit 9f5afeae51</a></li>
+<li>tcp: use an RB tree for ooo receive queue <a href="https://git.kernel.org/linus/9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a">commit 9f5afeae51</a></li>
 </ul>
+<pre><code class="language-diff">diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 7be9b1242354..c723a465125d 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -281,10 +281,9 @@ struct tcp_sock {
+        struct sk_buff* lost_skb_hint;
+        struct sk_buff *retransmit_skb_hint;
+
+-       /* OOO segments go in this list. Note that socket lock must be held,
+-        * as we do not use sk_buff_head lock.
+-        */
+-       struct sk_buff_head     out_of_order_queue;
++       /* OOO segments go in this rbtree. Socket lock must be held. */
++       struct rb_root  out_of_order_queue;
++       struct sk_buff  *ooo_last_skb; /* cache rb_last(out_of_order_queue) */
+</code></pre>
 <h2 id="46-2016-05-15">4.6 - 2016-05-15</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.6">Linux 4.6</a></p>
 <ul>
@@ -231,7 +275,7 @@ Ref. <a href="https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux">
 </ul>
 </li>
 </ul>
-<pre><code class="text">commit ca6fb06518836ef9b65dc0aac02ff97704d52a05
+<pre><code class="language-text">commit ca6fb06518836ef9b65dc0aac02ff97704d52a05
 Author: Eric Dumazet &lt;edumazet@google.com&gt;
 Date:   Fri Oct 2 11:43:35 2015 -0700
 
@@ -269,8 +313,7 @@ Date:   Fri Oct 2 11:43:35 2015 -0700
     Signed-off-by: Eric Dumazet &lt;edumazet@google.com&gt;
     Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
 </code></pre>
-
-<pre><code class="text">commit 079096f103faca2dd87342cca6f23d4b34da8871
+<pre><code class="language-text">commit 079096f103faca2dd87342cca6f23d4b34da8871
 Author: Eric Dumazet &lt;edumazet@google.com&gt;
 Date:   Fri Oct 2 11:43:32 2015 -0700
 
@@ -298,10 +341,12 @@ Date:   Fri Oct 2 11:43:32 2015 -0700
     Cc: Willem de Bruijn &lt;willemb@google.com&gt;
     Signed-off-by: David S. Miller &lt;davem@davemloft.net&gt;
 </code></pre>
-
 <h2 id="43-2015-11-01">4.3 - 2015-11-01</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.3">Linux 4.3</a></p>
-<pre><code class="text">commit 9dea5dc921b5f4045a18c63eb92e84dc274d17eb
+<ul>
+<li>Adds direct Sockets syscalls to i386.</li>
+</ul>
+<pre><code class="language-text">commit 9dea5dc921b5f4045a18c63eb92e84dc274d17eb
 Author: Andy Lutomirski &lt;luto@kernel.org&gt;
 Date:   Tue Jul 14 15:24:24 2015 -0700
 
@@ -314,10 +359,10 @@ Date:   Tue Jul 14 15:24:24 2015 -0700
     filter socket calls (for new userspace only, but that's fine for
     some applications) and it will provide a tiny performance boost.
 </code></pre>
-
 <p><a href="https://www.sourceware.org/ml/libc-alpha/2016-02/msg00502.html">glibc 2.23</a> 2016-02-19.
 Ubuntu 16.04 supports it, Debian 8 doesn't.</p>
-<pre><code class="text">commit e5a5315e2d290fe34e0fb80996c713b8b802dcc9
+<p><a href="https://github.com/bminor/glibc/commit/e5a5315e2d290fe34e0fb80996c713b8b802dcc9">https://github.com/bminor/glibc/commit/e5a5315e2d290fe34e0fb80996c713b8b802dcc9</a></p>
+<pre><code class="language-text">commit e5a5315e2d290fe34e0fb80996c713b8b802dcc9
 Author: Joseph Myers &lt;joseph@codesourcery.com&gt;
 Date:   Wed Dec 9 20:59:43 2015 +0000
 
@@ -331,10 +376,9 @@ Date:   Wed Dec 9 20:59:43 2015 +0000
     support on microblaze is it allows accept4 and sendmmsg to be
     supported on a wider range of kernel versions).
 </code></pre>
-
 <h2 id="42-2015-08-30">4.2 - 2015-08-30</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.2">Linux 4.2</a></p>
-<pre><code class="text">commit 90c337da1524863838658078ec34241f45d8394d
+<pre><code class="language-text">commit 90c337da1524863838658078ec34241f45d8394d
 Author: Eric Dumazet &lt;edumazet@google.com&gt;
 Date:   Sat Jun 6 21:17:57 2015 -0700
 

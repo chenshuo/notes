@@ -148,7 +148,7 @@
 <h3 id="epitem">epitem{}</h3>
 <h3 id="eppoll_entry">eppoll_entry</h3>
 <h2 id="epoll_create">epoll_create()</h2>
-<pre><code class="text">epoll_create1(flags)
+<pre><code class="language-text">epoll_create1(flags)
   CHECK(only valid flags is O_CLOEXEC)
   struct eventpool* ep = ep_alloc();
   int fd = get_unused_fd_flags()
@@ -166,9 +166,8 @@
   fd_install(fd, file)
   return fd
 </code></pre>
-
 <h2 id="close">close()</h2>
-<pre><code class="text">close(fd)
+<pre><code class="language-text">close(fd)
   -&gt; __close_fd(current-&gt;files, fd)
     struct fdtable* fdt = files_fdtable(files)
     struct file* file = fdt-&gt;fd[fd]
@@ -187,9 +186,8 @@
                   -&gt; epi_rcu_free
 
 </code></pre>
-
 <h2 id="epoll_ctladddelmod">epoll_ctl(ADD/DEL/MOD)</h2>
-<pre><code class="text">epoll_ctl(epfd, op, fd event)
+<pre><code class="language-text">epoll_ctl(epfd, op, fd event)
   f = fdget(epfd)  // epoll itself
   tf = fdget(fd)   // target
   eventpoll* ep = f.file-&gt;private_data
@@ -203,19 +201,15 @@
   if (MOD &amp;&amp; epi != NULL &amp;&amp; !(event &amp; EXCLUSIVE))
     -&gt; ep_modify(ep, epi, event)
 </code></pre>
-
 <h2 id="ep_insert"><code>ep_insert</code></h2>
-<pre><code class="text">  -&gt; ep_insert
+<pre><code class="language-text">  -&gt; ep_insert
 </code></pre>
-
 <h2 id="ep_remove"><code>ep_remove</code></h2>
-<pre><code class="text">  -&gt; ep_remove
+<pre><code class="language-text">  -&gt; ep_remove
 </code></pre>
-
 <h2 id="ep_modify"><code>ep_modify</code></h2>
-<pre><code class="text">  -&gt; ep_modify
+<pre><code class="language-text">  -&gt; ep_modify
 </code></pre>
-
 <h2 id="epoll_wait">epoll_wait()</h2>
               
             </div>

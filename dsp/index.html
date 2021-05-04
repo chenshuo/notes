@@ -175,7 +175,7 @@ FFT is a much faster multiplication in <script type="math/tex">O(N \log N)</scri
 <li><a href="http://www.ti.com/lit/an/spra096a/spra096a.pdf">DTMF Tone Generation and Detection</a> by Gunter Schmer</li>
 </ul>
 <p>Second-order digital resonator in Python:</p>
-<pre><code class="python">fs = 8000  # sampling frequency
+<pre><code class="language-python">fs = 8000  # sampling frequency
 fo = 700   # output frequency
 A = 1.0    # amplitude
 w = 2*pi*fo/fs    # angular frequency of fo
@@ -186,15 +186,13 @@ for ever:
     emit(x)
     x, y = c*x - y, x
 </code></pre>
-
 <p>First 100 data points:</p>
 <p><img alt="wave" src="../links/resonator-wave.png" /></p>
-<pre><code class="python">N = 4096
+<pre><code class="language-python">N = 4096
 f = fft(signal[:N])
 p = np.argmax(abs(f)[:N//2])
 print(p*fs/N) =&gt; 699.21895 Hz
 </code></pre>
-
 <p>FFT:
 <img alt="fft" src="../links/resonator-fft.png" /></p>
 <ul>

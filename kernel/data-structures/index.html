@@ -149,7 +149,7 @@
             <div class="section">
               
                 <h1 id="file-descriptor-table">File Descriptor Table</h1>
-<pre><code class="c">// include/linux/sched.h
+<pre><code class="language-c">// include/linux/sched.h
 
 struct task_struct {
   // ...
@@ -221,9 +221,8 @@ struct file {
 };
 
 </code></pre>
-
 <h1 id="struct-socket"><code>struct socket{}</code></h1>
-<pre><code class="c">// include/linux/net.h
+<pre><code class="language-c">// include/linux/net.h
 
 struct socket_wq {
         /* Note: wait MUST be first field of socket_wq */
@@ -286,9 +285,8 @@ struct inode {
 // ...
 };
 </code></pre>
-
 <h1 id="socket2"><code>socket(2)</code></h1>
-<pre><code class="text">int sys_socket(int family, int type, int protocol)
+<pre><code class="language-text">int sys_socket(int family, int type, int protocol)
   -&gt; struct socket* sock_create(family, type, protocol)
     -&gt; __sock_create(family, type, protocol)
       -&gt; struct socket* sock = sock_alloc()
@@ -332,7 +330,6 @@ inet_create(sock, protocol)
         sk-&gt;sk_state = TCP_CLOSE;
       icsk-&gt;icsk_af_ops = &amp;ipv4_specific;
 </code></pre>
-
 <p>After <code>socket()</code>
 <img alt="inode" src="../inode.png" /></p>
 <h1 id="memory-usage">Memory usage</h1>
@@ -441,7 +438,7 @@ inet_create(sock, protocol)
 </tr>
 </tbody>
 </table>
-<pre><code class="c">// include/linux/net.h
+<pre><code class="language-c">// include/linux/net.h
 // How to create a socket for an address family
 struct net_proto_family {
   int family;  // AF_INET, AF_UNIX, AF_INET6, etc. must: 0 &lt;= family &lt; NPROTO
@@ -450,8 +447,7 @@ struct net_proto_family {
 };
 
 </code></pre>
-
-<pre><code class="c">// net/socket.c
+<pre><code class="language-c">// net/socket.c
 static const struct net_proto_family *net_families[NPROTO];
 
 // net/ipv4/af_inet.c
@@ -466,9 +462,8 @@ static const struct net_proto_family inet_family_ops = {
 // inet_init() calls sock_register():
 net_families[AF_INET] = &amp;inet_family_ops;
 </code></pre>
-
 <h1 id="inet_protosw">inet_protosw</h1>
-<pre><code class="c">// include/net/protocol.h
+<pre><code class="language-c">// include/net/protocol.h
 /* This is used to register socket interfaces for IP protocols.  */
 struct inet_protosw {
   struct list_head list;
@@ -486,8 +481,7 @@ struct inet_protosw {
 #define INET_PROTOSW_PERMANENT  0x02  /* Permanent protocols are unremovable. */
 #define INET_PROTOSW_ICSK       0x04  /* Is this an inet_connection_sock? */
 </code></pre>
-
-<pre><code class="c">// net/ipv4/af_inet.c
+<pre><code class="language-c">// net/ipv4/af_inet.c
 /* The inetsw table contains everything that inet_create needs to
  * build a new socket.
  */
@@ -541,7 +535,6 @@ static struct inet_protosw inetsw_array[] =
   for (struct inet_protosw *q = inetsw_array; q &lt; &amp;inetsw_array[INETSW_ARRAY_LEN]; ++q)
     inet_register_protosw(q);
 </code></pre>
-
 <p>After Initialization:
 <img alt="inetsw" src="../inetsw.png" /></p>
 <h1 id="skbuff">skbuff</h1>

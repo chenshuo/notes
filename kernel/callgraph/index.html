@@ -151,7 +151,7 @@
                 <h1 id="tcp_sock"><code>tcp_sock</code></h1>
 <p><img alt="sock" src="../sock.png" /></p>
 <h1 id="tcp_hashinfo"><code>tcp_hashinfo</code></h1>
-<pre><code class="c">// include/linux/types.h
+<pre><code class="language-c">// include/linux/types.h
 struct hlist_head {
         struct hlist_node *first;
 };
@@ -223,11 +223,10 @@ struct inet_hashinfo {
 };
 
 </code></pre>
-
 <h1 id="tcp-state-diagram-in-linux-44">TCP state diagram in Linux 4.4+</h1>
 <p><img alt="tcp" src="../tcp.png" /></p>
 <h1 id="bind"><code>bind</code></h1>
-<pre><code class="text">sys_bind
+<pre><code class="language-text">sys_bind
   -&gt; inet_bind
     -&gt; inet_csk_get_port
       -&gt; goto have_snum:
@@ -239,9 +238,8 @@ struct inet_hashinfo {
   -&gt; fput_light
 // tcp_hashinfo.bhash -&gt; inet_bind_hashbucket -&gt; inet_bind_bucket[port=2222] -&gt; tcp_sock
 </code></pre>
-
 <h1 id="listen"><code>listen</code></h1>
-<pre><code class="text">sys_listen
+<pre><code class="language-text">sys_listen
   -&gt; inet_listen
     -&gt; inet_csk_listen_start
       -&gt; reqsk_queue_alloc
@@ -255,7 +253,6 @@ struct inet_hashinfo {
       -&gt; inet_hash
         -&gt; __inet_hash  // tcp_hashinfo.listening_hash[X] add node
 </code></pre>
-
 <p>After bind() and listen()
 <img alt="bhash" src="../bhash.png" /></p>
 <h1 id="passive-open">Passive open</h1>
@@ -304,7 +301,6 @@ struct inet_hashinfo {
                   -&gt; dst_output
                     -&gt; ip_output
 </code></pre>
-
 <p>After receiving SYN
 <img alt="syn" src="../syn.png" /></p>
 <h2 id="receive-ack">Receive ACK</h2>
@@ -393,12 +389,11 @@ struct inet_hashinfo {
       -&gt; tcp_ack_snd_check
     -&gt; parent-&gt;sk_data_ready -&gt; sock_def_readable -&gt; wake_up_interruptible_sync_poll
 </code></pre>
-
 <p>After receiving ACK
 <img alt="ack" src="../ack.png" /></p>
 <h1 id="active-open">Active open</h1>
 <h2 id="connect">connect</h2>
-<pre><code class="text">sys_connect
+<pre><code class="language-text">sys_connect
   -&gt; inet_stream_connect -&gt; __inet_stream_connect
     -&gt; tcp_v4_connect (sk-&gt;sk_prot-&gt;connect)
       -&gt; ip_route_connect
@@ -460,11 +455,10 @@ struct inet_hashinfo {
     timeo = sock_sndtimeo() // NULL
     return err
 </code></pre>
-
 <p>After <code>connect()</code>
 <img alt="ehash" src="../ehash.png" /></p>
 <h2 id="receive-synack">Receive SYN+ACK</h2>
-<pre><code class="text">tcp_v4_rcv
+<pre><code class="language-text">tcp_v4_rcv
   -&gt; __inet_lookup_skb
     -&gt; __inet_lookup
       -&gt; __inet_lookup_established  // found
@@ -518,9 +512,8 @@ struct inet_hashinfo {
       -&gt; tcp_data_snd_check
       return 0;
 </code></pre>
-
 <h1 id="accept">accept</h1>
-<pre><code class="text">sys_accept4
+<pre><code class="language-text">sys_accept4
   -&gt; newsock = sock_alloc
   -&gt; newfd = get_unused_fd_flags
   -&gt; newfile = sock_alloc_file(newsock, ...)
@@ -537,19 +530,17 @@ struct inet_hashinfo {
     -&gt; sock_graft(sk2, newsock)
   -&gt; fd_install(newfd, newfile)
 </code></pre>
-
 <h1 id="read">read</h1>
 <h1 id="write">write</h1>
-<pre><code class="text">do_syscall_64 -&gt; __x64_sys_write -&gt; ksys_write -&gt; vfs_write -&gt; __vfs_write -&gt; new_sync_write
+<pre><code class="language-text">do_syscall_64 -&gt; __x64_sys_write -&gt; ksys_write -&gt; vfs_write -&gt; __vfs_write -&gt; new_sync_write
   -&gt; sock_write_iter -&gt; sock_sendmsg -&gt; inet_sendmsg -&gt; tcp_sendmsg
   -&gt; tcp_sendmsg_locked -&gt; tcp_push_one -&gt; tcp_write_xmit
 
 tcp_sendmsg_locked -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
 tcp_sendmsg_locked -&gt; tcp_push -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
 </code></pre>
-
 <h1 id="receive">Receive</h1>
-<pre><code class="text">net_rx_action -&gt; napi_poll -&gt; mlx4_en_poll_rx_cq -&gt; napi_complete_done -&gt; gro_normal_list
+<pre><code class="language-text">net_rx_action -&gt; napi_poll -&gt; mlx4_en_poll_rx_cq -&gt; napi_complete_done -&gt; gro_normal_list
   -&gt; netif_receive_skb_list_internal -&gt; __netif_receive_skb_list -&gt; __netif_receive_skb_list_core
   -&gt; __netif_receive_skb_list_ptype
   -&gt; ip_list_rcv -&gt; ip_sublist_rcv -&gt; ip_list_rcv_finish -&gt; ip_sublist_rcv_finish -&gt; dst_input
@@ -559,9 +550,8 @@ netif_receive_skb -&gt; __netif_receive_skb -&gt; __netif_receive_skb_one_core -
   -&gt; ip_rcv -&gt; ip_rcv_finish -&gt; ip_protocol_deliver_rcu -&gt; ip_local_deliver -&gt; ip_local_deliver_finish
   -&gt; ip_protocol_deliver_rcu _&gt; tcp_v4_rcv
 </code></pre>
-
 <h1 id="transmit">transmit</h1>
-<pre><code class="text">tcp_v4_rcv -&gt; tcp_v4_do_rcv -&gt; tcp_rcv_established -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
+<pre><code class="language-text">tcp_v4_rcv -&gt; tcp_v4_do_rcv -&gt; tcp_rcv_established -&gt; __tcp_push_pending_frames -&gt; tcp_write_xmit
 
 tcp_write_xmit -&gt; tcp_transmit_skb -&gt; __tcp_transmit_skb -&gt; ip_queue_xmit -&gt; __ip_queue_xmit -&gt; ip_local_out
   -&gt; __ip_local_out -&gt; ip_output

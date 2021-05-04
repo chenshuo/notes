@@ -161,11 +161,10 @@ correction: the SHA1 hash is <strong>NOT</strong> the hash of the <em>compressed
 <ul>
 <li><code>blob</code> is content of file</li>
 </ul>
-<pre><code class="text">$ git cat-file -p 74576250e3c3a901bf06832bd0e4ee5e00422115
+<pre><code class="language-text">$ git cat-file -p 74576250e3c3a901bf06832bd0e4ee5e00422115
 # Shuo's notes
 http://chenshuo.github.io/notes
 </code></pre>
-
 <ul>
 <li><code>tree</code> has one or more <code>tree</code>/<code>blob</code>, it's <a href="https://en.wikipedia.org/wiki/Merkle_tree">Merkle tree</a>.<ul>
 <li><code>blob</code> are leaf nodes</li>
@@ -173,13 +172,12 @@ http://chenshuo.github.io/notes
 </ul>
 </li>
 </ul>
-<pre><code class="text">$ git cat-file -p 5d42664e3d812288b47795718d0e4faf26397bf9
+<pre><code class="language-text">$ git cat-file -p 5d42664e3d812288b47795718d0e4faf26397bf9
 100644 blob cde88fe0e10f265ed3cb2af0ea5422f607c1a37c    .gitignore
 100644 blob 74576250e3c3a901bf06832bd0e4ee5e00422115    README.md
 040000 tree eabff4ee0b30f5d6a644ce508ba7fe47dc563aa4    docs
 100644 blob 020682e2399c75cf3ad9636964c7501f27a0e893    mkdocs.yml
 </code></pre>
-
 <ul>
 <li><code>commit</code>:<ul>
 <li>has one <code>tree</code></li>
@@ -187,7 +185,7 @@ http://chenshuo.github.io/notes
 </ul>
 </li>
 </ul>
-<pre><code class="text">$ git cat-file -p 3f08891b366c750d4739241874cfb1dbef56c398
+<pre><code class="language-text">$ git cat-file -p 3f08891b366c750d4739241874cfb1dbef56c398
 tree 5d42664e3d812288b47795718d0e4faf26397bf9
 parent 955f683cae5d2514d1c788fce9206451e2ac3334
 author Shuo Chen &lt;chenshuo@chenshuo.com&gt; 1484903215 -0800
@@ -195,7 +193,6 @@ committer Shuo Chen &lt;chenshuo@chenshuo.com&gt; 1484903215 -0800
 
 update ssl.md
 </code></pre>
-
 <ul>
 <li>
 <p><code>tag</code> ???</p>

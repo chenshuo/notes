@@ -174,7 +174,7 @@
 <h2 id="gcc">GCC</h2>
 <h3 id="bug-54812-private-default-destructor-is-public"><a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812">Bug 54812</a>: <code>private</code> <code>=default</code> destructor is <code>public</code></h3>
 <p>Delete expression doesn't respect access of defaulted destructor</p>
-<pre><code class="cpp">struct Base
+<pre><code class="language-cpp">struct Base
 {
  private:
   ~Base() = default;
@@ -186,7 +186,6 @@ int main()
   delete p;
 }
 </code></pre>
-
 <blockquote>
 <p><a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54812#c10">Quote:</a> <em>The bug affects protected destructors too, and they're commonly used for base classes to prevent deletion via pointer-to-base.</em></p>
 </blockquote>
@@ -215,7 +214,7 @@ released on 2017-02-05.  Ubuntu 18.04, Debian 10 and CentOS 8 contain this chang
 <h2 id="kernel">Kernel</h2>
 <h3 id="write2-not-thread-safe"><code>write(2)</code> not thread-safe</h3>
 <p>Fixed in v3.14, released in 2014-03-30. Ubuntu 14.04 has this bug, Debian 8 doesn't.</p>
-<pre><code class="text">commit 9c225f2655e36a470c4f58dbbc99244c5fc7f2d4
+<pre><code class="language-text">commit 9c225f2655e36a470c4f58dbbc99244c5fc7f2d4
 Author: Linus Torvalds &lt;torvalds@linux-foundation.org&gt;
 Date:   Mon Mar 3 09:36:58 2014 -0800
 
@@ -251,9 +250,8 @@ Date:   Mon Mar 3 09:36:58 2014 -0800
     Signed-off-by: Linus Torvalds &lt;torvalds@linux-foundation.org&gt;
     Signed-off-by: Al Viro &lt;viro@zeniv.linux.org.uk&gt;
 </code></pre>
-
 <p><code>$ man 2 write</code></p>
-<pre><code class="text">BUGS
+<pre><code class="language-text">BUGS
        According  to  POSIX.1-2008/SUSv4  Section XSI 2.9.7 (&quot;Thread Interactions
        with Regular File Operations&quot;):
 
@@ -270,7 +268,6 @@ Date:   Mon Mar 3 09:36:58 2014 -0800
        the result that the blocks of data  output  by  the  two  processes  might
        (incorrectly) overlap.  This problem was fixed in Linux 3.14.
 </code></pre>
-
 <h2 id="java">Java</h2>
 <h3 id="applied-to-string-operands-can-provoke-side-effects"><a href="https://bugs.openjdk.java.net/browse/JDK-8204322">"+=" applied to String operands can provoke side effects</a></h3>
 <p>Introduced in JDK9, fixed in JDK10 but not JDK9.</p>
