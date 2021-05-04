@@ -30,6 +30,34 @@
 
 * Adds `pidfd_send_signal(2)` syscall.  [Toward race-free process signaling](https://lwn.net/Articles/773459/)
 
+## 4.15 - 2018-01-28
+
+[Linux 4.15](https://kernelnewbies.org/Linux_4.15)
+
+* tcp: implement rb-tree based retransmit queue [commit 75c119afe14f7](http://git.kernel.org/linus/75c119afe14f74b4dd967d75ed9f57ab6c0ef045)
+
+```diff
+diff --git a/include/net/sock.h b/include/net/sock.h
+index a6b9a8d1a6df..4827094f1db4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -397,7 +397,10 @@ struct sock {
+        int                     sk_wmem_queued;
+        refcount_t              sk_wmem_alloc;
+        unsigned long           sk_tsq_flags;
+-       struct sk_buff          *sk_send_head;
++       union {
++               struct sk_buff  *sk_send_head;   // Front of stuff to transmit
++               struct rb_root  tcp_rtx_queue;   // TCP re-transmit queue
++       };
+        struct sk_buff_head     sk_write_queue;  // Packet sending queue
+        __s32                   sk_peek_off;
+        int                     sk_write_pending;
+```
+
+* TUN: enable NAPI for TUN/TAP driver [commit 1](http://git.kernel.org/linus/943170998b200190f99d3fe7e771437e2c51f319),
+    [commit 2](http://git.kernel.org/linus/90e33d45940793def6f773b2d528e9f3c84ffdc7)
+
 ## 4.12 - 2017-07-02
 
 [Linux 4.12](https://kernelnewbies.org/Linux_4.12)
@@ -42,7 +70,25 @@ Ref. [Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent
 [Linux 4.9](https://kernelnewbies.org/Linux_4.9)
 
 * BBR congestion control algorithm
-* tcp: use an RB tree for ooo receive queue [commit 9f5afeae51](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a)
+* tcp: use an RB tree for ooo receive queue [commit 9f5afeae51](https://git.kernel.org/linus/9f5afeae51526b3ad7b7cb21ee8b145ce6ea7a7a)
+
+```diff
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 7be9b1242354..c723a465125d 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -281,10 +281,9 @@ struct tcp_sock {
+        struct sk_buff* lost_skb_hint;
+        struct sk_buff *retransmit_skb_hint;
+
+-       /* OOO segments go in this list. Note that socket lock must be held,
+-        * as we do not use sk_buff_head lock.
+-        */
+-       struct sk_buff_head     out_of_order_queue;
++       /* OOO segments go in this rbtree. Socket lock must be held. */
++       struct rb_root  out_of_order_queue;
++       struct sk_buff  *ooo_last_skb; /* cache rb_last(out_of_order_queue) */
+```
 
 ## 4.6 - 2016-05-15
 
