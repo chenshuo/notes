@@ -4,10 +4,16 @@
 
 ## 0.01 to 1.1.10
 
-A fixed length array in `struct task_struct`.
+`filp` is a fixed length array in `struct task_struct`.
 
 ```c
-// include/linux/sched.h of linux-1.1.10
+//
+// linux-0.99
+//
+
+//
+// include/linux/sched.h
+//
 
 struct task_struct {
         // ...
@@ -15,27 +21,118 @@ struct task_struct {
         fd_set close_on_exec;
         // ...
 };
+
+//
+// include/linux/fs.h
+//
+
+struct file {
+        mode_t f_mode;
+        dev_t  f_rdev;
+        off_t  f_pos;            // each opened file has its own offset
+        unsigned short f_flags;
+        unsigned short f_count;
+        unsigned short f_reada;
+        struct inode * f_inode;
+        struct file_operations * f_op;
+};
+
+struct inode {
+        dev_t           i_dev;
+        unsigned long   i_ino;
+        umode_t         i_mode;
+        nlink_t         i_nlink;
+        uid_t           i_uid;
+        gid_t           i_gid;
+        dev_t           i_rdev;
+        off_t           i_size;  // each disk file has one size
+        time_t          i_atime;
+        time_t          i_mtime;
+        time_t          i_ctime;
+        unsigned long   i_blksize;
+        unsigned long   i_blocks;
+        struct inode_operations * i_op;
+        struct super_block * i_sb;
+        // ...
+};
+
+//
+// fs/file_table.c
+//
+
+struct file file_table[NR_FILE];
+
+struct file * get_empty_filp(void)
+{
+        int i;
+        struct file * f = file_table+0;
+
+        for (i = 0; i++ < NR_FILE; f++)
+                if (!f->f_count) {
+                        memset(f,0,sizeof(*f));
+                        f->f_count = 1;
+                        return f;
+                }
+        return NULL;
+}
+
+//
+// fs/inode.c
+//
+
+static struct inode inode_table[NR_INODE];
 ```
+
+See <https://en.wikipedia.org/wiki/File_descriptor> for per-process **file descriptor table**,
+system-wide **file table** and **inode table**.
+
+Relation of three tables:
+
+1. Thie simplest case is one process opens one disk file (e.g. `open("/var/log/access.log", O_WRONLY)`),
+   it uses one entry from each table.
+2. Then the process does a `dup()`, the old and new file descriptors may be used interchangeably.
+   Two file descriptors refer to the same open file, and thus share file offset and file status flags.
+   However, the two file descriptors do not share file descriptor flags (`close_on_exec`).
+3. Later, the process does a `open("/var/log/access.log", O_RDONLY)`,
+   a new file descriptor and new `file` description is created, and pointing to the same `inode` entry.
+   Therefore, it sees the same file size as the first two fds, but different offset.
+
+Sizes of those three tables in early Linux
+
+* `NR_OPEN`: How many files can a process open?
+* `NR_FILE`: How many files can all processes open?
+* `NR_INODE`: How many disk files can all processes open?
+
+
+| Version | Date       | `NR_OPEN` | `NR_FILE` | `NR_INODE` |
+| ------- | ---------- | --------: | --------: | ---------: |
+| 0.01    | 1991-09-17 |    20     |     64    |     32     |
+| 0.12    | 1992-01-15 |    20     |     64    |   **64**   |
+| 0.95    | 1992-03-08 |    20     |     64    |  **128**   |
+| 0.96a.3 | 1992-05-22 |  **32**   |     64    |    128     |
+| 0.96c.1 | 1992-07-04 |    32     |  **128**  |    128     |
+| 0.97    | 1992-08-01 |    32     |    128    |    128     |
+| 0.98.4  | 1992-11-09 | **256**   |    128    |    128     |
+| 0.99.10 | 1993-06-07 |   256     | **1024**  | **2048**   |
+
+
+&nbsp;
 
 Note 1: `file_table` and `inode_table` were made dynamic in 0.99.10.
 
-| Version | `NR_OPEN` | `NR_FILE` | `NR_INODE` |
-| ------- | --------- | --------- | ---------- |
-| 0.01    |    20     |     64    |     32     |
-| 0.12    |    20     |     64    |     64     |
-| 0.95    |    20     |     64    |    128     |
-|0.96a-patch3| 32     |     64    |    128     |
-|0.96c-patch1| 32     |    128    |    128     |
-| 0.96pre |    32     |     64    |    128     |
-| 0.97    |    32     |    128    |    128     |
-| 0.98.4  |   256     |    128    |    128     |
-| 0.99.10 |   256     |   1024    |   2048     |
-
 ```diff
-// fs/file_table.c of linux-0.99.10
+    [PATCH] Linux-0.99.10 (June 7, 1993)
+
+    The "struct file" file_table is made dynamic, instaed of a static
+    allocation.  For the first time you can have _lots_ of files open.
+
+diff --git a/fs/file_table.c b/fs/file_table.c
+--- a/fs/file_table.c
++++ b/fs/file_table.c
 
 -struct file file_table[NR_FILE];
 +struct file * first_file;
++int nr_files = 0;
 ```
 
 Note 2: ext2 file system was added 0.99.7.
