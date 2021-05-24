@@ -15,6 +15,7 @@ pages:
     - 'Epoll': kernel/epoll.md
     - 'Call Graphs': kernel/callgraph.md
     - 'SO_REUSEPRT': kernel/reuseport.md
+    - 'Profiles': kernel/profiles.md
     - 'Changes': kernel/changes.md
     - 'Links': kernel/links.md
   - Languages:

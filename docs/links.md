@@ -8,6 +8,9 @@
     1. The Performance of Open Source Applications
     1. 500 Lines or Less
 
+* [Matthew Austern's list of publications](http://lafstern.org/matt/publications.html)
+    * [Why you shouldn't use set (and what you should use instead)](http://lafstern.org/matt/col1.pdf)
+
 ## System programming
 
 * [Excuse me son, but your code is leaking !!!](https://danwalsh.livejournal.com/53603.html) on Dan Walsh's Blog, about `FD_CLOEXEC` and `O_CLOEXEC`

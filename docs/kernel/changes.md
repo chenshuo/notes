@@ -11,6 +11,7 @@
 [Linux 5.4](https://kernelnewbies.org/Linux_5.4)
 
 * `waitid()` syscall supports `P_PIDFD` flag.  [Adding the pidfd abstraction to the kernel](https://lwn.net/Articles/801319/)
+* `snd_wnd` added to `TCP_INFO`.  [netdev thread](https://lore.kernel.org/netdev/20190913232332.44036-2-tph@fb.com/).  Ubuntu 20.04 and Debian 11 have it.  iperf3 shows it in [3.10](https://github.com/esnet/iperf/pull/1148).
 
 ## 5.3 - 2019-09-15
 
@@ -62,8 +63,15 @@ index a6b9a8d1a6df..4827094f1db4 100644
 
 [Linux 4.12](https://kernelnewbies.org/Linux_4.12)
 
-* Removed `net.ipv4.tcp_tw_recycle` option from Kernel [commit](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc).
+* Removed `net.ipv4.tcp_tw_recycle` option from Kernel [commit](https://git.kernel.org/linus/4396e46187ca5070219b81773c4e65088dac50cc).
 Ref. [Coping with the TCP TIME-WAIT state on busy Linux servers](https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux) by Vincent Bernat.
+
+## 4.10 - 2017-02-19
+
+[Linux 4.10](https://kernelnewbies.org/Linux_4.10)
+
+* tcp: sender chronographs instrumentation
+* tcp: drop SYN packets if accept queue is full [commit](https://git.kernel.org/linus/5ea8ea2cb7f1d0db15762c9b0bb9e7330425a071).
 
 ## 4.9 - 2016-12-11
 
