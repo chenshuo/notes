@@ -78,6 +78,8 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../reuseport/">SO_REUSEPRT</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../profiles/">Profiles</a>
+                    </li>
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Changes</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#56-2020-03-29">5.6 - 2020-03-29</a>
@@ -93,6 +95,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#415-2018-01-28">4.15 - 2018-01-28</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#412-2017-07-02">4.12 - 2017-07-02</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#410-2017-02-19">4.10 - 2017-02-19</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#49-2016-12-11">4.9 - 2016-12-11</a>
     </li>
@@ -184,6 +188,7 @@
 <p><a href="https://kernelnewbies.org/Linux_5.4">Linux 5.4</a></p>
 <ul>
 <li><code>waitid()</code> syscall supports <code>P_PIDFD</code> flag.  <a href="https://lwn.net/Articles/801319/">Adding the pidfd abstraction to the kernel</a></li>
+<li><code>snd_wnd</code> added to <code>TCP_INFO</code>.  <a href="https://lore.kernel.org/netdev/20190913232332.44036-2-tph@fb.com/">netdev thread</a>.  Ubuntu 20.04 and Debian 11 have it.  iperf3 shows it in <a href="https://github.com/esnet/iperf/pull/1148">3.10</a>.</li>
 </ul>
 <h2 id="53-2019-09-15">5.3 - 2019-09-15</h2>
 <p><a href="https://kernelnewbies.org/Linux_5.3">Linux 5.3</a></p>
@@ -229,8 +234,14 @@ index a6b9a8d1a6df..4827094f1db4 100644
 <h2 id="412-2017-07-02">4.12 - 2017-07-02</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.12">Linux 4.12</a></p>
 <ul>
-<li>Removed <code>net.ipv4.tcp_tw_recycle</code> option from Kernel <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4396e46187ca5070219b81773c4e65088dac50cc">commit</a>.
+<li>Removed <code>net.ipv4.tcp_tw_recycle</code> option from Kernel <a href="https://git.kernel.org/linus/4396e46187ca5070219b81773c4e65088dac50cc">commit</a>.
 Ref. <a href="https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux">Coping with the TCP TIME-WAIT state on busy Linux servers</a> by Vincent Bernat.</li>
+</ul>
+<h2 id="410-2017-02-19">4.10 - 2017-02-19</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.10">Linux 4.10</a></p>
+<ul>
+<li>tcp: sender chronographs instrumentation</li>
+<li>tcp: drop SYN packets if accept queue is full <a href="https://git.kernel.org/linus/5ea8ea2cb7f1d0db15762c9b0bb9e7330425a071">commit</a>.</li>
 </ul>
 <h2 id="49-2016-12-11">4.9 - 2016-12-11</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.9">Linux 4.9</a></p>
@@ -417,7 +428,7 @@ Date:   Sat Jun 6 21:17:57 2015 -0700
         <a href="../links/" class="btn btn-neutral float-right" title="Links">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../reuseport/" class="btn btn-neutral" title="SO_REUSEPRT"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../profiles/" class="btn btn-neutral" title="Profiles"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -443,7 +454,7 @@ Date:   Sat Jun 6 21:17:57 2015 -0700
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../reuseport/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../profiles/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
         <span style="margin-left: 15px"><a href="../links/" style="color: #fcfcfc">Next &raquo;</a></span>
