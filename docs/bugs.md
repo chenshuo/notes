@@ -49,6 +49,8 @@ released on 2017-02-05.  Ubuntu 18.04, Debian 10 and CentOS 8 contain this chang
 > _Because of the aforementioned problems, since glibc version 2.25, the PID cache is removed:
     calls to getpid() always invoke the actual system call, rather than returning a cached value._
 
+In a tight loop, it takes about 200ns for `getpid(2)` on z420 (E5-1620 3.6GHz) running Linux 5.10.
+
 ## Kernel
 
 ### `write(2)` not thread-safe

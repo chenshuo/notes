@@ -12,6 +12,7 @@
 
 * `waitid()` syscall supports `P_PIDFD` flag.  [Adding the pidfd abstraction to the kernel](https://lwn.net/Articles/801319/)
 * `snd_wnd` added to `TCP_INFO`.  [netdev thread](https://lore.kernel.org/netdev/20190913232332.44036-2-tph@fb.com/).  Ubuntu 20.04 and Debian 11 have it.  iperf3 shows it in [3.10](https://github.com/esnet/iperf/pull/1148).
+* `SOMAXCONN` increased from 128 to 4096. [commit](http://git.kernel.org/linus/19f92a030ca6d772ab44b22ee6a01378a8cb32d4), <https://lkml.org/lkml/2019/11/13/510>
 
 ## 5.3 - 2019-09-15
 

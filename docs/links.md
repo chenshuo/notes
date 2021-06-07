@@ -32,6 +32,11 @@
 * <https://jvns.ca/blog/2013/10/24/day-16-gzip-plus-poetry-equals-awesome/>
 * [Dissecting the GZIP format](http://www.infinitepartitions.com/art001.html)
 
+## Unix history
+
+* [Evolution of the Unix System Architecture: An Exploratory Case Study](https://dx.doi.org/10.1109/TSE.2019.2892149), [Video from FOSDEM'18](https://youtu.be/FbDebSinSQo) by [Diomidis Spinellis](https://www2.dmst.aueb.gr/dds/).
+* [A repository of Unix History and evolution](https://www2.dmst.aueb.gr/dds/pubs/jrnl/2016-EMPSE-unix-history/html/unix-history.html)
+
 ## Maths
 
 * [Theory and Applications of Markov Chains to Finance](http://www.atteson.com/Markov/) by Kevin Atteson
