@@ -189,6 +189,7 @@
 <ul>
 <li><code>waitid()</code> syscall supports <code>P_PIDFD</code> flag.  <a href="https://lwn.net/Articles/801319/">Adding the pidfd abstraction to the kernel</a></li>
 <li><code>snd_wnd</code> added to <code>TCP_INFO</code>.  <a href="https://lore.kernel.org/netdev/20190913232332.44036-2-tph@fb.com/">netdev thread</a>.  Ubuntu 20.04 and Debian 11 have it.  iperf3 shows it in <a href="https://github.com/esnet/iperf/pull/1148">3.10</a>.</li>
+<li><code>SOMAXCONN</code> increased from 128 to 4096. <a href="http://git.kernel.org/linus/19f92a030ca6d772ab44b22ee6a01378a8cb32d4">commit</a>, <a href="https://lkml.org/lkml/2019/11/13/510">https://lkml.org/lkml/2019/11/13/510</a></li>
 </ul>
 <h2 id="53-2019-09-15">5.3 - 2019-09-15</h2>
 <p><a href="https://kernelnewbies.org/Linux_5.3">Linux 5.3</a></p>
