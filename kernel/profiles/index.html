@@ -196,6 +196,16 @@ Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtr
                                   tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm ida arat pln pts
 </code></pre>
 <h2 id="dd-ifdevzero-ofdevnull"><code>dd if=/dev/zero of=/dev/null</code></h2>
+<p>Writing to <code>/dev/null</code> is a no-op, it doesn't even touch the buffer.
+That is, even if you pass a NULL pointer to <code>write(2)</code>, e.g. <code>write(null_fd, NULL, 1048576)</code>,
+it won't segfault.</p>
+<pre><code class="language-c">// drivers/char/mem.c
+static ssize_t write_null(struct file *file, const char __user *buf,
+                          size_t count, loff_t *ppos)
+{
+        return count;
+}
+</code></pre>
 <ul>
 <li><a href="../profile-dd1b.html">profile</a> of <code>sudo perf record -g dd if=/dev/zero of=/dev/null bs=1 count=10M</code></li>
 </ul>
