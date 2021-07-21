@@ -113,6 +113,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#system-programming">System programming</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compiler">Compiler</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#time-keeping">Time-keeping</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#lz77-and-zlib">LZ77 and zlib</a>
@@ -182,8 +184,15 @@
 <li><a href="https://danwalsh.livejournal.com/53603.html">Excuse me son, but your code is leaking !!!</a> on Dan Walsh's Blog, about <code>FD_CLOEXEC</code> and <code>O_CLOEXEC</code></li>
 <li><a href="https://udrepper.livejournal.com/20407.html">Secure File Descriptor Handling</a> by Ulrich Drepper, about <code>O_CLOEXEC</code>, <code>O_NONBLOCK</code>.</li>
 </ul>
+<h2 id="compiler">Compiler</h2>
+<ul>
+<li><a href="https://godbolt.org/z/jr99qncW5">Old school strcpy(3)</a> on modern compiler. <img alt="strcpy" src="strcpy-assemble.png" /></li>
+<li><a href="https://godbolt.org/z/9crsYrWo1">std::reverse() a string</a> on modern compiler. <img alt="strcpy" src="reverse-string.png" /></li>
+</ul>
 <h2 id="time-keeping">Time-keeping</h2>
 <ul>
+<li><a href="http://www.allanstime.com/Publications/DWA/Science_Timekeeping/TheScienceOfTimekeeping.pdf">The Science of Timekeeping</a> HP Application Note 1289.</li>
+<li><a href="http://leapsecond.com/hpan/an1272.pdf">GPS and Precision Timing Applications</a> HP Application Note 1272.</li>
 <li><a href="https://developers.google.com/time/smear">Leap Smear</a> for applying leap seconds smoothly.</li>
 <li>Day of the weekday: <a href="https://en.wikipedia.org/wiki/Zeller%27s_congruence">Zeller's congruence</a>,
   <a href="https://tools.ietf.org/html/rfc3339#appendix-B">RFC3339</a></li>
