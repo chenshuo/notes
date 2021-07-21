@@ -16,8 +16,15 @@
 * [Excuse me son, but your code is leaking !!!](https://danwalsh.livejournal.com/53603.html) on Dan Walsh's Blog, about `FD_CLOEXEC` and `O_CLOEXEC`
 * [Secure File Descriptor Handling](https://udrepper.livejournal.com/20407.html) by Ulrich Drepper, about `O_CLOEXEC`, `O_NONBLOCK`.
 
+## Compiler
+
+* [Old school strcpy(3)](https://godbolt.org/z/jr99qncW5) on modern compiler. ![strcpy](links/strcpy-assemble.png)
+* [std::reverse() a string](https://godbolt.org/z/9crsYrWo1) on modern compiler. ![strcpy](links/reverse-string.png)
+
 ## Time-keeping
 
+* [The Science of Timekeeping](http://www.allanstime.com/Publications/DWA/Science_Timekeeping/TheScienceOfTimekeeping.pdf) HP Application Note 1289.
+* [GPS and Precision Timing Applications](http://leapsecond.com/hpan/an1272.pdf) HP Application Note 1272.
 * [Leap Smear](https://developers.google.com/time/smear) for applying leap seconds smoothly.
 * Day of the weekday: [Zeller's congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence),
   [RFC3339](https://tools.ietf.org/html/rfc3339#appendix-B)
