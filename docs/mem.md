@@ -7,3 +7,5 @@
 * [Awesome Lock-Free](https://github.com/rigtorp/awesome-lockfree)
 * [Lockless algorithms](https://lwn.net/Kernel/Index/#Lockless_algorithms) on LWN.net
 * [Linux-Kernel Memory Model](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r5.html)
+* [Russ Cox explains Memory Models](https://research.swtch.com/mm)
+* [RISC-V memory consistency model](https://www.youtube.com/watch?v=QkbWgCSAEoo)

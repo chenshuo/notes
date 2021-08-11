@@ -7,7 +7,8 @@
     1. Volumn I and II
     1. The Performance of Open Source Applications
     1. 500 Lines or Less
-
+* [Producing Wrong Data Without Doing Anything Obviously Wrong!](https://users.cs.northwestern.edu/~robby/courses/322-2013-spring/mytkowicz-wrong-data.pdf)
+    *  Changing a seemingly innocuous aspect of an experimental setup can cause a systems researcher to draw wrong conclusions from an experiment. What appears to be an innocuous aspect in the experimental setup may in fact introduce a significant bias in an evaluation. (i) UNIX environment size, (ii) link order.
 * [Matthew Austern's list of publications](http://lafstern.org/matt/publications.html)
     * [Why you shouldn't use set (and what you should use instead)](http://lafstern.org/matt/col1.pdf)
 
@@ -15,11 +16,13 @@
 
 * [Excuse me son, but your code is leaking !!!](https://danwalsh.livejournal.com/53603.html) on Dan Walsh's Blog, about `FD_CLOEXEC` and `O_CLOEXEC`
 * [Secure File Descriptor Handling](https://udrepper.livejournal.com/20407.html) by Ulrich Drepper, about `O_CLOEXEC`, `O_NONBLOCK`.
+* [A fork() in the road](https://www.microsoft.com/en-us/research/uploads/prod/2019/04/fork-hotos19.pdf) from HotOS '19.
 
 ## Compiler
 
 * [Old school strcpy(3)](https://godbolt.org/z/jr99qncW5) on modern compiler. ![strcpy](links/strcpy-assemble.png)
 * [std::reverse() a string](https://godbolt.org/z/9crsYrWo1) on modern compiler. ![strcpy](links/reverse-string.png)
+* [Run 32-bit ARM binary on ARM64](https://askubuntu.com/questions/1090351/can-i-run-an-arm32-bit-app-on-an-arm64bit-platform-which-is-running-ubuntu-16-04)
 
 ## Time-keeping
 
