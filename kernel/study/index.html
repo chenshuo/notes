@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Study - Shuo Chen's Notes</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Study";
+        var mkdocs_page_input_path = "kernel/study.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-1220141-6', 'chenshuo.com');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Shuo Chen's Notes
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../bugs/">Bugs</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Study</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#build-kernel-from-source-for-debugging">Build kernel from source for debugging</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#debugging-qemu-and-virtme">Debugging QEMU and virtme</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ftrace-to-show-call-graph">ftrace() to show call graph</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#study-tcpip-stack-using-packetdrill">Study TCP/IP stack using packetdrill</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-freebsd-kernel-on-linux">Compile FreeBSD kernel on Linux</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#debugging-freebsd-kernel-in-qemu">Debugging FreeBSD kernel in QEMU</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../data-structures/">Data Structures</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../file-descriptor-table/">File Descriptor Table</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../epoll/">Epoll</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../callgraph/">Call Graphs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../reuseport/">SO_REUSEPRT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../links/">Links</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Languages</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lcc/">lcc</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lua/">Lua</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../git/">Git</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../mem/">Memory Model</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../ssl/">SSL</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../dsp/">DSP</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../links/">Links</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Shuo Chen's Notes</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+          <li>Kernel &raquo;</li><li>Study</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="study-kernel-source">Study Kernel source</h1>
+<h2 id="build-kernel-from-source-for-debugging">Build kernel from source for debugging</h2>
+<p>Generally, Linux kernel doesn't compile with <code>-O0</code>, which is unfortunate
+for debugging and steping through in GDB.</p>
+<p>For parts I (Chen Shuo) care mostly, i.e. networking, I manage to compile
+those parts with <code>-O0</code> and the rest with <code>-Og</code>, so GDB works much smoother.</p>
+<p>I created a git repository for my own convenience.  It has some tweaks in
+<code>kernel/configs/study.config</code> to make building and debugging faster.</p>
+<pre><code class="language-sh">$ cd ~/kernel
+$ git clone https://github.com/chenshuo/linux-study.git
+$ cd linux-study
+
+$ study/config.sh
+...
+To build:
+    cd ../build-g
+    make -j8
+
+$ cd ../build-g
+$ make -j24
+...
+  BUILD   arch/x86/boot/bzImage
+Kernel: arch/x86/boot/bzImage is ready
+</code></pre>
+<h2 id="debugging-qemu-and-virtme">Debugging QEMU and virtme</h2>
+<p>Traditionally, you need to <a href="http://nickdesaulniers.github.io/blog/2018/10/24/booting-a-custom-linux-kernel-in-qemu-and-debugging-it-with-gdb/">build a disk image with root filesystem</a>,
+but with <a href="https://github.com/amluto/virtme">virtme</a>, it's not needed anymore.</p>
+<p>Virtme shares host filesystem with guest OS using 9p protocol, so it doesn't interfere with networking stack.</p>
+<pre><code class="language-sh">$ virtme/virtme-run --kdir ~/kernel/build-g --mods=auto --pwd --qemu-opts -s
+</code></pre>
+<p>In another window</p>
+<pre><code class="language-sh">$ gdb vmlinux
+
+(gdb) target remote :1234
+0xffffffff818de078 in default_idle () at /home/chenshuo/kernel/linux-study/arch/x86/kernel/process.c:718
+718 }
+
+(gdb) b sock_alloc
+(gdb) continue
+</code></pre>
+<p>To exit, in QEMU window: <code>Ctrl-A C</code> then <code>quit</code>.</p>
+<h2 id="ftrace-to-show-call-graph"><code>ftrace()</code> to show call graph</h2>
+<p><a href="https://www.youtube.com/watch?v=JRyrhsx-L5Y">Steven Rostedt - Learning the Linux Kernel with tracing</a></p>
+<p>Sample function graph trace for <code>tcp_sendmsg()</code>:</p>
+<pre><code class="language-text"> 0)               |  tcp_sendmsg() {
+ 0)               |    lock_sock_nested() {
+ 0)   2.032 us    |    }
+ 0)               |    tcp_sendmsg_locked() {
+ 0)   0.753 us    |      tcp_rate_check_app_limited();
+ 0)               |      tcp_send_mss() {
+ 0)               |        tcp_current_mss() {
+ 0)   1.826 us    |        }
+ 0)   0.387 us    |        tcp_xmit_size_goal();
+ 0)   2.858 us    |      }
+ 0)               |      sk_stream_alloc_skb() {
+ 0)   7.404 us    |      }
+ 0)               |      skb_entail() {
+ 0)   2.389 us    |      }
+ 0)               |      sk_page_frag_refill() {
+ 0)   6.727 us    |      }
+ 0)               |      __sk_mem_schedule() {
+ 0)   1.750 us    |      }
+ 0)               |      tcp_push_one() {
+ 0)               |        tcp_write_xmit() {
+ 0)               |          tcp_mstamp_refresh() {
+ 0)   0.629 us    |          }
+ 0)               |          tcp_tso_segs() {
+ 0)   0.158 us    |            tcp_tso_autosize();
+ 0)   0.569 us    |          }
+ 0)   0.498 us    |          tcp_pacing_check();
+ 0)               |          tcp_init_tso_segs() {
+ 0)   0.166 us    |            tcp_set_skb_tso_segs();
+ 0)   0.618 us    |          }
+ 0)   0.328 us    |          tcp_snd_wnd_test();
+ 0)   0.233 us    |          tcp_mss_split_point();
+ 0)               |          tso_fragment();
+ 0)   0.240 us    |          tcp_small_queue_check();
+ 0)               |          tcp_transmit_skb() {
+ 0)               |            __tcp_transmit_skb() {
+ 0)               |              skb_clone() 
+ 0)   0.216 us    |              tcp_established_options();
+ 0)   0.184 us    |              skb_push();
+ 0)               |              tcp_options_write() 
+ 0)               |              tcp_select_window() 
+ 0)   0.167 us    |              tcp_ecn_send();
+ 0)   0.148 us    |              bpf_skops_write_hdr_opt();
+ 0)               |              tcp_v6_send_check() 
+ 0)               |              tcp_event_data_sent() 
+ 0)               |              inet6_csk_xmit() {
+ 0)               |                inet6_csk_route_socket() 
+ 0)               |                ip6_xmit() {
+ 0)   0.173 us    |                  skb_push();
+ 0)               |                  ip6_dst_hoplimit() 
+ 0)   0.188 us    |                  ip6_autoflowlabel();
+ 0)               |                  ip6_mtu() 
+ 0)               |                  ip6_output() {
+ 0)               |                    ip6_finish_output() {
+ 0)               |                      __ip6_finish_output() {
+ 0)               |                        ip6_mtu() 
+ 0)               |                        skb_gso_validate_network_len() 
+ 0)               |                        ip6_finish_output2() {
+ 0)               |                          neigh_connected_output() {
+ 0)               |                            dev_queue_xmit() {
+ 0)               |                              __dev_queue_xmit() {
+ 0)   0.531 us    |                                qdisc_pkt_len_init();
+ 0)   0.227 us    |                                netdev_core_pick_tx();
+ 0)   0.160 us    |                                _raw_spin_lock();
+ 0)               |                                sch_direct_xmit() {
+ 0)               |                                  validate_xmit_skb_list()
+ 0)               |                                  dev_hard_start_xmit() {
+ 0)               |                                    xmit_one() {
+ 0)   0.197 us    |                                      dev_nit_active();
+ 0)               |                                      dev_queue_xmit_nit()
+ 0)               |                                      tun_net_xmit() {
+ 0)   0.165 us    |                                        tun_automq_xmit();
+ 0)   0.155 us    |                                        check_filter();
+ 0)   0.421 us    |                                        run_ebpf_filter();
+ 0)               |                                        tcp_wfree() {
+ 0)   1.247 us    |                                        }
+ 0)   4.366 us    |                                      }
+ 0) + 11.675 us   |                                    }
+ 0) + 12.107 us   |                                  }
+ 0)   0.144 us    |                                  _raw_spin_lock();
+ 0) + 16.900 us   |                                }
+ 0)               |                                __qdisc_run() {
+ 0)   0.255 us    |                                  dequeue_skb();
+ 0)   0.602 us    |                                }
+ 0)   0.160 us    |                                __local_bh_enable_ip();
+ 0) + 20.803 us   |                              }
+ 0) + 21.102 us   |                            }
+ 0) + 21.831 us   |                          }
+ 0)   0.180 us    |                          __local_bh_enable_ip();
+ 0) + 22.979 us   |                        }
+ 0) + 25.719 us   |                      }
+ 0) + 26.057 us   |                    }
+ 0) + 26.430 us   |                  }
+ 0) + 29.684 us   |                }
+ 0)   0.164 us    |                rcu_read_unlock_strict();
+ 0) + 35.114 us   |              }
+ 0)   0.334 us    |              tcp_update_skb_after_send();
+ 0)   0.302 us    |              tcp_rate_skb_sent();
+ 0) + 44.667 us   |            }
+ 0) + 45.075 us   |          }
+...
+</code></pre>
+<p>Clearly shows the call chain:</p>
+<ul>
+<li>Transport layer</li>
+</ul>
+<pre><code class="language-c">tcp_sendmsg() -&gt; tcp_sendmsg_locked() -&gt; tcp_push_one() -&gt; tcp_write_xmit() -&gt; tcp_transmit_skb() -&gt; __tcp_transmit_skb()
+</code></pre>
+<ul>
+<li>Network layer</li>
+</ul>
+<pre><code class="language-c">inet6_csk_xmit() -&gt; ip6_xmit() -&gt; ip6_output() -&gt; ip6_finish_output() -&gt; __ip6_finish_output() -&gt; ip6_finish_output2()
+</code></pre>
+<ul>
+<li>Device layer</li>
+</ul>
+<pre><code class="language-c">neigh_connected_output() -&gt; dev_queue_xmit() -&gt; __dev_queue_xmit() -&gt; sch_direct_xmit() -&gt; dev_hard_start_xmit() -&gt; xmit_one()
+</code></pre>
+<ul>
+<li>Driver layer</li>
+</ul>
+<pre><code class="language-c">tun_net_xmit()
+</code></pre>
+<h2 id="study-tcpip-stack-using-packetdrill">Study TCP/IP stack using <code>packetdrill</code></h2>
+<h2 id="compile-freebsd-kernel-on-linux">Compile FreeBSD kernel on Linux</h2>
+<p>Recent FreeBSD kernel can be cross compiled on Linux host: https://wiki.freebsd.org/BuildingOnNonFreeBSD</p>
+<h3 id="debugging-freebsd-kernel-in-qemu">Debugging FreeBSD kernel in QEMU</h3>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../bugs/" class="btn btn-neutral float-left" title="Bugs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../data-structures/" class="btn btn-neutral float-right" title="Data Structures">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../bugs/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../data-structures/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme_extra.js" defer></script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
