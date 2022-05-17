@@ -6,10 +6,11 @@ extra_javascript:
 google_analytics: ['UA-1220141-6', 'chenshuo.com']
 markdown_extensions:
   - mdx_math
-pages:
+nav:
   - Home: index.md
   - Bugs: bugs.md
   - Kernel:
+    - 'Study': kernel/study.md
     - 'Data Structures': kernel/data-structures.md
     - 'File Descriptor Table': kernel/file-descriptor-table.md
     - 'Epoll': kernel/epoll.md
