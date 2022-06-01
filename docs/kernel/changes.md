@@ -32,6 +32,12 @@
 
 * Adds `pidfd_send_signal(2)` syscall.  [Toward race-free process signaling](https://lwn.net/Articles/773459/)
 
+## 4.17 - 2018-06-03
+
+[Linux 4.17](https://kernelnewbies.org/Linux_4.17#Kernel_TLS_receive_path)
+
+* Kernel TLS receive path
+
 ## 4.15 - 2018-01-28
 
 [Linux 4.15](https://kernelnewbies.org/Linux_4.15)
@@ -59,6 +65,12 @@ index a6b9a8d1a6df..4827094f1db4 100644
 
 * TUN: enable NAPI for TUN/TAP driver [commit 1](http://git.kernel.org/linus/943170998b200190f99d3fe7e771437e2c51f319),
     [commit 2](http://git.kernel.org/linus/90e33d45940793def6f773b2d528e9f3c84ffdc7)
+
+## 4.13 - 2017-09-03
+
+[Linux 4.13](https://kernelnewbies.org/Linux_4.13#Kernel_TLS_acceleration)
+
+* [TLS in the kernel](https://lwn.net/Articles/666509/), sending only.
 
 ## 4.12 - 2017-07-02
 
@@ -98,6 +110,12 @@ index 7be9b1242354..c723a465125d 100644
 +       struct rb_root  out_of_order_queue;
 +       struct sk_buff  *ooo_last_skb; /* cache rb_last(out_of_order_queue) */
 ```
+
+## 4.8 - 2016-10-02
+
+[Linux 4.8](https://kernelnewbies.org/Linux_4.8)
+
+* [Reinventing the timer wheel](https://lwn.net/Articles/646950/) [merge](https://git.kernel.org/torvalds/c/55392c4c06204c8149dc333309cf474691f1cc3c)
 
 ## 4.6 - 2016-05-15
 
