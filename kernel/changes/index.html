@@ -87,13 +87,19 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#51-2019-05-05">5.1 - 2019-05-05</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#417-2018-06-03">4.17 - 2018-06-03</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#415-2018-01-28">4.15 - 2018-01-28</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#413-2017-09-03">4.13 - 2017-09-03</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#412-2017-07-02">4.12 - 2017-07-02</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#410-2017-02-19">4.10 - 2017-02-19</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#49-2016-12-11">4.9 - 2016-12-11</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#48-2016-10-02">4.8 - 2016-10-02</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#46-2016-05-15">4.6 - 2016-05-15</a>
     </li>
@@ -151,13 +157,13 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" alt="Docs"></a> &raquo;</li>
-          <li>Kernel &raquo;</li><li>Changes</li>
+          <li>Kernel &raquo;</li>
+      <li>Changes</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
   <hr/>
 </div>
-
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
@@ -189,6 +195,11 @@
 <ul>
 <li>Adds <code>pidfd_send_signal(2)</code> syscall.  <a href="https://lwn.net/Articles/773459/">Toward race-free process signaling</a></li>
 </ul>
+<h2 id="417-2018-06-03">4.17 - 2018-06-03</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.17#Kernel_TLS_receive_path">Linux 4.17</a></p>
+<ul>
+<li>Kernel TLS receive path</li>
+</ul>
 <h2 id="415-2018-01-28">4.15 - 2018-01-28</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.15">Linux 4.15</a></p>
 <ul>
@@ -214,6 +225,11 @@ index a6b9a8d1a6df..4827094f1db4 100644
 <ul>
 <li>TUN: enable NAPI for TUN/TAP driver <a href="http://git.kernel.org/linus/943170998b200190f99d3fe7e771437e2c51f319">commit 1</a>,
     <a href="http://git.kernel.org/linus/90e33d45940793def6f773b2d528e9f3c84ffdc7">commit 2</a></li>
+</ul>
+<h2 id="413-2017-09-03">4.13 - 2017-09-03</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.13#Kernel_TLS_acceleration">Linux 4.13</a></p>
+<ul>
+<li><a href="https://lwn.net/Articles/666509/">TLS in the kernel</a>, sending only.</li>
 </ul>
 <h2 id="412-2017-07-02">4.12 - 2017-07-02</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.12">Linux 4.12</a></p>
@@ -249,6 +265,11 @@ index 7be9b1242354..c723a465125d 100644
 +       struct rb_root  out_of_order_queue;
 +       struct sk_buff  *ooo_last_skb; /* cache rb_last(out_of_order_queue) */
 </code></pre>
+<h2 id="48-2016-10-02">4.8 - 2016-10-02</h2>
+<p><a href="https://kernelnewbies.org/Linux_4.8">Linux 4.8</a></p>
+<ul>
+<li><a href="https://lwn.net/Articles/646950/">Reinventing the timer wheel</a> <a href="https://git.kernel.org/torvalds/c/55392c4c06204c8149dc333309cf474691f1cc3c">merge</a></li>
+</ul>
 <h2 id="46-2016-05-15">4.6 - 2016-05-15</h2>
 <p><a href="https://kernelnewbies.org/Linux_4.6">Linux 4.6</a></p>
 <ul>
