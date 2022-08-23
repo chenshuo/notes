@@ -2,5 +2,5 @@
 http://chenshuo.github.io/notes
 
 ```bash
-$ sudo python3 -m pip install mkdocs python-markdown-math mkdocs-graphviz
+$ sudo python3 -m pip install mkdocs python-markdown-math mkdocs-graphviz jupyter_contrib_nbextensions
 ```
