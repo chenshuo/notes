@@ -50,12 +50,10 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Pitch shift" href="6-pitch.html" />
-    <link rel="prev" title="DFT 与 FFT" href="4-fft.html" />
+    <link rel="prev" title="DFT and FFT" href="4-fft.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -140,7 +138,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="4-fft.html">
-   DFT 与 FFT
+   DFT and FFT
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -367,18 +365,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fir">
-   FIR
+  <a class="reference internal nav-link" href="#chirp">
+   Chirp
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dc-blocker">
-   DC blocker
+  <a class="reference internal nav-link" href="#oboe">
+   Oboe
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#iir-notch">
-   IIR Notch
+  <a class="reference internal nav-link" href="#violin-vibrato">
+   Violin Vibrato
   </a>
  </li>
 </ul>
@@ -401,18 +399,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#fir">
-   FIR
+  <a class="reference internal nav-link" href="#chirp">
+   Chirp
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#dc-blocker">
-   DC blocker
+  <a class="reference internal nav-link" href="#oboe">
+   Oboe
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#iir-notch">
-   IIR Notch
+  <a class="reference internal nav-link" href="#violin-vibrato">
+   Violin Vibrato
   </a>
  </li>
 </ul>
@@ -444,32 +442,14 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">draw_pzmap</span><span class="p">(</span><span class="n">dlti</span><span class="p">):</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dlti</span><span class="o">.</span><span class="n">zeros</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">dlti</span><span class="o">.</span><span class="n">zeros</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">mfc</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">dlti</span><span class="o">.</span><span class="n">poles</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">dlti</span><span class="o">.</span><span class="n">poles</span><span class="p">),</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span>
-  <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="s1">&#39;y--&#39;</span><span class="p">)</span>
-  <span class="n">limits</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-
-<span class="k">def</span> <span class="nf">draw_resp_stem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-  <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">use_line_collection</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-  <span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">use_line_collection</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-  <span class="n">markerline</span><span class="o">.</span><span class="n">set_markerfacecolor</span><span class="p">(</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<section id="fir">
-<h2>FIR<a class="headerlink" href="#fir" title="Permalink to this headline">#</a></h2>
+<section id="chirp">
+<h2>Chirp<a class="headerlink" href="#chirp" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="dc-blocker">
-<h2>DC blocker<a class="headerlink" href="#dc-blocker" title="Permalink to this headline">#</a></h2>
+<section id="oboe">
+<h2>Oboe<a class="headerlink" href="#oboe" title="Permalink to this headline">#</a></h2>
 </section>
-<section id="iir-notch">
-<h2>IIR Notch<a class="headerlink" href="#iir-notch" title="Permalink to this headline">#</a></h2>
+<section id="violin-vibrato">
+<h2>Violin Vibrato<a class="headerlink" href="#violin-vibrato" title="Permalink to this headline">#</a></h2>
 </section>
 </section>
 
@@ -504,7 +484,7 @@ title="Print to PDF"
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">DFT 与 FFT</p>
+            <p class="prev-next-title">DFT and FFT</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="6-pitch.html" title="next page">
