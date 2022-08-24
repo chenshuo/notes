@@ -16,3 +16,6 @@ parts:
   - caption: 进阶
     chapters:
     - file: 6-pitch
+  - caption: 结语
+    chapters:
+    - file: epilogue
