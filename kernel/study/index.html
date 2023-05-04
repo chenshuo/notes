@@ -69,11 +69,9 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#ftrace-to-show-call-graph">ftrace() to show call graph</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#study-tcpip-stack-using-packetdrill">Study TCP/IP stack using packetdrill</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#compile-freebsd-kernel-on-linux">Compile FreeBSD kernel on Linux</a>
+    <li class="toctree-l2"><a class="reference internal" href="#debug-freebsd-kernel-in-qemu-on-linux">Debug FreeBSD kernel in QEMU on Linux</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#debugging-freebsd-kernel-in-qemu">Debugging FreeBSD kernel in QEMU</a>
+    <li class="toctree-l3"><a class="reference internal" href="#build-a-custom-kernel">Build a custom kernel</a>
     </li>
         </ul>
     </li>
@@ -226,27 +224,27 @@ but with <a href="https://github.com/amluto/virtme">virtme</a>, it's not needed 
  0)   0.240 us    |          tcp_small_queue_check();
  0)               |          tcp_transmit_skb() {
  0)               |            __tcp_transmit_skb() {
- 0)               |              skb_clone() 
+ 0)               |              skb_clone()
  0)   0.216 us    |              tcp_established_options();
  0)   0.184 us    |              skb_push();
- 0)               |              tcp_options_write() 
- 0)               |              tcp_select_window() 
+ 0)               |              tcp_options_write()
+ 0)               |              tcp_select_window()
  0)   0.167 us    |              tcp_ecn_send();
  0)   0.148 us    |              bpf_skops_write_hdr_opt();
- 0)               |              tcp_v6_send_check() 
- 0)               |              tcp_event_data_sent() 
+ 0)               |              tcp_v6_send_check()
+ 0)               |              tcp_event_data_sent()
  0)               |              inet6_csk_xmit() {
- 0)               |                inet6_csk_route_socket() 
+ 0)               |                inet6_csk_route_socket()
  0)               |                ip6_xmit() {
  0)   0.173 us    |                  skb_push();
- 0)               |                  ip6_dst_hoplimit() 
+ 0)               |                  ip6_dst_hoplimit()
  0)   0.188 us    |                  ip6_autoflowlabel();
- 0)               |                  ip6_mtu() 
+ 0)               |                  ip6_mtu()
  0)               |                  ip6_output() {
  0)               |                    ip6_finish_output() {
  0)               |                      __ip6_finish_output() {
- 0)               |                        ip6_mtu() 
- 0)               |                        skb_gso_validate_network_len() 
+ 0)               |                        ip6_mtu()
+ 0)               |                        skb_gso_validate_network_len()
  0)               |                        ip6_finish_output2() {
  0)               |                          neigh_connected_output() {
  0)               |                            dev_queue_xmit() {
@@ -313,10 +311,59 @@ but with <a href="https://github.com/amluto/virtme">virtme</a>, it's not needed 
 </ul>
 <pre><code class="language-c">tun_net_xmit()
 </code></pre>
-<h2 id="study-tcpip-stack-using-packetdrill">Study TCP/IP stack using <code>packetdrill</code></h2>
-<h2 id="compile-freebsd-kernel-on-linux">Compile FreeBSD kernel on Linux</h2>
-<p>Recent FreeBSD kernel can be cross compiled on Linux host: https://wiki.freebsd.org/BuildingOnNonFreeBSD</p>
-<h3 id="debugging-freebsd-kernel-in-qemu">Debugging FreeBSD kernel in QEMU</h3>
+<h2 id="debug-freebsd-kernel-in-qemu-on-linux">Debug FreeBSD kernel in QEMU on Linux</h2>
+<ol>
+<li>
+<p>Download FreeBSD VM image <code>FreeBSD-13.2-RELEASE-amd64.qcow2.xz</code> from <a href="https://download.freebsd.org/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/">https://download.freebsd.org/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/</a>.</p>
+</li>
+<li>
+<p>Decompress and run FreeBSD VM in QEMU.</p>
+<p><code>$ qemu-system-x86_64 -m 12G -hda FreeBSD-13.2-RELEASE-amd64.qcow2 --enable-kvm -machine accel=kvm:tcg \
+  -netdev user,id=n0 -device e1000,netdev=n0 -device virtio-net-pci,netdev=n1 -netdev tap,id=n1 -s -cpu host -echr 17</code></p>
+<p>a. enable serial console, so later we can run with <code>-nographic</code>. Edit <code>/boot/loader.conf</code>.</p>
+<p>b. resize disk to 20G, so we can build custom kernel later. <code>gpart</code> and <code>growfs</code></p>
+<p>c. <code>sudo pkg install gmake git screen vim ncdu</code></p>
+</li>
+<li>
+<p>Build <code>gdb</code> that support FreeBSD kernel.</p>
+<p><code>$ sudo apt install libsource-highlight-dev libgmp-dev libncursesw6-dev
+$ # Download and extract gdb tarball to ~/freebsd13/gdb, then
+$ ./configure --enable-source-highlight --enable-tui --target=x86_64-portbld-freebsd13.2</code></p>
+</li>
+<li>
+<p>Download FreeBSD <code>kernel-dbg.txz</code> and <code>src.txz</code> from <a href="https://download.freebsd.org/releases/amd64/13.2-RELEASE/">https://download.freebsd.org/releases/amd64/13.2-RELEASE/</a>,
+   and extract them on Linux host. FreeBSD kernel source will be in <code>~/freebsd13/usr/src/sys/</code>.</p>
+</li>
+<li>
+<p>Attach <code>gdb</code> to QEMU</p>
+<p><code>~/freebsd13 $ gdb usr/lib/debug/boot/kernel/kernel.debug
+Reading symbols from ./kernel.debug...
+(gdb) target remote :1234</code></p>
+</li>
+<li>
+<p>Set breakpoints, and step through the code.</p>
+</li>
+</ol>
+<h3 id="build-a-custom-kernel">Build a custom kernel</h3>
+<p>Follow <a href="https://docs.freebsd.org/en/books/handbook/kernelconfig/#kernelconfig-config">handbook chapter 9</a></p>
+<ol>
+<li>copy <code>src.txz</code> to FreeBSD VM, extract <code>src.txz</code> to root.</li>
+<li>disable optimization for stepping through, <code>__attribute__((optnone))</code> for a given function, e.g. <code>tcp_output()</code>.</li>
+<li>
+<p>config &amp; build</p>
+<p><code>% cd /usr/src/sys/amd64/conf
+% cp GENERIC MYKERNEL
+% cd /usr/src/
+% sudo make -D NO_CLEAN buildkernel KERNCONF=MYKERNEL
+% sudo make -D NO_CLEAN installkernel KERNCONF=MYKERNEL</code></p>
+</li>
+<li>
+<p>copy <code>/usr/lib/debug/boot/kernel/kernel.debug</code> to Linux</p>
+</li>
+<li><code>gdb kernel.debug</code> and attach to QEMU VM running custom kernel.</li>
+</ol>
+<p>Recent FreeBSD kernel can be cross compiled on Linux host: https://wiki.freebsd.org/BuildingOnNonFreeBSD,
+but I didn't succeed.</p>
               
             </div>
           </div><footer>

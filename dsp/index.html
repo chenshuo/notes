@@ -1,1 +1,241 @@
-<meta http-equiv="Refresh" content="0; url=intro.html" />
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>DSP - Shuo Chen's Notes</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "DSP";
+        var mkdocs_page_input_path = "dsp.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-1220141-6', 'chenshuo.com');
+        ga('send', 'pageview');
+      </script>
+    
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Shuo Chen's Notes
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../bugs/">Bugs</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/study/">Study</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/data-structures/">Data Structures</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/file-descriptor-table/">File Descriptor Table</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/epoll/">Epoll</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/callgraph/">Call Graphs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/reuseport/">SO_REUSEPRT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/profiles/">Profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/changes/">Changes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/links/">Links</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Languages</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../lcc/">lcc</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lua/">Lua</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../git/">Git</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../mem/">Memory Model</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../ssl/">SSL</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">DSP</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dftfft">DFT/FFT</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#digital-sinusoid-generators">Digital Sinusoid Generators</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../links/">Links</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Shuo Chen's Notes</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>DSP</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="digital-signal-processing">Digital Signal Processing</h1>
+<h2 id="dftfft">DFT/FFT</h2>
+<p>DFT is a matrix multiplication, the naive implementation is <script type="math/tex">O(N^2)</script>.
+FFT is a much faster multiplication in <script type="math/tex">O(N \log N)</script>, which makes it practical.</p>
+<p>
+<script type="math/tex; mode=display"> X_k = \sum_{n=0}^{N-1} x_n e^{-j 2 \pi k n / N} </script>
+</p>
+<video controls="controls">
+  <source type="video/mp4" src="../media/dft-basis.mp4"></source>
+  <p>Your browser does not support the video element.</p>
+</video>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Discrete_Fourier_transform">Wikipedia</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Digital_Signal_Processing/Discrete_Fourier_Transform">Wikibooks</a></li>
+<li><a href="https://en.wikipedia.org/wiki/DFT_matrix">DFT matrix</a></li>
+<li><a href="http://www.dspguide.com/ch8/1.htm">Smith's Guide to DSP, ch.8</a> by Steven W. Smith</li>
+<li><a href="http://ccrma.stanford.edu/~jos/mdft/">Mathematics of the Discrete Fourier Transform</a> by Julius O. Smith</li>
+<li><a href="http://dsp-book.narod.ru/TDCH/CH-02.PDF">The Discrete Fourier Transform</a> by Ivan W. Selenick and Gerald Schuller.  From chapter 2 of <em>The Transform and Data Compression Handbook</em> ed. by <a href="https://en.wikipedia.org/wiki/K._R._Rao">Kamisetty Ramam Rao</a> and Patrick C. Yip</li>
+<li><a href="https://web.eecs.umich.edu/~fessler/course/451/l/pdf/c5.pdf">The Discrete Fourier Transform</a> by prof. <a href="http://web.eecs.umich.edu/~fessler/">Jeffrey A. Fessler</a> from <a href="https://web.eecs.umich.edu/~fessler/course/451/">EECS 451, Digital Signal Processing and Analysis</a></li>
+<li><a href="http://www.robots.ox.ac.uk/~sjrob/Teaching/SP/l7.pdf">The Discrete Fourier Transform</a> by prof. <a href="http://www.robots.ox.ac.uk/~sjrob/">Stephen Roberts</a> from <a href="http://www.robots.ox.ac.uk/~sjrob/Teaching/sp_course.html">Signal Processing &amp; Filter Design</a></li>
+</ul>
+<h2 id="digital-sinusoid-generators">Digital Sinusoid Generators</h2>
+<ul>
+<li><a href="http://www.ti.com/lit/an/spra096a/spra096a.pdf">DTMF Tone Generation and Detection</a> by Gunter Schmer</li>
+</ul>
+<p>Second-order digital resonator in Python:</p>
+<pre><code class="language-python">fs = 8000  # sampling frequency
+fo = 700   # output frequency
+A = 1.0    # amplitude
+w = 2*pi*fo/fs    # angular frequency of fo
+c = 2.0 * cos(w)  # coefficient, controls the frequency, 1.70528
+x = -A * sin(w)   # initial value, controls the amplitude and phase, -0.522498
+y = 0.0
+for ever:
+    emit(x)
+    x, y = c*x - y, x
+</code></pre>
+<p>First 100 data points:</p>
+<p><img alt="wave" src="../links/resonator-wave.png" /></p>
+<pre><code class="language-python">N = 4096
+f = fft(signal[:N])
+p = np.argmax(abs(f)[:N//2])
+print(p*fs/N) =&gt; 699.21895 Hz
+</code></pre>
+<p>FFT:
+<img alt="fft" src="../links/resonator-fft.png" /></p>
+<ul>
+<li><a href="https://ccrma.stanford.edu/~jos/pasp/Digital_Waveguide_Oscillator.html">Digital Waveguide Oscillator</a> by Julius O. Smith</li>
+<li><a href="https://ccrma.stanford.edu/~dattorro/EffectDesignPart3.pdf">Effect Design Part 3 Oscillators: Sinusoidal and Pseudonoise</a> by Jon Dattorro</li>
+<li><a href="https://ccrma.stanford.edu/~jos/pdf/GordonAndSmith86.pdf">A sine generation algorithm for VLSI applications</a> by John W. Gordon and Julius O. Smith</li>
+<li><a href="https://ccrma.stanford.edu/~jos/wgo/wgo.pdf">The Second-Order Digital Waveguide Oscillator</a> by Julius O. Smith and Perry R. Cook</li>
+<li><a href="http://www.ti.com/lit/an/snoa665c/snoa665c.pdf">AN-263 Sine Wave Generation Techniques</a></li>
+<li><a href="https://www.analogictips.com/sine-wave-generation/">5 ways to generate a sine wave</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ssl/" class="btn btn-neutral float-left" title="SSL"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../links/" class="btn btn-neutral float-right" title="Links">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../ssl/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../links/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
