@@ -99,27 +99,27 @@ Sample function graph trace for `tcp_sendmsg()`:
  0)   0.240 us    |          tcp_small_queue_check();
  0)               |          tcp_transmit_skb() {
  0)               |            __tcp_transmit_skb() {
- 0)               |              skb_clone() 
+ 0)               |              skb_clone()
  0)   0.216 us    |              tcp_established_options();
  0)   0.184 us    |              skb_push();
- 0)               |              tcp_options_write() 
- 0)               |              tcp_select_window() 
+ 0)               |              tcp_options_write()
+ 0)               |              tcp_select_window()
  0)   0.167 us    |              tcp_ecn_send();
  0)   0.148 us    |              bpf_skops_write_hdr_opt();
- 0)               |              tcp_v6_send_check() 
- 0)               |              tcp_event_data_sent() 
+ 0)               |              tcp_v6_send_check()
+ 0)               |              tcp_event_data_sent()
  0)               |              inet6_csk_xmit() {
- 0)               |                inet6_csk_route_socket() 
+ 0)               |                inet6_csk_route_socket()
  0)               |                ip6_xmit() {
  0)   0.173 us    |                  skb_push();
- 0)               |                  ip6_dst_hoplimit() 
+ 0)               |                  ip6_dst_hoplimit()
  0)   0.188 us    |                  ip6_autoflowlabel();
- 0)               |                  ip6_mtu() 
+ 0)               |                  ip6_mtu()
  0)               |                  ip6_output() {
  0)               |                    ip6_finish_output() {
  0)               |                      __ip6_finish_output() {
- 0)               |                        ip6_mtu() 
- 0)               |                        skb_gso_validate_network_len() 
+ 0)               |                        ip6_mtu()
+ 0)               |                        skb_gso_validate_network_len()
  0)               |                        ip6_finish_output2() {
  0)               |                          neigh_connected_output() {
  0)               |                            dev_queue_xmit() {
@@ -190,11 +190,64 @@ neigh_connected_output() -> dev_queue_xmit() -> __dev_queue_xmit() -> sch_direct
 ```c
 tun_net_xmit()
 ```
-## Study TCP/IP stack using `packetdrill`
 
-## Compile FreeBSD kernel on Linux
+## Debug FreeBSD kernel in QEMU on Linux
 
-Recent FreeBSD kernel can be cross compiled on Linux host: https://wiki.freebsd.org/BuildingOnNonFreeBSD
+1. Download FreeBSD VM image `FreeBSD-13.2-RELEASE-amd64.qcow2.xz` from <https://download.freebsd.org/releases/VM-IMAGES/13.2-RELEASE/amd64/Latest/>.
 
-### Debugging FreeBSD kernel in QEMU
+1. Decompress and run FreeBSD VM in QEMU.
+
+    ```
+    $ qemu-system-x86_64 -m 12G -hda FreeBSD-13.2-RELEASE-amd64.qcow2 --enable-kvm -machine accel=kvm:tcg \
+      -netdev user,id=n0 -device e1000,netdev=n0 -device virtio-net-pci,netdev=n1 -netdev tap,id=n1 -s -cpu host -echr 17
+    ```
+
+    a. enable serial console, so later we can run with `-nographic`. Edit `/boot/loader.conf`.
+
+    b. resize disk to 20G, so we can build custom kernel later. `gpart` and `growfs`
+
+    c. `sudo pkg install gmake git screen vim ncdu`
+
+1. Build `gdb` that support FreeBSD kernel.
+
+    ```
+    $ sudo apt install libsource-highlight-dev libgmp-dev libncursesw6-dev
+    $ # Download and extract gdb tarball to ~/freebsd13/gdb, then
+    $ ./configure --enable-source-highlight --enable-tui --target=x86_64-portbld-freebsd13.2
+    ```
+
+1. Download FreeBSD `kernel-dbg.txz` and `src.txz` from <https://download.freebsd.org/releases/amd64/13.2-RELEASE/>,
+   and extract them on Linux host. FreeBSD kernel source will be in `~/freebsd13/usr/src/sys/`.
+
+1. Attach `gdb` to QEMU
+
+    ```
+    ~/freebsd13 $ gdb usr/lib/debug/boot/kernel/kernel.debug
+    Reading symbols from ./kernel.debug...
+    (gdb) target remote :1234
+    ```
+
+1. Set breakpoints, and step through the code.
+
+### Build a custom kernel
+
+Follow [handbook chapter 9](https://docs.freebsd.org/en/books/handbook/kernelconfig/#kernelconfig-config)
+
+1. copy `src.txz` to FreeBSD VM, extract `src.txz` to root.
+1. disable optimization for stepping through, `__attribute__((optnone))` for a given function, e.g. `tcp_output()`.
+1. config & build
+
+    ```
+    % cd /usr/src/sys/amd64/conf
+    % cp GENERIC MYKERNEL
+    % cd /usr/src/
+    % sudo make -D NO_CLEAN buildkernel KERNCONF=MYKERNEL
+    % sudo make -D NO_CLEAN installkernel KERNCONF=MYKERNEL
+    ```
+
+1. copy `/usr/lib/debug/boot/kernel/kernel.debug` to Linux
+1. `gdb kernel.debug` and attach to QEMU VM running custom kernel.
+
+Recent FreeBSD kernel can be cross compiled on Linux host: https://wiki.freebsd.org/BuildingOnNonFreeBSD,
+but I didn't succeed.
 
