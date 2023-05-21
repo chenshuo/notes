@@ -1,9 +1,11 @@
 site_name: Shuo Chen's Notes
-theme: readthedocs
+theme:
+  name: readthedocs
+  analytics:
+    gtag: G-4PL3B2ZGE8
 extra_css: [extra.css]
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML
-google_analytics: ['UA-1220141-6', 'chenshuo.com']
 markdown_extensions:
   - mdx_math
 nav:
