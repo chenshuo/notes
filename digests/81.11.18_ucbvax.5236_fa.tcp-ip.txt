@@ -1,0 +1,273 @@
+Downloaded from https://cdn.preterhuman.net/texts/computing/gopher-archive/gopher.quux.org/Archives/usenet-a-news/FA.tcp-ip/
+Aucbvax.5236
+fa.tcp-ip
+utzoo!decvax!ucbvax!tcp-ip
+Wed Nov 18 05:50:19 1981
+TCP-IP Digest, Vol 1 #6
+>From tcp-ip@brl Wed Nov 18 05:33:31 1981
+TCP/IP Digest           Wednesday, 11 Nov 1981     Volume 1 : Issue 6
+
+Today's Topics:
+                       Administrivia:  Long Delay
+                  Disabling NCPs -- Directory Service?
+               TOPS-20 TCP Defenses? -- TCP/IP for Cybers?
+                  Unix/ArpaNet TCP Problems & Solutions
+                       TCP/IP Performance on VAXen
+                 Berkeley Enhanced TCP/IP for 4BSD UNIX
+----------------------------------------------------------------------
+
+From:  Mike Muuss
+Subject:  Administrivia
+
+Hello again folks!  Sorry about the long delay between this digest and
+the previous one -- I was in Denver on travel, and could not get to a
+terminal.  I hope to send out future digests as soon as enough material
+has been accumulated.
+					Cheers,
+					 -Mike
+
+------------------------------
+
+From: POSTEL at USC-ISIF
+Subject: Disabling NCPs
+
+There has been some talk of "forcing" the move to TCP by various 
+administrative and policy measures.  There was also a claim that
+there was no technical way to force the abandonment of NCP.  It
+should be pointed out that a quite simple modification to the IMP
+program would enable the IMPs to filter out and discard all NCP
+traffic.  As far as i know, there has been no decision to do this,
+but you should be aware that it is technical feasible.
+
+--jon.
+
+------------------------------
+
+From: Harris A. Meyers <MEYERS SRI-KL AT>
+Subject: Request
+
+A useful fuction for this list to perform might be to produce a directory of
+who has IP/TCP available for what machines and operating systems.
+In particular I am looking for a version to run on IBM's VM/CMS.
+
+harris
+
+------------------------------
+
+Subject: Re: TOPS 20 TCP/IP
+From: mike at RAND-UNIX
+
+I have often heard criticisms of TOPS 20 TCP/IP implementation, but
+never a defense.  Does anyone from BBN or ARPA care to defend their
+implementation or do they agree with the criticisms?
+
+------------------------------
+
+From: roya at UTEXAS-11 
+Subject: Is there TCP/IP for Cyber machines?
+
+	Do any of you know any sites that might have or is planning to
+	implement TCP/IP for CDC Cyber machines like 175 with NOS like
+	operating system?
+Roya
+
+[ Tektronix Labs (Clem Cole et.al.) have already implemented
+  TCP and IP in RatFor for their Cyber, running under NOS.   -Mike ]
+
+------------------------------
+
+From: greg at NPRDC
+Subject: Future contributions
+
+Now that all the special interest groups have spoken, can we get back to
+the original subject?  In case you've forgotten, it was "Unix/ARPAnet TCP
+problems and solutions."  Although I'm interested in the various problems/
+possibilities of using TCP on other operating systems or other ethers, at
+a minimum, our mutual interest is getting our machines running TCP before
+the deadline.  (Probabally this list goes a little farther than that; to
+those people, I appologize.  But we are the ones with the deadline fast
+approaching.)  Maybe we can discuss theoretical issues later, but I am
+more interested in the practical issues -- namely, who has TCP up?  How
+is it connected to the ARPAnet (or even another ether, if the problems/
+solutions are similar)?  What problems were encountered?  How fast is it?
+How does it compare in simplicity/performance/transparancy/completeness/
+functionality/limitations/etc. with the other possibilities?  So far, we
+have heard of two real choices (assuming that we're not going to have to
+buy any additional hardware): BBN and 3COM.  Who's got them up?  How
+connected?  (I am VDH, so solutions that don't have a VDH driver are
+uninteresting.)  Speak up; now's your chance to brag, and you can do the
+rest of us a real service.
+
+[ Actually, I had hoped that this digest could serve as a forum for
+  technical discussion of networking for ALL systems, but clearly the
+  transition to TCP for current ArpaNet Hosts is the primary motivator.
+  I hope that this list will not restrict itself just to UNIX, though.
+      -Mike]
+
+------------------------------
+
+Subject: TCP/IP Performance on VAX
+From: CERF at USC-ISI
+
+UC Berkeley has been developing a paging UNIX(TM) for the VAX
+based on V7 UNIX (TM-Western Electric).  BBN has been developing
+a TCP/IP for this VAX UNIX(TM) and UCB recently reported data
+bandwidths of Mb/sec over a 3 Mb/s Ethernet running TCP/IP to
+TCP/IP including checksumming.  This figure obtained on VAX
+11/750 using 1 kilobyte packets.
+
+A point of contact for the Berkeley + BBN VAX UNIX(TM) is Prof.
+Robert Fabry (ARPAVAX.Fabry@Berkeley).
+
+A point of contact at BBN is Gurwitz@BBN-RSM(Rob Gurwitz).
+
+Vint Cerf (bd)
+
+------------------------------
+
+From: ARPAVAX .wnj at Berkeley
+Subject: tcp-ip digest contribution
+Cc: gurwitz@bbn-unix
+
+Moderator: Here is a description of the work we are doing a
+Berkeley with tcp-ip.  I hope it is in time for this weeks
+digest.  We have enjoyed the past digests and hope that future
+digests will be as interesting.
+
+	Regards,
+		Bill Joy
+
+===== begin =====
+
+	The Computer Systems Research Group at Berkeley is
+enhancing the UNIX operating system with DARPA support.
+We are improving UNIX memory management facilities, working
+on extensions to UNIX to support better inter-process communication, and
+incorporating support for both local and long haul networks.  In
+particular, we expect to try using the INTERNET protocols on a number
+of different commercially available local network interfaces.
+
+	The basis for our INTERNET protocols is the TCP/IP
+implementation done by Rob Gurwitz at BBN.  While this TCP has more
+than adequate performance for use in the ARPANET context, we need
+extremely good performance to be able to use the protocols as the basis
+for construction of distributed UNIX applications between machines on a
+local network.  In particular, we wish to insure that data can be
+transferred rapidly between VAX machines on 10 Megabaud Ethernet
+cables.  Our current file system organization uses 1024 byte records,
+while a newer, high-performance file system will use 4096 byte
+records.  We are therefore interested in the effective transmission of
+records of these sizes.  We are also interested in low per-packet
+overhead for distributed applications which exchange many messages.
+
+	We have just finished about three weeks of tuning of the BBN TCP/IP
+for our 3 Megabaud prototype Ethernet.  We had previously brought
+TCP/IP up on the Ethernet and were interested in learning more about
+the internals of TCP and discovering whether the protocol would be a
+bottleneck when running on a local network.  The results we have
+obtained suggest that this is not the case.
+
+	As an experiment to investigate the performance of the resulting
+TCP/IP implementation, we transmitted 4 Megabytes of data between two
+user processes on different machines.  The transfer was partitioned
+into 1024 byte records and encapsulated in 1068 byte Ethernet packets.
+Sending the data from our 11/750 to our 11/780 through TCP/IP takes 28
+seconds.  This includes all the time needed to set up and tear down the
+connections, for an user-user throughput of 1.2 Megabaud.  During this
+time the 11/750 is CPU saturated, but the 11/780 has about 30% idle
+time.  The time spent in the system processing the data is spread out
+among handling for the Ethernet (20%), IP packet processing (10%), TCP
+processing (30%), checksumming (25%), and user system call handling
+(15%), with no single part of the handling dominating the time in the
+system.
+
+	The TCP performance exceeds the throughput of the current
+VAX/UNIX file system by a factor of 3, due to the small block size of
+the UNIX file system.  It comes within a factor of 2 of our per-spindle
+performance of a early prototype of a new file system organization we
+are working on.  The relative speed of the TCP/IP protocol and the file
+system suggests that we will be able to transfer volumes of data
+regularly between machines without any special protocols.  The limited
+bandwidth of our 3 Megabaud cable may be a bottleneck until we put in
+one or more 10 Megabaud cables.
+
+	Higher rates can be expected between VAX-11/780's, but we have
+no direct measurements yet, as we have only one 780 with easily accessible
+down time.  Improvements are yet possible within the bounds of the
+TCP/IP protocol and the new Ethernet standard (which limits packets to
+about 1500 bytes).  In particular, we may use IP fragmentation and
+reassembly on the local network to allow the TCP and higher level
+system code to process 4096 byte data records (which is a more natural
+block size for the newer system we are working on, being a basic file
+system data page size.)  This is convenient within the bounds of the
+Ethernet standards only because IP supports fragmentation and
+reassembly in a general way.  Simple techniques are also available
+which would reduce the number of ACK's by a significant amount to
+further speed the TCP.
+
+	Using information gathered from UNIX kernel profiling we can
+estimate the speed improvements possible given a 10 Megabaud cable.
+(All of these projections will be for user-user throughput between
+11/750's.)  Switching to 4096 byte segments in TCP transfers, while
+fragmenting at the IP layer (to stay within the packet length
+restriction of the Ethernet standard) we estimate an increased
+throughput of 1.9 Megabaud.  This is with an interface which is
+functionality equivalent to our current prototype Ethernets.  We plan
+on changing UNIX soon so that user i/o buffers are naturally page aligned.
+This would eliminate a copy of the data (when it is read) to raise the
+throughput to about 2.25 Megabaud.  (This speedup only at the receiver
+gives an end-end speedup because the receiving process otherwise has
+more work to do.)  With checksum calculation support from the interface
+hardware the user-user bandwidth would rise to about 3.5 Megabaud.
+At this point the major overhead is the processing of the 4 interrupts
+for the fragments of the 4k packets; a transmission medium which
+allowed us to use 4k packets would let the bandwidth rise to about
+6.6 Megabaud, user-user.   A final improvement would be to implement a
+variant on the send system call which released the virtual memory when
+the message was sent.  This would be very useful for servers and could
+also be used by the standard i/o library.  This would reduce the
+transmit overhead (which at this point should be greater than the
+receive overhead) making the final throughput about 8 Megabaud.
+
+	On 11/780's, these numbers typically scale up by 1.4 so that we
+can project the throughput with the improvements described above to be
+about 11.2 Megabaud, user-user.  While factors in the VAX architecture other
+than the protocol might well dominate before this bandwidth is achieved,
+this means that high data rates through the protocol can be achieved
+with a relatively small percentage of the processor.
+
+	We are working on IPC facilities for UNIX which will interface
+to the INTERNET protocol family, and allow us to construct distributed
+applications for UNIX without explicit dependence on the network layer
+protocols.  The measurements reported here suggest that we do not need
+to look for more efficient local network protocols, but will need
+to support other protocols only for inter-operability with other
+networks and systems.
+
+	We will be working with Rob Gurwitz at BBN in the coming weeks,
+combining our version of TCP/IP with his current version.  We look
+forward to making a high-performance version of the protocol available
+to the VAX/UNIX community at an early date.
+
+	Regards,
+		Bill Joy and Bob Fabry
+
+End of TCP-IP Digest
+********************
+
+-----------------------------------------------------------------
+ gopher://quux.org/ conversion by John Goerzen <jgoerzen@complete.org>
+ of http://communication.ucsd.edu/A-News/
+
+
+This Usenet Oldnews Archive
+article may be copied and distributed freely, provided:
+
+1. There is no money collected for the text(s) of the articles.
+
+2. The following notice remains appended to each copy:
+
+The Usenet Oldnews Archive: Compilation Copyright (C) 1981, 1996 
+ Bruce Jones, Henry Spencer, David Wiseman.
+
+
