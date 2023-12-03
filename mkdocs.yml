@@ -20,12 +20,15 @@ nav:
     - 'SO_REUSEPRT': kernel/reuseport.md
     - 'Profiles': kernel/profiles.md
     - 'Changes': kernel/changes.md
-    - 'Links': kernel/links.md
+    - 'Docs': kernel/docs.md
   - Languages:
     - lcc: lcc.md
     - Lua: lua.md
-  - Git: git.md
-  - Memory Model: mem.md
-  - SSL: ssl.md
-  - DSP: dsp.md
-  - Links: links.md
+    - Memory Model: mem.md
+  - Miscs:
+    - Git: git.md
+    - SSL: ssl.md
+    - Links: links.md
+  - Elec:
+    - DSP: dsp.md
+    - Reed-Solomon: reed-solomon.md

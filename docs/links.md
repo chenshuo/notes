@@ -55,7 +55,3 @@
 ## Maths
 
 * [Theory and Applications of Markov Chains to Finance](http://www.atteson.com/Markov/) by Kevin Atteson
-* [Reed-Solomon](http://web.eecs.utk.edu/~plank/plank/papers/CS-05-569.html) by James S. Plank,
-also [tutorials](http://web.eecs.utk.edu/~plank/plank/www/software.html) and
-[SPE97](http://cgi.di.uoa.gr/~ad/M155/Papers/RS-Tutorial.pdf)
-
