@@ -6,6 +6,14 @@
   color: #080;
 }
 
+.rst-content .section ul li>* {
+  margin-top: 0;
+}
+
+.rst-content .section ul li>ul {
+  margin-bottom: 0;
+}
+
 .hljs-comment, .hljs-quote
 {
   color: #080;

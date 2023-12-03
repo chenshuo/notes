@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Memory Model - Shuo Chen's Notes</title>
+    <title>Reed-Solomon - Shuo Chen's Notes</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,8 +13,8 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Memory Model";
-        var mkdocs_page_input_path = "mem.md";
+        var mkdocs_page_name = "Reed-Solomon";
+        var mkdocs_page_input_path = "reed-solomon.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -78,14 +78,12 @@
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Languages</span></p>
-              <ul class="current">
+              <ul>
                   <li class="toctree-l1"><a class="reference internal" href="../lcc/">lcc</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../lua/">Lua</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Memory Model</a>
-    <ul class="current">
-    </ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../mem/">Memory Model</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Miscs</span></p>
@@ -98,10 +96,36 @@
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Elec</span></p>
-              <ul>
+              <ul class="current">
                   <li class="toctree-l1"><a class="reference internal" href="../dsp/">DSP</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../reed-solomon/">Reed-Solomon</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Reed-Solomon</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#tutorials">Tutorials</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#videos">Videos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#open-source">Open source</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#original-view-vandermonde-reed-solomon">Original view (Vandermonde Reed-Solomon)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#bch-view">BCH view</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#erasure-codes-in-python">Erasure codes in Python</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#finite-field-galois-field">Finite Field (Galois Field)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#history">History</a>
+    </li>
+    </ul>
                   </li>
               </ul>
       </div>
@@ -118,8 +142,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Languages</li>
-      <li class="breadcrumb-item active">Memory Model</li>
+          <li class="breadcrumb-item">Elec</li>
+      <li class="breadcrumb-item active">Reed-Solomon</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -128,26 +152,58 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="notes-on-cc-memory-model">Notes on C/C++ memory model</h1>
+                <h1 id="reed-solomon-error-correction-codes">Reed-Solomon Error Correction Codes</h1>
+<p><strong>Original view and BCH view</strong></p>
+<p>There are two views of Reed-Solomon codes, make sure which <em>view</em> you are reading about.</p>
+<h2 id="reference">Reference</h2>
 <ul>
-<li><a href="https://www.hboehm.info/c++mm/">Threads and memory model for C++</a> by Hans Boehm<ul>
-<li><a href="https://docs.google.com/presentation/d/1Eapu4G6QcetO9mOeZSQJAuvxB8kK3pHQwxWbHNOLk8w/pub?start=false&amp;loop=false&amp;delayms=3000&amp;slide=id.g347b81b2f_023">GCC 4.7 and above does the right thing!</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Reed-Solomon_error_correction">https://en.wikipedia.org/wiki/Reed-Solomon_error_correction</a></li>
+</ul>
+<h3 id="tutorials">Tutorials</h3>
+<h3 id="videos">Videos</h3>
+<ul>
+<li><a href="https://vcubingx.com">vcubingx</a> - <a href="https://www.youtube.com/watch?v=1pQJkt7-R4Q">What are Reed-Solomon Codes?</a></li>
+<li><a href="https://www.math.brown.edu/ivogt/">Isabel Vogt</a> - <a href="https://www.youtube.com/watch?v=CcZf_7Fb4Us">Error Correcting Curves - Numberphile</a></li>
+<li><a href="https://sites.google.com/site/marywootters/home">Mary Wootters</a> - <a href="https://www.youtube.com/watch?v=yQkEnde2lNg">Lecture 4: Reed-Solomon Codes!</a> of Stanford <a href="https://web.stanford.edu/class/cs250/">CS250/EE387: Algebraic Error Correcting Codes</a><ul>
+<li><a href="https://www.youtube.com/watch?v=xE4jEKx9fTM&amp;ab_channel=SimonsInstitute">Her 1-hr long public lecture for wider audience</a></li>
 </ul>
 </li>
-<li><a href="https://www.cs.kent.ac.uk/people/staff/mjb211/docs/toc.pdf">The C11 and C++11 Concurrency Model</a> by Mark John Batty</li>
-<li><a href="https://www.cl.cam.ac.uk/~pes20/cpp/cpp0xmappings.html">C/C++11 mappings to processors</a> by Alexander Terekhov, Paul McKenney, et al.</li>
-<li><a href="https://github.com/rigtorp/awesome-lockfree">Awesome Lock-Free</a></li>
-<li><a href="https://lwn.net/Kernel/Index/#Lockless_algorithms">Lockless algorithms</a> on LWN.net</li>
-<li><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r5.html">Linux-Kernel Memory Model</a></li>
-<li><a href="https://research.swtch.com/mm">Russ Cox explains Memory Models</a></li>
-<li><a href="https://www.youtube.com/watch?v=QkbWgCSAEoo">RISC-V memory consistency model</a></li>
 </ul>
+<h2 id="open-source">Open source</h2>
+<h3 id="original-view-vandermonde-reed-solomon">Original view (Vandermonde Reed-Solomon)</h3>
+<ul>
+<li>
+<p>James S. Plank: <a href="http://web.eecs.utk.edu/~plank/plank/www/software.html">Tutorial Material for Erasure Coding</a>, <a href="http://cgi.di.uoa.gr/~ad/M155/Papers/RS-Tutorial.pdf">SPE97 paper</a> and <a href="https://web.eecs.utk.edu/~jplank/plank/papers/SPE-04.html">correction 2003</a>.</p>
+</li>
+<li>
+<p>Luigi Rizzo: <a href="http://info.iet.unipi.it/~luigi/fec.html">Software FEC in computer communications</a>, <a href="https://www.rfc-editor.org/rfc/rfc5510.html">RFC 5510</a></p>
+</li>
+<li><a href="https://github.com/Backblaze/JavaReedSolomon">JavaReedSolomon</a> by Backblaze.<ul>
+<li>Blog post <a href="https://www.backblaze.com/blog/reed-solomon/">Backblaze Open-sources Reed-Solomon Erasure Coding Source Code</a> and <a href="https://www.youtube.com/watch?v=jgO09opx56o&amp;ab_channel=Backblaze">5-minute video tutorial by Brian Beach</a></li>
+</ul>
+</li>
+<li>Python <a href="https://github.com/emin63/pyfinite">pyfinite</a> package.</li>
+</ul>
+<h3 id="bch-view">BCH view</h3>
+<ul>
+<li><a href="https://www.eccpage.com/">Error Correcting Codes (ECC) Page</a> by Robert Morelos-Zaragoza.</li>
+<li><a href="https://www.ka9q.net/code/fec/">FEC Library</a> by Phil Karn, KA9Q.<ul>
+<li>Adapted into <a href="https://github.com/torvalds/linux/tree/master/lib/reed_solomon">Linux kernel</a> 2.6.10 by Thomas Gleixner.</li>
+</ul>
+</li>
+<li>Russ Cox blog <a href="https://research.swtch.com/field">Finite Field Arithmetic and Reed-Solomon Coding</a> with <a href="https://github.com/rsc/qr/tree/master/gf256">source code in Go</a>.</li>
+<li>Python <a href="https://mhostetter.github.io/galois/latest/">galois</a> package.</li>
+</ul>
+<h2 id="erasure-codes-in-python">Erasure codes in Python</h2>
+<h3 id="finite-field-galois-field">Finite Field (Galois Field)</h3>
+<pre><code></code></pre>
+<h2 id="history">History</h2>
+<p><img alt="Authors" src="reed-solomon.jpg" /></p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../lua/" class="btn btn-neutral float-left" title="Lua"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../git/" class="btn btn-neutral float-right" title="Git">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../dsp/" class="btn btn-neutral float-left" title="DSP"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
@@ -170,10 +226,8 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../lua/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../dsp/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-    
-      <span><a href="../git/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
