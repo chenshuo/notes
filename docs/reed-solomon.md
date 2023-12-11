@@ -13,7 +13,7 @@ It seems to me, BCH view is most common used (QR codes, CD/DVD, FEC in communica
 | Basic encoding | \(V_{n \times k} \cdot \boldsymbol m \) | \(s(x) = p(x) \cdot g(x)\) |  |
 | Systematic encoding | $$\begin{bmatrix}I_k\\G\end{bmatrix} \cdot \boldsymbol m$$  | \(p(x) \cdot x^{n-k} \mod g(x)\) |
 | Implementation | More memory for \(V\) or \(G\) | linear feedback shift register (LFSR)  |
-| Erasure decoding | \(M_k^{-1}\) (Inverse of matrix)| Solve linear equations? |
+| Erasure decoding | Inverse of matrix \(O(n^3)\) | Forney algorithm \(O(n^2)\) |
 | Error correction decoding| Berlekamp-Welch (1983), Shuhong Gao (2002) | PGZ (1960), Berlekamp-Massey (1967)  |  |
 
 $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm]  1 & a_1 & a_1^2 & \cdots & a_1^{k-1} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & a_{n-1} & a_{n-1}^2 & \cdots & a_{n-1}^{k-1} \end{pmatrix}, \quad g(x) = (x-\alpha^i)(x-\alpha^{i+1})\cdots (x-\alpha^{i+n-k-1})$$
