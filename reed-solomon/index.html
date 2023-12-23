@@ -107,6 +107,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#videos">Videos</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#course-notes">Course notes</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#open-source">Open source</a>
@@ -153,13 +155,125 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="reed-solomon-error-correction-codes">Reed-Solomon Error Correction Codes</h1>
-<p><strong>Original view and BCH view</strong></p>
-<p>There are two views of Reed-Solomon codes, make sure which <em>view</em> you are reading about.</p>
+<p>There are two views of Reed-Solomon codes, <strong>Original view and BCH view</strong>, make sure which <em>view</em> you are reading about.</p>
+<p>It seems to me, BCH view is most common used (QR codes, CD/DVD, FEC in communications like DVB or 100GbE), and can do both erasure and error corrections. Original view is mainly used for erasure codes in (distributed) storage systems.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Original view</th>
+<th>BCH view</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Message <script type="math/tex">\boldsymbol m = [m_0, m_1, \ldots, m_{k-1}]</script>  <td colspan=2>As coefficients of polynomial <script type="math/tex">p(x) = m_0 + m_1x + m_2x^2 + \cdots + m_{k-1}x^{k-1}</script>
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Codeword <script type="math/tex">\boldsymbol c = [c_0, c_1, \ldots, c_{n-1}]</script>
+</td>
+<td>As values of <script type="math/tex">p(x)</script> at <script type="math/tex">a_0, a_1, \ldots, a_{n-1}</script>
+</td>
+<td>As coefficients of polynomial <script type="math/tex">s(x)</script>
+</td>
+</tr>
+<tr>
+<td>Characteristic</td>
+<td>Vandermonde matrix <script type="math/tex">V</script>
+</td>
+<td>Generator polynomial <script type="math/tex">g(x)</script>
+</td>
+</tr>
+<tr>
+<td>
+<script type="math/tex">(n, k)</script>
+</td>
+<td>Usuall small, for erasure codes in storage systems</td>
+<td>
+<script type="math/tex">n=2^m-1</script>, usually <script type="math/tex">n=255</script>
+</td>
+</tr>
+<tr>
+<td>Basic encoding</td>
+<td>
+<script type="math/tex">V_{n \times k} \cdot \boldsymbol m </script>
+</td>
+<td>
+<script type="math/tex">s(x) = p(x) \cdot g(x)</script>
+</td>
+</tr>
+<tr>
+<td>Systematic encoding</td>
+<td>
+<script type="math/tex; mode=display">\begin{bmatrix}I_k\\G\end{bmatrix} \cdot \boldsymbol m</script>
+</td>
+<td>
+<script type="math/tex">p(x) \cdot x^{n-k} \mod g(x)</script>
+</td>
+</tr>
+<tr>
+<td>Implementation</td>
+<td>More memory for <script type="math/tex">V</script> or <script type="math/tex">G</script>
+</td>
+<td>linear feedback shift register (LFSR)</td>
+</tr>
+<tr>
+<td>Erasure decoding</td>
+<td>
+<script type="math/tex">M_k^{-1}</script> (Inverse of matrix)</td>
+<td>Solve linear equations?</td>
+</tr>
+<tr>
+<td>Error correction decoding</td>
+<td>Berlekamp-Welch (1983), Shuhong Gao (2002)</td>
+<td>PGZ (1960), Berlekamp-Massey (1967)</td>
+</tr>
+</tbody>
+</table>
+<p>
+<script type="math/tex; mode=display">V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm]  1 & a_1 & a_1^2 & \cdots & a_1^{k-1} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & a_{n-1} & a_{n-1}^2 & \cdots & a_{n-1}^{k-1} \end{pmatrix}, \quad g(x) = (x-\alpha^i)(x-\alpha^{i+1})\cdots (x-\alpha^{i+n-k-1})</script>
+</p>
 <h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Reed-Solomon_error_correction">https://en.wikipedia.org/wiki/Reed-Solomon_error_correction</a></li>
 </ul>
 <h3 id="tutorials">Tutorials</h3>
+<p><strong>Starts here</strong></p>
+<ul>
+<li>"Practical Reed-Solomon for Programmers" <a href="https://berthub.eu/articles/posts/reed-solomon-for-programmers/">https://berthub.eu/articles/posts/reed-solomon-for-programmers/</a> (BCH view)</li>
+<li><a href="https://www.akalin.com/intro-erasure-codes">https://www.akalin.com/intro-erasure-codes</a> (Original view)</li>
+</ul>
+<p><strong>Polynomial visualize</strong></p>
+<ul>
+<li>"Reed-Solomon Error Correcting Codes from the Bottom Up" <a href="https://tomverbeure.github.io/2022/08/07/Reed-Solomon.html">https://tomverbeure.github.io/2022/08/07/Reed-Solomon.html</a></li>
+<li>"Introduction to Reed-Solomon" <a href="https://innovation.vivint.com/introduction-to-reed-solomon-bc264d0794f8">https://innovation.vivint.com/introduction-to-reed-solomon-bc264d0794f8</a><ul>
+<li><a href="https://github.com/vivint/infectious">https://github.com/vivint/infectious</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>Finite Field</strong></p>
+<ul>
+<li>"Finite Field Arithmetic and Reed-Solomon Coding" <a href="https://research.swtch.com/field">https://research.swtch.com/field</a> (BCH view)<ul>
+<li><a href="https://github.com/rsc/qr/blob/master/gf256/gf256.go">https://github.com/rsc/qr/blob/master/gf256/gf256.go</a></li>
+</ul>
+</li>
+<li>"The mathematics of RAID-6" <a href="https://www.kernel.org/pub/linux/kernel/people/hpa/raid6.pdf">https://www.kernel.org/pub/linux/kernel/people/hpa/raid6.pdf</a> (Finite Field Arithmetic)</li>
+</ul>
+<p><strong>Error correction decoding in BCH view</strong></p>
+<ul>
+<li><a href="https://en.wikiversity.org/wiki/Reed%E2%80%93Solomon_codes_for_coders">Reed–Solomon codes for coders</a> (BCH view with Python code)</li>
+<li><a href="https://downloads.bbc.co.uk/rd/pubs/whp/whp-pdf-files/WHP031.pdf">https://downloads.bbc.co.uk/rd/pubs/whp/whp-pdf-files/WHP031.pdf</a> (BCH view)</li>
+<li><a href="https://www.nayuki.io/page/reed-solomon-error-correcting-code-decoder">https://www.nayuki.io/page/reed-solomon-error-correcting-code-decoder</a> (BCH view, PGZ decoder)</li>
+</ul>
+<p><strong>Erasure decoding in original view</strong></p>
+<ul>
+<li>Erasure Codes for Storage Applications <a href="https://web.eecs.utk.edu/~jplank/plank/papers/FAST-2005.pdf">https://web.eecs.utk.edu/~jplank/plank/papers/FAST-2005.pdf</a></li>
+<li>Tutorial: Erasure Coding for Storage Applications <a href="https://web.eecs.utk.edu/~jplank/plank/papers/FAST-2013-Tutorial.html">https://web.eecs.utk.edu/~jplank/plank/papers/FAST-2013-Tutorial.html</a></li>
+<li>All About Erasure Codes by James Plank <a href="https://web.eecs.utk.edu/~jplank/plank/classes/cs560/560/notes/Erasure/2004-ICL.pdf">https://web.eecs.utk.edu/~jplank/plank/classes/cs560/560/notes/Erasure/2004-ICL.pdf</a></li>
+</ul>
 <h3 id="videos">Videos</h3>
 <ul>
 <li><a href="https://vcubingx.com">vcubingx</a> - <a href="https://www.youtube.com/watch?v=1pQJkt7-R4Q">What are Reed-Solomon Codes?</a></li>
@@ -169,11 +283,17 @@
 </ul>
 </li>
 </ul>
+<h3 id="course-notes">Course notes</h3>
+<ul>
+<li>Stanford CS250/EE387: Algebraic Error Correcting Codes <a href="https://web.stanford.edu/class/cs250/">https://web.stanford.edu/class/cs250/</a></li>
+<li>Berkeley CS 294-226: Advances in Error-Correcting Codes <a href="https://people.eecs.berkeley.edu/~venkatg/teaching/ECC-fall22/">https://people.eecs.berkeley.edu/~venkatg/teaching/ECC-fall22/</a></li>
+<li>MIT 6.451: Principles Of Digital Communication II <a href="https://ocw.mit.edu/courses/6-451-principles-of-digital-communication-ii-spring-2005/resources/mit6_451s05_fulllecnotes/">https://ocw.mit.edu/courses/6-451-principles-of-digital-communication-ii-spring-2005/resources/mit6_451s05_fulllecnotes/</a></li>
+</ul>
 <h2 id="open-source">Open source</h2>
 <h3 id="original-view-vandermonde-reed-solomon">Original view (Vandermonde Reed-Solomon)</h3>
 <ul>
 <li>
-<p>James S. Plank: <a href="http://web.eecs.utk.edu/~plank/plank/www/software.html">Tutorial Material for Erasure Coding</a>, <a href="http://cgi.di.uoa.gr/~ad/M155/Papers/RS-Tutorial.pdf">SPE97 paper</a> and <a href="https://web.eecs.utk.edu/~jplank/plank/papers/SPE-04.html">correction 2003</a>.</p>
+<p>James S. Plank: <a href="https://web.eecs.utk.edu/~jplank/plank/papers/SPE-9-97.html">A Tutorial on Reed-Solomon Coding for Fault-Tolerance in RAID-like Systems</a>, <a href="http://cgi.di.uoa.gr/~ad/M155/Papers/RS-Tutorial.pdf">SPE97 paper</a> and <a href="https://web.eecs.utk.edu/~jplank/plank/papers/SPE-04.html">correction 2003</a>.</p>
 </li>
 <li>
 <p>Luigi Rizzo: <a href="http://info.iet.unipi.it/~luigi/fec.html">Software FEC in computer communications</a>, <a href="https://www.rfc-editor.org/rfc/rfc5510.html">RFC 5510</a></p>
