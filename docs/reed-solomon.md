@@ -19,6 +19,10 @@ It seems to me, BCH view is most common used (QR codes, CD/DVD, FEC in communica
 $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm]  1 & a_1 & a_1^2 & \cdots & a_1^{k-1} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & a_{n-1} & a_{n-1}^2 & \cdots & a_{n-1}^{k-1} \end{pmatrix}, \quad g(x) = (x-\alpha^i)(x-\alpha^{i+1})\cdots (x-\alpha^{i+n-k-1})$$
 
 
+## Erasure codes in Python
+
+<https://github.com/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb>
+
 ## Reference
 
 * <https://en.wikipedia.org/wiki/Reed-Solomon_error_correction>
@@ -86,14 +90,15 @@ $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm] 
 * Russ Cox blog [Finite Field Arithmetic and Reed-Solomon Coding](https://research.swtch.com/field) with [source code in Go](https://github.com/rsc/qr/tree/master/gf256).
 * Python [galois](https://mhostetter.github.io/galois/latest/) package.
 
-## Erasure codes in Python
-
-### Finite Field (Galois Field)
-
-```
-```
-
 ## History
 
-
 ![Authors](reed-solomon.jpg)
+
+* https://en.wikipedia.org/wiki/Irving_S._Reed
+* https://en.wikipedia.org/wiki/Gustave_Solomon
+* https://en.wikipedia.org/wiki/Elwyn_Berlekamp
+* https://en.wikipedia.org/wiki/James_Massey
+* https://en.wikipedia.org/wiki/Lloyd_R._Welch
+* https://en.wikipedia.org/wiki/Dave_Forney
+* https://en.wikipedia.org/wiki/Robert_Tienwen_Chien
+
