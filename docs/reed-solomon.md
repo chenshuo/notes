@@ -21,6 +21,8 @@ $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm] 
 
 ## Erasure codes in Python
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb)
+
 <https://github.com/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb>
 
 ## Reference
@@ -90,15 +92,15 @@ $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm] 
 * Russ Cox blog [Finite Field Arithmetic and Reed-Solomon Coding](https://research.swtch.com/field) with [source code in Go](https://github.com/rsc/qr/tree/master/gf256).
 * Python [galois](https://mhostetter.github.io/galois/latest/) package.
 
-## History
+## History and People
 
 ![Authors](reed-solomon.jpg)
 
-* https://en.wikipedia.org/wiki/Irving_S._Reed
-* https://en.wikipedia.org/wiki/Gustave_Solomon
-* https://en.wikipedia.org/wiki/Elwyn_Berlekamp
-* https://en.wikipedia.org/wiki/James_Massey
-* https://en.wikipedia.org/wiki/Lloyd_R._Welch
-* https://en.wikipedia.org/wiki/Dave_Forney
-* https://en.wikipedia.org/wiki/Robert_Tienwen_Chien
+* <https://en.wikipedia.org/wiki/Irving_S._Reed>
+* <https://en.wikipedia.org/wiki/Gustave_Solomon>
+* <https://en.wikipedia.org/wiki/Elwyn_Berlekamp>
+* <https://en.wikipedia.org/wiki/James_Massey>
+* <https://en.wikipedia.org/wiki/Lloyd_R._Welch>
+* <https://en.wikipedia.org/wiki/Robert_Tienwen_Chien>
+* <https://en.wikipedia.org/wiki/Dave_Forney>
 
