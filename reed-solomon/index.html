@@ -101,6 +101,8 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">Reed-Solomon</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#erasure-codes-in-python">Erasure codes in Python</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#tutorials">Tutorials</a>
@@ -116,12 +118,6 @@
     <li class="toctree-l3"><a class="reference internal" href="#original-view-vandermonde-reed-solomon">Original view (Vandermonde Reed-Solomon)</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#bch-view">BCH view</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#erasure-codes-in-python">Erasure codes in Python</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#finite-field-galois-field">Finite Field (Galois Field)</a>
     </li>
         </ul>
     </li>
@@ -236,6 +232,8 @@
 <p>
 <script type="math/tex; mode=display">V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm]  1 & a_1 & a_1^2 & \cdots & a_1^{k-1} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & a_{n-1} & a_{n-1}^2 & \cdots & a_{n-1}^{k-1} \end{pmatrix}, \quad g(x) = (x-\alpha^i)(x-\alpha^{i+1})\cdots (x-\alpha^{i+n-k-1})</script>
 </p>
+<h2 id="erasure-codes-in-python">Erasure codes in Python</h2>
+<p><a href="https://github.com/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb</a></p>
 <h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Reed-Solomon_error_correction">https://en.wikipedia.org/wiki/Reed-Solomon_error_correction</a></li>
@@ -314,11 +312,17 @@
 <li>Russ Cox blog <a href="https://research.swtch.com/field">Finite Field Arithmetic and Reed-Solomon Coding</a> with <a href="https://github.com/rsc/qr/tree/master/gf256">source code in Go</a>.</li>
 <li>Python <a href="https://mhostetter.github.io/galois/latest/">galois</a> package.</li>
 </ul>
-<h2 id="erasure-codes-in-python">Erasure codes in Python</h2>
-<h3 id="finite-field-galois-field">Finite Field (Galois Field)</h3>
-<pre><code></code></pre>
 <h2 id="history">History</h2>
 <p><img alt="Authors" src="reed-solomon.jpg" /></p>
+<ul>
+<li>https://en.wikipedia.org/wiki/Irving_S._Reed</li>
+<li>https://en.wikipedia.org/wiki/Gustave_Solomon</li>
+<li>https://en.wikipedia.org/wiki/Elwyn_Berlekamp</li>
+<li>https://en.wikipedia.org/wiki/James_Massey</li>
+<li>https://en.wikipedia.org/wiki/Lloyd_R._Welch</li>
+<li>https://en.wikipedia.org/wiki/Dave_Forney</li>
+<li>https://en.wikipedia.org/wiki/Robert_Tienwen_Chien</li>
+</ul>
               
             </div>
           </div><footer>
