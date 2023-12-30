@@ -1,6 +1,6 @@
 # Compact Disc
 
-https://web.archive.org/web/20181122182956/http://www.cs.tut.fi/~ypsilon/80545/CD.html
+<https://web.archive.org/web/20181122182956/http://www.cs.tut.fi/~ypsilon/80545/CD.html>
 
 ## Table of Contents
 
@@ -208,4 +208,38 @@ Frame assembly
 
 <span id="ENDFILE"></span>
 
+## Why 44.1 KHz
 
+<https://indico.cern.ch/event/48127/attachments/956600/1357608/Error_Control_Coding.pdf>
+
+Explanation of 44.1 kHz CD sampling rate.
+
+The CD sampling rate has to be larger than about 40 kHz to fulfill the
+Nyquist criterion that requires sampling at twice the maximum analog frequency, which is about 20 kHz for audio.
+The sampling frequency is chosen somewhat higher than the Nyquist rate since practical filters neede to prevent
+aliasing have a finite slope. Digital audio tapes (DATs) use a sampling rate of 48 kHz. It has been claimed that thier
+sampling rate differs from that of CDs to make digital copying from one to the other more difficult. 48 kHz is, in
+principle, a better rate since it is a multiple of the other standard sampling rates,
+namely 8 and 16 kHz for telephonequality audio.
+Sampling rate conversion is simplified if rates are integer multiples of each other.
+
+From John Watkinson, The Art of Digital Audio, 2nd edition, pg. 104:
+In the early days of digital audio research, the necessary bandwidth of about 1 Mbps per audio channel was difficult to store.
+Disk drives had the bandwidth but not the capacity for long recording time, so attention turned to video recorders.
+These were adapted to store audio samples by creating a
+pseudo-video waveform which would convey binary as black and white levels. The sampling rate of such a system is
+constrained to relate simply to the field rate and field structure of the television standard used, so that an integer number
+of samples can be stored on each usable TV line in the field. Such a recording can be made on a monochrome recorder,
+and these recording are made in two standards, 525 lines at 60 Hz and 625 lines at 50 Hz. Thus it is possible to find a
+frequency which is a common multiple of the two and is also suitable for use as a sampling rate.The allowable sampling
+rates in a pseudo-video system can be deduced by multiplying the field rate by the number of active lines in a field
+(blanking lines cannot be used) and again by the number of samples in a line. By careful choice of parameters it is
+possible to use either 525/60 or 625/50 video with a sampling rate of 44.1KHz.In 60 Hz video, there are 35 blanked lines,
+leaving 490 lines per frame or 245 lines per field, so the sampling rate is given by :60 X 245 X 3 = 44.1 KHzIn 50 Hz video,
+there are 37 lines of blanking, leaving 588 active lines per frame, or 294 per field, so the same sampling rate is given by50
+X 294 X3 = 44.1 Khz.The sampling rate of 44.1 KHz came to be that of the Compact Disc. Even though CD has no video
+circuitry, the equipment used to make CD masters is video based and determines the sampling rate.
+(Reference kindly provided by Kavitha Parthasarathy.)
+
+from H. Schulzrinne, Professor and Chair in the Dept. of Computer Science; also with the Dept. of Electrical Engineering at
+Columbia University
