@@ -19,7 +19,9 @@ It seems to me, BCH view is most common used (QR codes, CD/DVD, FEC in communica
 $$V_{n\times k} = \begin{pmatrix}  1 & a_0 & a_0^2 & \cdots & a_0^{k-1} \\[1mm]  1 & a_1 & a_1^2 & \cdots & a_1^{k-1} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & a_{n-1} & a_{n-1}^2 & \cdots & a_{n-1}^{k-1} \end{pmatrix}, \quad g(x) = (x-\alpha^i)(x-\alpha^{i+1})\cdots (x-\alpha^{i+n-k-1})$$
 
 
-## Erasure codes in Python
+## Reed-Solomon error correction in Python
+
+![decoder](decoder.png)
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/ReedSolomonErasureCodes.ipynb)
 
