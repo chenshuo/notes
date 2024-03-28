@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Shuo Chen" /><link rel="canonical" href="https://chenshuo.com/notes/tl431/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>TL431 - Shuo Chen's Notes</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "TL431";
+        var mkdocs_page_input_path = "tl431.md";
+        var mkdocs_page_url = "/notes/tl431/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-4PL3B2ZGE8"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', "G-4PL3B2ZGE8");
+      </script>
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Shuo Chen's Notes
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../bugs/">Bugs</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Kernel</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/study/">Study</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/data-structures/">Data Structures</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/file-descriptor-table/">File Descriptor Table</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/epoll/">Epoll</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/callgraph/">Call Graphs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/reuseport/">SO_REUSEPRT</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/profiles/">Profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/changes/">Changes</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../kernel/docs/">Docs</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Languages</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../lcc/">lcc</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lua/">Lua</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../mem/">Memory Model</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Miscs</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../git/">Git</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ssl/">SSL</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../links/">Links</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Elec</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dsp/">DSP</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../reed-solomon/">Reed-Solomon</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">TL431</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#bandgap-voltage-reference">Bandgap voltage reference</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-internal-schematic">The internal schematic</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#analysis">Analysis</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#calculation">Calculation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#another-schematic-by-ken-shirriff">Another schematic by Ken Shirriff</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#spice-model-by-eugene-dvoskin">SPICE model by Eugene Dvoskin</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Shuo Chen's Notes</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Elec</li>
+      <li class="breadcrumb-item active">TL431</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="tl431">TL431</h1>
+<p>Comments and discussions: <a href="https://github.com/chenshuo/notes/discussions">https://github.com/chenshuo/notes/discussions</a></p>
+<h2 id="bandgap-voltage-reference">Bandgap voltage reference</h2>
+<p>See "How a bandgap reference works" section in <a href="https://www.righto.com/2014/09/reverse-engineering-counterfeit-7805.html">https://www.righto.com/2014/09/reverse-engineering-counterfeit-7805.html</a></p>
+<p>The thermal voltage <script type="math/tex">V_\mathrm{T} = \dfrac{kT}{q}</script> is proportional to absolute temperature (PTAT). <script type="math/tex">V_\mathrm{T} \approx 25.8\mathrm{mV}</script> at room temperature (27°C, or 300K).</p>
+<blockquote>
+<p>Ref. <a href="https://en.wikipedia.org/wiki/Boltzmann_constant#The_thermal_voltage">https://en.wikipedia.org/wiki/Boltzmann_constant#The_thermal_voltage</a></p>
+</blockquote>
+<p>
+<script type="math/tex">V_\mathrm{T}</script> has a positive temperature coefficient of about 86.2μV/°C.</p>
+<blockquote>
+<p>
+<script type="math/tex">\dfrac{V_\mathrm{T}}{T} = \dfrac{k}{q} = \dfrac{ 1.380649\times 10^{-23}}{1.602176634\times 10^{-19}} \approx 8.62 \times 10^{-5}\mathrm{V/K}</script>
+</p>
+</blockquote>
+<p>Therefore, we usually need <script type="math/tex">10\ln 10 \cdot V_\mathrm{T}\approx 23V_\mathrm{T}</script> to cancel out the tempco of one <script type="math/tex">V_\mathrm{BE}</script>, which normally has a negative tempco about -2mV/°C.</p>
+<blockquote>
+<p>
+<script type="math/tex">10 \ln 10 \times 86.2 \approx 23 \times 86.2 = 1.983\mathrm{mV/°C}</script>
+</p>
+</blockquote>
+<p>The actual tempco of <script type="math/tex">V_\mathrm{BE}</script> is related to <script type="math/tex">V_\mathrm{BE}</script> itself, see formula in <a href="https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor">https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor</a></p>
+<h2 id="the-internal-schematic">The internal schematic</h2>
+<p><img alt="TL431" src="../media/tl431a.png" /></p>
+<p>Resistors are taken from official TI datasheet <a href="https://www.ti.com/lit/ds/symlink/tl431.pdf">https://www.ti.com/lit/ds/symlink/tl431.pdf</a>.</p>
+<p>The resistor and transistor numbering follows <a href="https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/">SPICE model by Eugene Dvoskin</a>.</p>
+<p>Transistor <script type="math/tex">Q_{11}</script> is drawn in dashed lines, as it is off in normal operation mode.
+IIUC, it acts like a diode to shutdown the output when <code>Ref</code> is connected to <code>Anode</code>.</p>
+<h2 id="analysis">Analysis</h2>
+<p>Ignoring base currents, assuming <script type="math/tex">\beta\gg 1</script>.
+As we will see in the next section , we can actually estimate that <script type="math/tex">\beta\approx 120</script>.</p>
+<p>For the following analysis, we assume area ratio of <script type="math/tex">Q_6:Q_2:Q_3</script> being <script type="math/tex">1:3:6</script>, taken from <a href="https://powersimtof.com/Downloads/Papers/The%20TL431%20in%20loop%20control.pdf">The TL431 in loop control</a> by Christophe Basso.
+Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<script type="math/tex">0.5:1.2:2.2</script>) though.</p>
+<p><img alt="TL431" src="../media/tl431b.png" /></p>
+<ol>
+<li>There are 11 transistors in total, <script type="math/tex">Q_{11}</script> is normally off, so we need to analyze 10 BJTs only.</li>
+<li>It's easy to see that <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script> form a Darlinton pair, it's the output stage.</li>
+<li>It's also easy to recognize that <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> is a <a href="https://en.wikipedia.org/wiki/Current_mirror">current mirror</a>, if we assuming they have the same area. (In Ken Shirriff's schematic below, their areas are different, though.)</li>
+<li>The rest of 6 transistors <script type="math/tex">Q_{1\dots 6}</script> are tangled together, let's analyse them in parts.</li>
+</ol>
+<h2 id="calculation">Calculation</h2>
+<p>1.</p>
+<p>The voltages and currents are from SPICE simulation.</p>
+<p><img alt="TL431" src="../media/tl431dc1.png" /></p>
+<p><img alt="TL431" src="../media/tl431dc2.png" /></p>
+<h2 id="simulation">Simulation</h2>
+<p>TODO: set up</p>
+<p><img alt="TL431" src="../media/tl431c.png" /></p>
+<h2 id="another-schematic-by-ken-shirriff">Another schematic by Ken Shirriff</h2>
+<p><a href="https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html">https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html</a></p>
+<p>Note: the transistor and resistor numbers in the following schematic match Ken Shirriff's post, don't be confused.</p>
+<p><img alt="TL431" src="../media/tl431ken.png" /></p>
+<blockquote>
+<p>The resistances on the official schematic above are very different from what can be seen from the die.</p>
+</blockquote>
+<p>Here's brief analysis of its DC operating point, ignoring base currents.</p>
+<ol>
+<li>Assuming <script type="math/tex">V_\mathrm{BE4}\approx V_\mathrm{BE6}\approx 0.65\mathrm{V}</script>
+</li>
+<li>Voltage drops on <script type="math/tex">R_2</script> and <script type="math/tex">R_3</script> are approx the same. <script type="math/tex">R_2 = R_3</script> and <script type="math/tex">V_\mathrm{R2}\approx V_\mathrm{R3}</script>, so <script type="math/tex">I_2\approx I_3</script>.</li>
+<li>
+<p>The area ratio of <script type="math/tex">Q_4</script> and <script type="math/tex">Q_5</script> is <script type="math/tex">0.9:7.2</script>, so voltage on <script type="math/tex">R_4</script> is <script type="math/tex">\Delta V_\mathrm{BE} = V_\mathrm{T}\ln \dfrac{7.2}{0.9}= V_\mathrm{T}\ln 8\approx 53.6\mathrm{mV}</script> at room temperature.</p>
+</li>
+<li>
+<p>Assuming for <script type="math/tex">Q_5</script>, its <script type="math/tex">I_\mathrm{C5} = I_\mathrm{E5} = I_3</script>, so voltage on <script type="math/tex">R_3</script> is <script type="math/tex">\dfrac{24}{3.4}\Delta V_\mathrm{BE}</script>
+</p>
+</li>
+<li>
+<p>Voltage on <script type="math/tex">R_1</script> is <script type="math/tex">I_1 R_1 = 2 I_3 R_1 = 2 \dfrac{R_1}{R_4}\Delta V_\mathrm{BE} =\dfrac{2\times 25}{3.4} \Delta V_\mathrm{BE}</script>.</p>
+</li>
+<li>
+<p>In total, <script type="math/tex">V_\mathrm{REF} = V_\mathrm{BE6} + V_\mathrm{R3} + V_\mathrm{R1} + V_\mathrm{BE2} = \dfrac{2\times 25 + 24}{3.4} \Delta V_\mathrm{BE} + V_\mathrm{BE6}  + V_\mathrm{BE2} = \dfrac{74}{3.4} \Delta V_\mathrm{BE} + 2V_\mathrm{BE} </script>
+</p>
+</li>
+<li>
+<p>The PTAT portion <script type="math/tex">\dfrac{74}{3.4} \Delta V_\mathrm{BE} = 21.765\times\ln 8 V_\mathrm{T} \approx 45.26  V_\mathrm{T}</script>, which should be in right amount to cancel tempco of two <script type="math/tex">V_\mathrm{BE}</script>.</p>
+</li>
+</ol>
+<h2 id="spice-model-by-eugene-dvoskin">SPICE model by Eugene Dvoskin</h2>
+<p><a href="https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/">https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/</a></p>
+<p>TODO: set up</p>
+<p><img alt="TL431" src="../media/tl431ed.png" /></p>
+<p>The Vref can be tuned to 2.495V by changing R4 to 3.22kΩ.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../reed-solomon/" class="btn btn-neutral float-left" title="Reed-Solomon"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/chenshuo/notes" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../reed-solomon/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
