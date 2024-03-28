@@ -1,4 +1,8 @@
 site_name: Shuo Chen's Notes
+site_url: https://chenshuo.com/notes
+repo_url: https://github.com/chenshuo/notes
+edit_uri: ''
+site_author: Shuo Chen
 theme:
   name: readthedocs
   analytics:
@@ -32,3 +36,4 @@ nav:
   - Elec:
     - DSP: dsp.md
     - Reed-Solomon: reed-solomon.md
+    - TL431: tl431.md
