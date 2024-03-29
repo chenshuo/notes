@@ -40,11 +40,7 @@
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
           <a href=".." class="icon icon-home"> Shuo Chen's Notes
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
+        </a>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
@@ -101,6 +97,8 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../reed-solomon/">Reed-Solomon</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ReedSolomonErasureCodes/">Reed-Solomon Erasure Codes in Python</a>
+                  </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">TL431</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#bandgap-voltage-reference">Bandgap voltage reference</a>
@@ -118,6 +116,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#spice-model-by-eugene-dvoskin">SPICE model by Eugene Dvoskin</a>
     </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../UA78L05/">μA78L05 Analysis and Simulation</a>
                   </li>
               </ul>
       </div>
@@ -179,7 +179,7 @@ their difference is called <script type="math/tex">\Delta V_\mathrm{BE}</script>
  inversely proportional to its area.</p>
 <h2 id="the-internal-schematic">The internal schematic</h2>
 <p><img alt="TL431" src="../media/tl431a.png" /></p>
-<p>Resistor valuess are taken from official TI datasheet <a href="https://www.ti.com/lit/ds/symlink/tl431.pdf">https://www.ti.com/lit/ds/symlink/tl431.pdf</a>.</p>
+<p>Resistor values are taken from official TI datasheet <a href="https://www.ti.com/lit/ds/symlink/tl431.pdf">https://www.ti.com/lit/ds/symlink/tl431.pdf</a>.</p>
 <p>The resistor and transistor numbering follows <a href="https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/">SPICE model by Eugene Dvoskin</a>.</p>
 <p>Transistor <script type="math/tex">Q_{11}</script> is drawn in dashed lines, as it is off in normal operation mode.
 IIUC, it acts like a diode to shutdown the output when <code>Ref</code> is connected to <code>Anode</code>.</p>
@@ -196,7 +196,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>There are 11 transistors in total, <script type="math/tex">Q_{11}</script> is normally off, so we need to analyze 10 BJTs only.</li>
 <li>It's easy to see that <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script> form a Darlinton pair, it's the output stage.</li>
 <li>It's also easy to recognize that <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> is a <a href="https://en.wikipedia.org/wiki/Current_mirror">current mirror</a>, if we assuming they have the same area. (In Ken Shirriff's schematic below, their areas are different, though.)</li>
-<li>The rest of 6 transistors <script type="math/tex">Q_1\dots Q_6</script> are tangled together, let's analyse them in parts.</li>
+<li>The rest of 6 transistors <script type="math/tex">Q_1\dots Q_6</script> are tangled together, let's analyze them in parts.</li>
 </ol>
 <p><strong>Notation</strong>:</p>
 <ul>
@@ -211,7 +211,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>
 <script type="math/tex">I_\mathrm{B6}</script> denotes the base current of transistor <script type="math/tex">Q_6</script>, which equals to currents on <script type="math/tex">R_6</script>, <script type="math/tex">I_\mathrm{R6}</script>.</li>
 <li>
-<script type="math/tex">V_\mathrm{R3}</script> denotes the voltage across resistor <script type="math/tex">R_3</script>, whish is <script type="math/tex">9 \Delta V_\mathrm{BE}</script>, assuming <script type="math/tex">I_\mathrm{C3}\approx I_\mathrm{E3}</script>.</li>
+<script type="math/tex">V_\mathrm{R3}</script> denotes the voltage across resistor <script type="math/tex">R_3</script>, which is <script type="math/tex">9 \Delta V_\mathrm{BE}</script>, assuming <script type="math/tex">I_\mathrm{C3}\approx I_\mathrm{E3}</script>.</li>
 <li>
 <script type="math/tex">I_2</script>, <script type="math/tex">I_3</script>, <script type="math/tex">I_1</script> are currents on <script type="math/tex">R_2</script>, <script type="math/tex">R_3</script>, <script type="math/tex">R_4</script>, respectively, <script type="math/tex">I_1 = I_2 + I_3</script> as shown in the full schematic above.</li>
 <li>Ignoring base currents, <script type="math/tex">I_2 = I_\mathrm{C2} =  I_\mathrm{E2}</script>, <script type="math/tex">I_3 = I_\mathrm{C3} =  I_\mathrm{E3}</script>, <script type="math/tex">I_1 = I_\mathrm{C1} =  I_\mathrm{E1}</script>.</li>
@@ -235,7 +235,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>The current on <script type="math/tex">R_4</script> is <script type="math/tex">I_1 = I_2 + I_3 = 4I_3</script>, so <script type="math/tex">V_\mathrm{R4} = \dfrac{4 R_4}{R_1}\Delta V_\mathrm{BE} = 16.4\Delta V_\mathrm{BE}</script>
 </li>
 <li>Sum of voltages across <script type="math/tex">R_3</script> and <script type="math/tex">R_4</script> is <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4} = (9+16.4) \Delta V_\mathrm{BE} = 25.4\Delta V_\mathrm{BE}=25.4\ln 6 V_\mathrm{T}\approx 45.5 V_\mathrm{T}\approx 1.174</script>V.</li>
-<li>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 V/°C, cancelling out negative tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script>, which is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}</script>
+<li>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 V/°C, canceling out negative tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script>, which is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}</script>
 </li>
 <li>In theory, <script type="math/tex">V_\mathrm{REF} = 2V_\mathrm{g0}</script> when its tempco is zero.</li>
 </ol>
@@ -267,7 +267,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>In conclusion, 6 transistors <script type="math/tex">Q_3\dots Q_8</script> all have the same current as <script type="math/tex">Q_3</script>, when balanced, that is <script type="math/tex">I_3=60</script>μA.</li>
 </ol>
 <p>Although this conclusion matches the simulation of the next section, there is an <strong>unsolved puzzle</strong>: the current mirror of <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> is supposed to copy <script type="math/tex">Q_7</script>'s current to <script type="math/tex">Q_8</script>, but not vice versa.  However, the analysis above assume current of <script type="math/tex">Q_6</script>, <script type="math/tex">I_\mathrm{E6}</script>, is set by <script type="math/tex">V_\mathrm{Q2B}</script>, then mirrored in <script type="math/tex">Q_4</script> and <script type="math/tex">Q_5</script>.
-Is this reasonable? My explaination is that the feedback of output stage will bring the circuit into the balanced state, where <script type="math/tex">I_\mathrm{E4} = I_\mathrm{E6}</script>. (<script type="math/tex">I_\mathrm{C6} = I_\mathrm{C8} - I_\mathrm{B9}</script>)</p>
+Is this reasonable? My explanation is that the feedback of output stage will bring the circuit into the balanced state, where <script type="math/tex">I_\mathrm{E4} = I_\mathrm{E6}</script>. (<script type="math/tex">I_\mathrm{C6} = I_\mathrm{C8} - I_\mathrm{B9}</script>)</p>
 <p>The following diagram shows what we have analyzed so far.</p>
 <p><img alt="TL431" src="../media/tl431dc2.png" /></p>
 <p>The voltages and currents shown in above schematic are from SPICE simulation.</p>
@@ -367,7 +367,7 @@ so that <script type="math/tex">I_\mathrm{R1}\approx 240</script>μA. With <scri
 </ul>
 </li>
 <li>
-<p>TODO: analyse the current mirror of gain 0.5, made of <script type="math/tex">Q_8</script> and <script type="math/tex">Q_9</script>.</p>
+<p>TODO: analyze the current mirror of gain 0.5, made of <script type="math/tex">Q_8</script> and <script type="math/tex">Q_9</script>.</p>
 </li>
 </ol>
 <h2 id="spice-model-by-eugene-dvoskin">SPICE model by Eugene Dvoskin</h2>
@@ -384,7 +384,8 @@ kΩ</p>
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../reed-solomon/" class="btn btn-neutral float-left" title="Reed-Solomon"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ReedSolomonErasureCodes/" class="btn btn-neutral float-left" title="Reed-Solomon Erasure Codes in Python"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../UA78L05/" class="btn btn-neutral float-right" title="μA78L05 Analysis and Simulation">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -411,8 +412,10 @@ kΩ</p>
         </span>
     
     
-      <span><a href="../reed-solomon/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../ReedSolomonErasureCodes/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
+    
+      <span><a href="../UA78L05/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -421,7 +424,6 @@ kΩ</p>
     <script src="../js/theme_extra.js"></script>
     <script src="../js/theme.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML"></script>
-      <script src="../search/main.js"></script>
     <script>
         jQuery(function () {
             SphinxRtdTheme.Navigation.enable(true);
