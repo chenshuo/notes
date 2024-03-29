@@ -166,7 +166,7 @@
 <script type="math/tex">10 \ln 10 \times 86.2 \approx 23 \times 86.2 = 1.983\mathrm{mV/°C}</script>
 </p>
 </blockquote>
-<p>The actual tempco of <script type="math/tex">V_\mathrm{BE}</script> is related to <script type="math/tex">V_\mathrm{BE}</script> itself, see formula in <a href="https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor">https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor</a></p>
+<p>The actual tempco of <script type="math/tex">V_\mathrm{BE}</script> is related to <script type="math/tex">V_\mathrm{BE}</script> itself, its first order approximation is <script type="math/tex">\dfrac{V_\mathrm{BE0} - V_\mathrm{g0}}{T_0}</script>, see formula in <a href="https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor">https://en.wikipedia.org/wiki/Silicon_bandgap_temperature_sensor</a></p>
 <p><a href="https://en.wikipedia.org/wiki/Bipolar_junction_transistor#Ebers%E2%80%93Moll_model">Ebers–Moll model</a>:
 <script type="math/tex">I_\mathrm{E} \approx I_\mathrm{S}\exp \dfrac{V_\mathrm{BE}}{V_\mathrm{T}}</script>, equivalently
 <script type="math/tex">V_\mathrm{BE} = V_\mathrm{T}\ln \dfrac{I_\mathrm{E}}{I_\mathrm{S}}</script>.</p>
@@ -209,16 +209,16 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <script type="math/tex">V_\mathrm{Q3E}</script> denotes the emitter voltage of transistor <script type="math/tex">Q_3</script>, which is also known as <script type="math/tex">\Delta V_\mathrm{BE}</script>.</li>
 <li>It's obvious from the schematic above, <script type="math/tex">V_\mathrm{Q3C} = V_\mathrm{Q5B}</script>.</li>
 <li>
-<script type="math/tex">I_\mathrm{B6}</script> denotes the base current of transistor <script type="math/tex">Q_6</script>.</li>
+<script type="math/tex">I_\mathrm{B6}</script> denotes the base current of transistor <script type="math/tex">Q_6</script>, which equals to currents on <script type="math/tex">R_6</script>, <script type="math/tex">I_\mathrm{R6}</script>.</li>
 <li>
-<script type="math/tex">V_\mathrm{R3}</script> denotes the voltage across resistor <script type="math/tex">R_3</script>.</li>
+<script type="math/tex">V_\mathrm{R3}</script> denotes the voltage across resistor <script type="math/tex">R_3</script>, whish is <script type="math/tex">9 \Delta V_\mathrm{BE}</script>, assuming <script type="math/tex">I_\mathrm{C3}\approx I_\mathrm{E3}</script>.</li>
 <li>
 <script type="math/tex">I_2</script>, <script type="math/tex">I_3</script>, <script type="math/tex">I_1</script> are currents on <script type="math/tex">R_2</script>, <script type="math/tex">R_3</script>, <script type="math/tex">R_4</script>, respectively, <script type="math/tex">I_1 = I_2 + I_3</script> as shown in the full schematic above.</li>
 <li>Ignoring base currents, <script type="math/tex">I_2 = I_\mathrm{C2} =  I_\mathrm{E2}</script>, <script type="math/tex">I_3 = I_\mathrm{C3} =  I_\mathrm{E3}</script>, <script type="math/tex">I_1 = I_\mathrm{C1} =  I_\mathrm{E1}</script>.</li>
 </ul>
 <h2 id="calculation">Calculation</h2>
 <p>The reference voltage can be divided into 4 segments, from base of <script type="math/tex">Q_1</script> to ground: <script type="math/tex">V_\mathrm{REF} = V_\mathrm{BE1} + V_\mathrm{R4} + V_\mathrm{R3} + V_\mathrm{BE5}</script>.</p>
-<p><strong>First</strong>, we consider <script type="math/tex">Q_2, Q_3</script> only, to show <script type="math/tex">I_2 = 3I_3</script>. Ignoring base currents.</p>
+<p><strong>First</strong>, we consider <script type="math/tex">Q_2, Q_3</script> and resistors connected to them, it's easy to find <script type="math/tex">I_2 = 3I_3</script>.</p>
 <ol>
 <li>
 <p>Assuming <script type="math/tex">V_\mathrm{BE2}=V_\mathrm{BE5}\approx 0.65\mathrm{V}</script>,
@@ -230,9 +230,18 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 </li>
 <li>
 <script type="math/tex">\Delta V_\mathrm{BE} = V_\mathrm{BE2} -V_\mathrm{BE3} = V_\mathrm{T}\ln 6\approx 46.3</script>mV, given that the area of <script type="math/tex">Q_3</script> is <script type="math/tex">2\times</script> of <script type="math/tex">Q_2</script>.</li>
+<li>
+<script type="math/tex">V_\mathrm{R3} = \dfrac{R_3}{R_1}\Delta V_\mathrm{BE} = 9\Delta V_\mathrm{BE}</script>, assuming <script type="math/tex">I_\mathrm{C3}\approx I_\mathrm{E3}</script>.</li>
+<li>The current on <script type="math/tex">R_4</script> is <script type="math/tex">I_1 = I_2 + I_3 = 4I_3</script>, so <script type="math/tex">V_\mathrm{R4} = \dfrac{4 R_4}{R_1}\Delta V_\mathrm{BE} = 16.4\Delta V_\mathrm{BE}</script>
+</li>
+<li>Sum of voltages across <script type="math/tex">R_3</script> and <script type="math/tex">R_4</script> is <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4} = (9+16.4) \Delta V_\mathrm{BE} = 25.4\Delta V_\mathrm{BE}=25.4\ln 6 V_\mathrm{T}\approx 45.5 V_\mathrm{T}\approx 1.174</script>V.</li>
+<li>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 V/°C, cancelling out negative tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script>, which is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}</script>
+</li>
+<li>In theory, <script type="math/tex">V_\mathrm{REF} = 2V_\mathrm{g0}</script> when its tempco is zero.</li>
 </ol>
-<p>Estimating <script type="math/tex">\beta</script>
-</p>
+<p>
+<script type="math/tex">R_4</script> is critical, it controls both <script type="math/tex">V_\mathrm{REF}</script> and its tempco, I guess that's why it shows 3 decimal places in the datasheet (3.28kΩ), while other resistors has only 2.</p>
+<p>Estimating <script type="math/tex">\beta</script> for fun. It's rough estimation, so we use rounded values, like 1.2V, instead of 1.174V for  <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script>.</p>
 <ol>
 <li>Assuming <script type="math/tex">V_\mathrm{BE1}=V_\mathrm{BE5}=0.65</script>V for now.</li>
 <li>Sum of voltages across <script type="math/tex">R_3</script> and <script type="math/tex">R_4</script> is <script type="math/tex">V_\mathrm{REF} - V_\mathrm{BE1}-V_\mathrm{BE5} = 2.5-2\times 0.65 = 1.2\mathrm{V}</script>
@@ -293,6 +302,7 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 </ol>
 <p>In the SPICE model, we set <script type="math/tex">I_\mathrm{S} = 1.0</script>fA for NPN transistors.</p>
 <p><strong>Fourth</strong>, the feedback loop.</p>
+<p>TODO: write this part.</p>
 <h2 id="simulation">Simulation</h2>
 <p>TODO: show the set up</p>
 <p><img alt="TL431" src="../media/tl431c.png" /></p>
