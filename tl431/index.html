@@ -304,7 +304,10 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 <p><strong>Fourth</strong>, the feedback loop.</p>
 <p>TODO: write this part.</p>
 <h2 id="simulation">Simulation</h2>
-<p>TODO: show the set up</p>
+<p>Simulating the following circuit using NgSpice in Python Jupyter.</p>
+<p><img alt="TL431" src="../media/tl431dc3.png" /></p>
+<p>SPICE netlist and results are in <a href="https://github.com/chenshuo/notes/blob/master/notebooks/TL431.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/TL431.ipynb</a>,
+view in <a href="https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/TL431.ipynb">Google Colab</a>.</p>
 <p><img alt="TL431" src="../media/tl431c.png" /></p>
 <blockquote>
 <p>To show a larger image, right click and then "Open image in new tab".</p>
@@ -312,6 +315,7 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 <p><strong>DC Gain</strong></p>
 <p>It's about 60dB from simulation, higher than 55dB as stated in TI's datasheet.</p>
 <p><strong>Dynamic Impedance</strong></p>
+<p>It's 0.14Ω from simulation, lower than 0.2Ω as stated in the datasheet.</p>
 <h2 id="another-schematic-by-ken-shirriff">Another schematic by Ken Shirriff</h2>
 <p><a href="https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html">https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html</a></p>
 <blockquote>
@@ -368,7 +372,10 @@ so that <script type="math/tex">I_\mathrm{R1}\approx 240</script>μA. With <scri
 </ol>
 <h2 id="spice-model-by-eugene-dvoskin">SPICE model by Eugene Dvoskin</h2>
 <p><a href="https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/">https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/</a></p>
-<p>TODO: show the set up</p>
+<p>Simulating the following circuit using NgSpice in Python Jupyter.</p>
+<p><img alt="TL431" src="../media/tl431ed1.png" /></p>
+<p><a href="https://github.com/chenshuo/notes/blob/master/notebooks/AnalogCircuits.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/AnalogCircuits.ipynb</a>, view in <a href="https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/AnalogCircuits.ipynb#scrollTo=e59f94ac-a62b-4332-b1f6-9154db064b26">Google Colab</a>.</p>
+<p>Scroll down to "TL431 Regulator" section.</p>
 <p><img alt="TL431" src="../media/tl431ed.png" /></p>
 <p>The Vref can be tuned to 2.495V by changing R4 to 3.22kΩ.</p>
 <p>μA
