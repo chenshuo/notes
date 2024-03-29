@@ -12,6 +12,8 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML
 markdown_extensions:
   - mdx_math
+plugins:
+  - mkdocs-jupyter
 nav:
   - Home: index.md
   - Bugs: bugs.md
@@ -36,4 +38,6 @@ nav:
   - Elec:
     - DSP: dsp.md
     - Reed-Solomon: reed-solomon.md
+    - Reed-Solomon Notebook: ReedSolomonErasureCodes.ipynb
     - TL431: tl431.md
+    - μA78L05: UA78L05.ipynb
