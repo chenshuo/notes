@@ -239,6 +239,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 </ol>
 <p>
 <script type="math/tex">R_4</script> is critical, it controls both <script type="math/tex">V_\mathrm{REF}</script> and its tempco, I guess that's why it shows 3 decimal places in the datasheet (3.28kΩ), while other resistors has only 2.</p>
+<p><img alt="TL431" src="../media/tl431dc1.png" /></p>
 <p>Estimating <script type="math/tex">\beta</script> for fun. It's rough estimation, so we use rounded values, like 1.2V, instead of 1.174V for  <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script>.</p>
 <ol>
 <li>Assuming <script type="math/tex">V_\mathrm{BE1}=V_\mathrm{BE5}=0.65</script>V for now.</li>
@@ -250,7 +251,6 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>The current on <script type="math/tex">R_4</script> is <script type="math/tex">I_1 = I_2 + I_3 = 4I_3</script>, so <script type="math/tex">I_3 = I_1/4 = 60</script>μA, and <script type="math/tex">I_2 = 3I_3 = 180</script>μA.</li>
 <li>The datasheet says typical <script type="math/tex">I_\mathrm{REF}=I_\mathrm{B1}=2</script>μA, so we estimate <script type="math/tex">\beta + 1 = I_{E1}/I_\mathrm{B1} = 240/2 = 120</script>.</li>
 </ol>
-<p><img alt="TL431" src="../media/tl431dc1.png" /></p>
 <p>The voltages and currents shown in above schematic are from SPICE simulation.</p>
 <p><strong>Second</strong>, we add <script type="math/tex">Q_4\dots Q_8</script> into the picture, omitting <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script> for now.</p>
 <p>It's safe to assume that all <script type="math/tex">Q_4\dots Q_8</script> share the same (emitter) current, because <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> form a current mirror, and it sets the currents of <script type="math/tex">Q_4</script>, <script type="math/tex">Q_5</script>, and <script type="math/tex">Q_6</script> to be all the same.</p>
@@ -298,22 +298,30 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 </ul>
 </li>
 </ol>
+<p><img alt="TL431" src="../media/tl431is2.png" /> second way to estimate <script type="math/tex">I_\mathrm{S}</script>.</p>
 <p>In the SPICE model, we set <script type="math/tex">I_\mathrm{S} = 1.0</script>fA for NPN transistors.</p>
 <p><strong>Fourth</strong>, the feedback loop.</p>
+<p>
+<script type="math/tex">Q_4</script> and <script type="math/tex">Q_6</script> is differential pair, current mirror <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> serves as active load.</p>
 <p>TODO: write this part.</p>
+<p><img alt="TL431" src="../media/tl431dc3.png" /></p>
 <h2 id="simulation">Simulation</h2>
 <p>Simulating the following circuit using NgSpice in Python Jupyter.</p>
-<p><img alt="TL431" src="../media/tl431dc3.png" /></p>
+<p><img alt="TL431" src="../media/tl431sim1.png" /></p>
 <p>SPICE netlist and results are in <a href="https://github.com/chenshuo/notes/blob/master/notebooks/TL431.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/TL431.ipynb</a>,
 view in <a href="https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/TL431.ipynb">Google Colab</a>.</p>
 <p><img alt="TL431" src="../media/tl431c.png" /></p>
 <blockquote>
 <p>To show a larger image, right click and then "Open image in new tab".</p>
 </blockquote>
-<p><strong>DC Gain</strong></p>
-<p>It's about 60dB from simulation, higher than 55dB as stated in TI's datasheet.</p>
 <p><strong>Dynamic Impedance</strong></p>
+<p>If we sweep the bias current <script type="math/tex">I_\mathrm{KA}</script> from 1mA to 100mA,
+   then measure the the output voltage <script type="math/tex">V_\mathrm{out}</script> range,
+   we will get the output impedance of this circuit <script type="math/tex">\dfrac{\Delta V_\mathrm{out}}{\Delta I_\mathrm{KA}}\approx\dfrac{14\mathrm{mV}}{100\mathrm{mA}}=0.14\Omega</script>.</p>
 <p>It's 0.14Ω from simulation, lower than 0.2Ω as stated in the datasheet.</p>
+<p><strong>DC Gain</strong></p>
+<p><img alt="TL431" src="../media/tl431dcgain.png" /></p>
+<p>It's about 61dB from simulation, higher than 55dB as stated in TI's datasheet.</p>
 <h2 id="another-schematic-by-ken-shirriff">Another schematic by Ken Shirriff</h2>
 <p><a href="https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html">https://www.righto.com/2014/05/reverse-engineering-tl431-most-common.html</a></p>
 <blockquote>
