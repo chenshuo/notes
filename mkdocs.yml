@@ -41,5 +41,6 @@ nav:
   - Elec:
     - DSP: dsp.md
     - Reed-Solomon: reed-solomon.md
-    - TL431: tl431.md
     - μA78L05: UA78L05.ipynb
+    - LM7805: LM7805.ipynb
+    - TL431 Analysis and Simulation: tl431.md
