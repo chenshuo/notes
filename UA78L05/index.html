@@ -97,8 +97,6 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../reed-solomon/">Reed-Solomon</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../tl431/">TL431</a>
-                  </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="./">μA78L05 Analysis and Simulation</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#schematic">Schematic</a>
@@ -125,7 +123,13 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#loose-end">Loose end</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#another-spice-model">Another SPICE model</a>
+    </li>
     </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../LM7805/">LM7805 Analysis and Simulation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tl431/">TL431 Analysis and Simulation</a>
                   </li>
               </ul>
       </div>
@@ -409,12 +413,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     if (!diagrams.length) {
       return;
     }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.esm.min.mjs")).default;
-    const parser = new DOMParser();
+    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.2.3/mermaid.esm.min.mjs")).default;
 
     mermaid.initialize({
       maxTextSize: 100000,
-      maxEdges: 100000,
       startOnLoad: false,
       fontFamily: window
         .getComputedStyle(document.body)
@@ -427,52 +429,39 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     let _nextMermaidId = 0;
 
     function makeMermaidImage(svg) {
-      const img = document.createElement("img");
-      const doc = parser.parseFromString(svg, "image/svg+xml");
-      const svgEl = doc.querySelector("svg");
-      const { maxWidth } = svgEl?.style || {};
-      const firstTitle = doc.querySelector("title");
-      const firstDesc = doc.querySelector("desc");
-
-      img.setAttribute("src", `data:image/svg+xml,${encodeURIComponent(svg)}`);
-      if (maxWidth) {
-        img.width = parseInt(maxWidth);
+      const img = document.createElement('img');
+      const maxWidth = svg.match(/max-width: (\d+)/);
+      if (maxWidth && maxWidth[1]) {
+        const width = parseInt(maxWidth[1]);
+        if (width && !Number.isNaN(width) && Number.isFinite(width)) {
+          img.width = width;
+        }
       }
-      if (firstTitle) {
-        img.setAttribute("alt", firstTitle.textContent);
-      }
-      if (firstDesc) {
-        const caption = document.createElement("figcaption");
-        caption.className = "sr-only";
-        caption.textContent = firstDesc.textContent;
-        return [img, caption];
-      }
-      return [img];
+      img.setAttribute('src', `data:image/svg+xml,${encodeURIComponent(svg)}`);
+      return img;
     }
 
     async function makeMermaidError(text) {
-      let errorMessage = "";
+      let errorMessage = '';
       try {
         await mermaid.parse(text);
       } catch (err) {
         errorMessage = `${err}`;
       }
 
-      const result = document.createElement("details");
-      result.className = 'jp-RenderedMermaid-Details';
-      const summary = document.createElement("summary");
-      summary.className = 'jp-RenderedMermaid-Summary';
-      const pre = document.createElement("pre");
-      const code = document.createElement("code");
+      const result = document.createElement('details');
+      const summary = document.createElement('summary');
+      const pre = document.createElement('pre');
+      const code = document.createElement('code');
       code.innerText = text;
       pre.appendChild(code);
       summary.appendChild(pre);
       result.appendChild(summary);
 
-      const warning = document.createElement("pre");
+      const warning = document.createElement('pre');
       warning.innerText = errorMessage;
       result.appendChild(warning);
-      return [result];
+      return result;
     }
 
     async function renderOneMarmaid(src) {
@@ -482,74 +471,30 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       const el = document.createElement("div");
       el.style.visibility = "hidden";
       document.body.appendChild(el);
-      let results = null;
-      let output = null;
+      let result = null;
       try {
-        let { svg } = await mermaid.render(id, raw, el);
-        svg = cleanMermaidSvg(svg);
-        results = makeMermaidImage(svg);
-        output = document.createElement("figure");
-        results.map(output.appendChild, output);
+        const { svg } = await mermaid.render(id, raw, el);
+        result = makeMermaidImage(svg);
       } catch (err) {
         parent.classList.add("jp-mod-warning");
-        results = await makeMermaidError(raw);
-        output = results[0];
+        result = await makeMermaidError(raw);
       } finally {
         el.remove();
       }
       parent.classList.add("jp-RenderedMermaid");
-      parent.appendChild(output);
-    }
-
-
-    /**
-     * Post-process to ensure mermaid diagrams contain only valid SVG and XHTML.
-     */
-    function cleanMermaidSvg(svg) {
-      return svg.replace(RE_VOID_ELEMENT, replaceVoidElement);
-    }
-
-
-    /**
-     * A regular expression for all void elements, which may include attributes and
-     * a slash.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Glossary/Void_element
-     *
-     * Of these, only `<br>` is generated by Mermaid in place of `\n`,
-     * but _any_ "malformed" tag will break the SVG rendering entirely.
-     */
-    const RE_VOID_ELEMENT =
-      /<\s*(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\s*([^>]*?)\s*>/gi;
-
-    /**
-     * Ensure a void element is closed with a slash, preserving any attributes.
-     */
-    function replaceVoidElement(match, tag, rest) {
-      rest = rest.trim();
-      if (!rest.endsWith('/')) {
-        rest = `${rest} /`;
-      }
-      return `<${tag} ${rest}>`;
+      parent.appendChild(result);
     }
 
     void Promise.all([...diagrams].map(renderOneMarmaid));
   });
 </script>
 <style>
-  .jp-Mermaid:not(.jp-RenderedMermaid) {
+  .jp-RenderedMarkdown .jp-Mermaid:not(.jp-RenderedMermaid) {
     display: none;
   }
-
-  .jp-RenderedMermaid {
-    overflow: auto;
-    display: flex;
-  }
-
-  .jp-RenderedMermaid.jp-mod-warning {
+  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning {
     width: auto;
-    padding: 0.5em;
-    margin-top: 0.5em;
+    padding: 10px;
     border: var(--jp-border-width) solid var(--jp-warn-color2);
     border-radius: var(--jp-border-radius);
     color: var(--jp-ui-font-color1);
@@ -557,32 +502,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-
-  .jp-RenderedMermaid figure {
-    margin: 0;
-    overflow: auto;
-    max-width: 100%;
-  }
-
-  .jp-RenderedMermaid img {
-    max-width: 100%;
-  }
-
-  .jp-RenderedMermaid-Details > pre {
+  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning details > pre {
     margin-top: 1em;
   }
-
-  .jp-RenderedMermaid-Summary {
+  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning summary {
     color: var(--jp-warn-color2);
   }
-
-  .jp-RenderedMermaid:not(.jp-mod-warning) pre {
-    display: none;
-  }
-
-  .jp-RenderedMermaid-Summary > pre {
+  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning summary > pre {
     display: inline-block;
-    white-space: normal;
+  }
+  .jp-RenderedMermaid > .mermaid {
+    display: none;
   }
 </style>
 <!-- End of mermaid configuration --><div class="jupyter-wrapper">
@@ -595,6 +525,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <h1 id="a78l05-analysis-and-simulation">μA78L05 Analysis and Simulation<a class="anchor-link" href="#a78l05-analysis-and-simulation">¶</a></h1><p>By Shuo Chen (chenshuo_at_chenshuo.com)</p>
 <p>Latest notebook: <a href="https://github.com/chenshuo/notes/blob/master/notebooks/UA78L05.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/UA78L05.ipynb</a></p>
 <p>Comments and discussions: <a href="https://github.com/chenshuo/notes/discussions">https://github.com/chenshuo/notes/discussions</a></p>
+<p>Series of analysis &amp; simulation of IC regulator designed in 1970s:</p>
+<ol>
+<li><a href="https://chenshuo.github.io/notes/UA78L05">μA78L05</a> &lt;- This page</li>
+<li><a href="https://chenshuo.github.io/notes/LM7805">LM7805</a></li>
+<li><a href="https://chenshuo.github.io/notes/TL431">TL431</a></li>
+</ol>
 </div>
 </div>
 </div>
@@ -1498,6 +1434,66 @@ Vin = 7.00 V, Vout = 5.04 V, Dropout = 1.96 V
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=42d23298-7d09-4ec4-abed-c79ba9d25776">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="another-spice-model">Another SPICE model<a class="anchor-link" href="#another-spice-model">¶</a></h2><p><a href="https://github.com/kafana/ltspice-misc/blob/master/models/regulators.lib#L15C1-L63C12">https://github.com/kafana/ltspice-misc/blob/master/models/regulators.lib#L15C1-L63C12</a></p>
+<pre><code>*78L05 MCE 7-12-95
+*78L05 circuit taken from Signetics 1977 Analog Data Book page 160
+*5V 100mA Voltage Regulator pkg:TO-92 1,2,3
+.SUBCKT 78L05 1 2 3
+Q1 5 5 1 QPNP
+Q2 10 5 1 QPNP
+Q3 1 11 12 QNPN
+Q4 1 10 11 QNPN
+Q5 10 13 14 QNPN
+Q6 1 4 20 QNPN
+Q7 10 19 21 QNPN
+Q8 9 9 2 QNPN
+Q9 18 9 22 QNPN OFF
+Q10 8 18 2 QNPN
+Q11 5 7 17 QNPN
+Q12 5 16 17 QNPN
+Q13 10 15 17 QNPN
+C1 15 10 20E-12
+D1 2 4 DZ5V
+Q14 2 8 7 QPNP
+R17 2 17 4E3
+R16 4 1 20E3
+R15 16 20 4E3
+R14 19 16 700
+R13 2 19 300
+R12 2 21 100
+R11 9 7 1E3
+R10 18 7 10E3
+R9 7 3 2.2E3
+R8 2 22 1E3
+R7 8 7 2E3
+R6 2 15 1.4E3
+R5 15 3 4.5E3
+R4 3 14 100
+R3 3 12 2
+R2 13 11 500
+R1 13 12 200
+
+.MODEL QPNP PNP(IS=1.05E-15 BF=220 VAF=240 IKF=0.1 ISE=1.003E-9
++ NE=4 ISC=1.003E-9 NC=4 RB=3 RE=0.5 RC=0.2 CJE=5.7E-12 VJE=0.75 TF=3.35E-10
++ CJC=4.32E-12 VJC=0.75 TR=1.7E-7 VJS=0.75 KF=4E-15 )
+
+.MODEL QNPN NPN(IS=8.11E-14 BF=205 VAF=113 IKF=0.5 ISE=1.06E-11
++ NE=2 BR=4 VAR=24 IKR=0.225 RB=1.37 RE=0.343 RC=0.137 CJE=2.95E-11
++ TF=3.97E-10 CJC=1.52E-11 TR=8.5E-8 XTB=1.5 )
+
+.MODEL DZ5V D(IS=1E-11 RS=7.708 N=1.27 TT=5E-8 CJO=4.068E-10 VJ=0.75
++ M=0.33 BV=4.946 IBV=0.01 )
+.ENDS 78L05
+</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div> <!-- jp-Notebook -->
 </div> <!-- jupyter-wrapper -->
 
@@ -1509,7 +1505,8 @@ Vin = 7.00 V, Vout = 5.04 V, Dropout = 1.96 V
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../tl431/" class="btn btn-neutral float-left" title="TL431"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../reed-solomon/" class="btn btn-neutral float-left" title="Reed-Solomon"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../LM7805/" class="btn btn-neutral float-right" title="LM7805 Analysis and Simulation">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -1536,8 +1533,10 @@ Vin = 7.00 V, Vout = 5.04 V, Dropout = 1.96 V
         </span>
     
     
-      <span><a href="../tl431/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../reed-solomon/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
+    
+      <span><a href="../LM7805/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

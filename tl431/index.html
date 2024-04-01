@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Shuo Chen" /><link rel="canonical" href="https://chenshuo.com/notes/tl431/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>TL431 - Shuo Chen's Notes</title>
+    <title>TL431 Analysis and Simulation - Shuo Chen's Notes</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
@@ -13,7 +13,7 @@
     
       <script>
         // Current page data
-        var mkdocs_page_name = "TL431";
+        var mkdocs_page_name = "TL431 Analysis and Simulation";
         var mkdocs_page_input_path = "tl431.md";
         var mkdocs_page_url = "/notes/tl431/";
       </script>
@@ -97,7 +97,11 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../reed-solomon/">Reed-Solomon</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">TL431</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../UA78L05/">μA78L05 Analysis and Simulation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../LM7805/">LM7805 Analysis and Simulation</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">TL431 Analysis and Simulation</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#bandgap-voltage-reference">Bandgap voltage reference</a>
     </li>
@@ -115,8 +119,6 @@
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../UA78L05/">μA78L05 Analysis and Simulation</a>
-                  </li>
               </ul>
       </div>
     </div>
@@ -133,7 +135,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
           <li class="breadcrumb-item">Elec</li>
-      <li class="breadcrumb-item active">TL431</li>
+      <li class="breadcrumb-item active">TL431 Analysis and Simulation</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -142,8 +144,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="tl431">TL431</h1>
+                <h1 id="tl431-analysis-and-simulation">TL431 Analysis and Simulation</h1>
+<p>By Shuo Chen (chenshuo_at_chenshuo.com)</p>
+<p>Latest version: <a href="https://chenshuo.github.io/notes/tl431/">https://chenshuo.github.io/notes/tl431/</a></p>
 <p>Comments and discussions: <a href="https://github.com/chenshuo/notes/discussions">https://github.com/chenshuo/notes/discussions</a></p>
+<p>Series of analysis &amp; simulation of IC regulator designed in 1970s:</p>
+<ol>
+<li><a href="https://chenshuo.github.io/notes/UA78L05">μA78L05</a></li>
+<li><a href="https://chenshuo.github.io/notes/LM7805">LM7805</a></li>
+<li><a href="https://chenshuo.github.io/notes/TL431">TL431</a> &lt;- This page</li>
+</ol>
 <p>In this post, transistor = BJT, however, base currents are ignored by default.</p>
 <h2 id="bandgap-voltage-reference">Bandgap voltage reference</h2>
 <p>See "How a bandgap reference works" section in <a href="https://www.righto.com/2014/09/reverse-engineering-counterfeit-7805.html">https://www.righto.com/2014/09/reverse-engineering-counterfeit-7805.html</a></p>
@@ -390,8 +400,7 @@ kΩ</p>
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../reed-solomon/" class="btn btn-neutral float-left" title="Reed-Solomon"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../UA78L05/" class="btn btn-neutral float-right" title="μA78L05 Analysis and Simulation">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../LM7805/" class="btn btn-neutral float-left" title="LM7805 Analysis and Simulation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
@@ -418,10 +427,8 @@ kΩ</p>
         </span>
     
     
-      <span><a href="../reed-solomon/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../LM7805/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
-    
-      <span><a href="../UA78L05/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

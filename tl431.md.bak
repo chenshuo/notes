@@ -1,16 +1,6 @@
-# TL431 Analysis and Simulation
-
-By Shuo Chen (chenshuo_at_chenshuo.com)
-
-Latest version: <https://chenshuo.github.io/notes/tl431/>
+# TL431
 
 Comments and discussions: <https://github.com/chenshuo/notes/discussions>
-
-Series of analysis & simulation of IC regulator designed in 1970s:
-
-1. [μA78L05](https://chenshuo.github.io/notes/UA78L05)
-2. [LM7805](https://chenshuo.github.io/notes/LM7805)
-3. [TL431](https://chenshuo.github.io/notes/TL431) <- This page
 
 In this post, transistor = BJT, however, base currents are ignored by default.
 
@@ -49,7 +39,7 @@ their difference is called \(\Delta V_\mathrm{BE}\),
 
 ![TL431](media/tl431a.png)
 
-Resistor values are taken from official TI datasheet <https://www.ti.com/lit/ds/symlink/tl431.pdf>.
+Resistor valuess are taken from official TI datasheet <https://www.ti.com/lit/ds/symlink/tl431.pdf>.
 
 The resistor and transistor numbering follows [SPICE model by Eugene Dvoskin](https://www.audio-perfection.com/voltage-regulators/linear-regulators/accurate-tl431-model-development-analysis-and-evaluation/).
 
@@ -71,7 +61,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (\
 1. There are 11 transistors in total, \(Q_{11}\) is normally off, so we need to analyze 10 BJTs only.
 1. It's easy to see that \(Q_9\) and \(Q_{10}\) form a Darlinton pair, it's the output stage.
 1. It's also easy to recognize that \(Q_7\) and \(Q_8\) is a [current mirror](https://en.wikipedia.org/wiki/Current_mirror), if we assuming they have the same area. (In Ken Shirriff's schematic below, their areas are different, though.)
-1. The rest of 6 transistors \(Q_1\dots Q_6\) are tangled together, let's analyze them in parts.
+1. The rest of 6 transistors \(Q_1\dots Q_6\) are tangled together, let's analyse them in parts.
 
 **Notation**:
 
@@ -80,7 +70,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (\
 * \(V_\mathrm{Q3E}\) denotes the emitter voltage of transistor \(Q_3\), which is also known as \(\Delta V_\mathrm{BE}\).
 * It's obvious from the schematic above, \(V_\mathrm{Q3C} = V_\mathrm{Q5B}\).
 * \(I_\mathrm{B6}\) denotes the base current of transistor \(Q_6\), which equals to currents on \(R_6\), \(I_\mathrm{R6}\).
-* \(V_\mathrm{R3}\) denotes the voltage across resistor \(R_3\), which is \(9 \Delta V_\mathrm{BE}\), assuming \(I_\mathrm{C3}\approx I_\mathrm{E3}\).
+* \(V_\mathrm{R3}\) denotes the voltage across resistor \(R_3\), whish is \(9 \Delta V_\mathrm{BE}\), assuming \(I_\mathrm{C3}\approx I_\mathrm{E3}\).
 * \(I_2\), \(I_3\), \(I_1\) are currents on \(R_2\), \(R_3\), \(R_4\), respectively, \(I_1 = I_2 + I_3\) as shown in the full schematic above.
 * Ignoring base currents, \(I_2 = I_\mathrm{C2} =  I_\mathrm{E2}\), \(I_3 = I_\mathrm{C3} =  I_\mathrm{E3}\), \(I_1 = I_\mathrm{C1} =  I_\mathrm{E1}\).
 
@@ -98,12 +88,10 @@ The reference voltage can be divided into 4 segments, from base of \(Q_1\) to gr
 4. \(V_\mathrm{R3} = \dfrac{R_3}{R_1}\Delta V_\mathrm{BE} = 9\Delta V_\mathrm{BE}\), assuming \(I_\mathrm{C3}\approx I_\mathrm{E3}\).
 5. The current on \(R_4\) is \(I_1 = I_2 + I_3 = 4I_3\), so \(V_\mathrm{R4} = \dfrac{4 R_4}{R_1}\Delta V_\mathrm{BE} = 16.4\Delta V_\mathrm{BE}\)
 6. Sum of voltages across \(R_3\) and \(R_4\) is \(V_\mathrm{R3} + V_\mathrm{R4} = (9+16.4) \Delta V_\mathrm{BE} = 25.4\Delta V_\mathrm{BE}=25.4\ln 6 V_\mathrm{T}\approx 45.5 V_\mathrm{T}\approx 1.174\)V.
-7. Tempco of \(V_\mathrm{R3} + V_\mathrm{R4}\) is \(45.5 \times 86.2\) = 3.922 V/°C, canceling out negative tempco of \(V_\mathrm{BE1} + V_\mathrm{BE5}\), which is \(\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}\)
+7. Tempco of \(V_\mathrm{R3} + V_\mathrm{R4}\) is \(45.5 \times 86.2\) = 3.922 V/°C, cancelling out negative tempco of \(V_\mathrm{BE1} + V_\mathrm{BE5}\), which is \(\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}\)
 8. In theory, \(V_\mathrm{REF} = 2V_\mathrm{g0}\) when its tempco is zero.
 
 \(R_4\) is critical, it controls both \(V_\mathrm{REF}\) and its tempco, I guess that's why it shows 3 decimal places in the datasheet (3.28kΩ), while other resistors has only 2.
-
-![TL431](media/tl431dc1.png)
 
 Estimating \(\beta\) for fun. It's rough estimation, so we use rounded values, like 1.2V, instead of 1.174V for  \(V_\mathrm{R3} + V_\mathrm{R4}\).
 
@@ -114,6 +102,9 @@ Estimating \(\beta\) for fun. It's rough estimation, so we use rounded values, l
 \(I_\mathrm{E1} = 240\)μA,
 5. The current on \(R_4\) is \(I_1 = I_2 + I_3 = 4I_3\), so \(I_3 = I_1/4 = 60\)μA, and \(I_2 = 3I_3 = 180\)μA.
 6. The datasheet says typical \(I_\mathrm{REF}=I_\mathrm{B1}=2\)μA, so we estimate \(\beta + 1 = I_{E1}/I_\mathrm{B1} = 240/2 = 120\).
+
+
+![TL431](media/tl431dc1.png)
 
 The voltages and currents shown in above schematic are from SPICE simulation.
 
@@ -130,7 +121,7 @@ We will show that the current is 60μA for \(Q_4\dots Q_8\), same as emitter cur
 5. In conclusion, 6 transistors \(Q_3\dots Q_8\) all have the same current as \(Q_3\), when balanced, that is \(I_3=60\)μA.
 
 Although this conclusion matches the simulation of the next section, there is an **unsolved puzzle**: the current mirror of \(Q_7\) and \(Q_8\) is supposed to copy \(Q_7\)'s current to \(Q_8\), but not vice versa.  However, the analysis above assume current of \(Q_6\), \(I_\mathrm{E6}\), is set by \(V_\mathrm{Q2B}\), then mirrored in \(Q_4\) and \(Q_5\).
-Is this reasonable? My explanation is that the feedback of output stage will bring the circuit into the balanced state, where \(I_\mathrm{E4} = I_\mathrm{E6}\). (\(I_\mathrm{C6} = I_\mathrm{C8} - I_\mathrm{B9}\))
+Is this reasonable? My explaination is that the feedback of output stage will bring the circuit into the balanced state, where \(I_\mathrm{E4} = I_\mathrm{E6}\). (\(I_\mathrm{C6} = I_\mathrm{C8} - I_\mathrm{B9}\))
 
 The following diagram shows what we have analyzed so far.
 
@@ -156,23 +147,17 @@ so \(V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\approx V_\mathrm{BE5}+3
     * \(I_\mathrm{S} = 1.379\)fA
     * for \(Q_1\), its \(I_\mathrm{S1} = I_\mathrm{S} = 1.379\)fA.
 
-![TL431](media/tl431is2.png) second way to estimate \(I_\mathrm{S}\).
-
 In the SPICE model, we set \(I_\mathrm{S} = 1.0\)fA for NPN transistors.
 
 **Fourth**, the feedback loop.
 
-\(Q_4\) and \(Q_6\) is differential pair, current mirror \(Q_7\) and \(Q_8\) serves as active load.
-
 TODO: write this part.
-
-![TL431](media/tl431dc3.png)
 
 ## Simulation
 
 Simulating the following circuit using NgSpice in Python Jupyter.
 
-![TL431](media/tl431sim1.png)
+![TL431](media/tl431dc3.png)
 
 SPICE netlist and results are in <https://github.com/chenshuo/notes/blob/master/notebooks/TL431.ipynb>,
 view in [Google Colab](https://colab.research.google.com/github/chenshuo/notes/blob/master/notebooks/TL431.ipynb).
@@ -181,19 +166,13 @@ view in [Google Colab](https://colab.research.google.com/github/chenshuo/notes/b
 
 > To show a larger image, right click and then "Open image in new tab".
 
-**Dynamic Impedance**
-
-If we sweep the bias current \(I_\mathrm{KA}\) from 1mA to 100mA,
-   then measure the the output voltage \(V_\mathrm{out}\) range,
-   we will get the output impedance of this circuit \(\dfrac{\Delta V_\mathrm{out}}{\Delta I_\mathrm{KA}}\approx\dfrac{14\mathrm{mV}}{100\mathrm{mA}}=0.14\Omega\).
-
-It's 0.14Ω from simulation, lower than 0.2Ω as stated in the datasheet.
-
 **DC Gain**
 
-![TL431](media/tl431dcgain.png)
+It's about 60dB from simulation, higher than 55dB as stated in TI's datasheet.
 
-It's about 61dB from simulation, higher than 55dB as stated in TI's datasheet.
+**Dynamic Impedance**
+
+It's 0.14Ω from simulation, lower than 0.2Ω as stated in the datasheet.
 
 ## Another schematic by Ken Shirriff
 
@@ -228,7 +207,7 @@ so that \(I_\mathrm{R1}\approx 240\)μA. With \(I_\mathrm{REF} = 2\)μA, we have
     * \(R_2=R_3=3.24\mathrm{kΩ}\)
     * \(R_4=460\mathrm{Ω}\)
 
-1. TODO: analyze the current mirror of gain 0.5, made of \(Q_8\) and \(Q_9\).
+1. TODO: analyse the current mirror of gain 0.5, made of \(Q_8\) and \(Q_9\).
 
 ## SPICE model by Eugene Dvoskin
 
