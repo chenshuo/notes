@@ -312,9 +312,23 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 <p>In the SPICE model, we set <script type="math/tex">I_\mathrm{S} = 1.0</script>fA for NPN transistors.</p>
 <p><strong>Fourth</strong>, the feedback loop.</p>
 <p>
-<script type="math/tex">Q_4</script> and <script type="math/tex">Q_6</script> is differential pair, current mirror <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> serves as active load.</p>
-<p>TODO: write this part.</p>
+<script type="math/tex">Q_1</script> is an emitter follower, <script type="math/tex">Q_4</script> and <script type="math/tex">Q_6</script> is differential pair, current mirror <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> serves as active load, the error amplifier output is collector of <script type="math/tex">Q_8</script>, which feeds into base of <script type="math/tex">Q_9</script>.</p>
+<p>If <script type="math/tex">V_\mathrm{REF}</script> increases a tiny bit, we want to increase collector current of <script type="math/tex">Q_{10}</script> by a lot (a few mA per mV), to hopefully bring back <script type="math/tex">V_\mathrm{REF}</script> to its nominal value (2.495V) through the external feedback network (usually two resistors).</p>
+<p>The following diagram shows what will happen if <script type="math/tex">V_\mathrm{REF}</script> increases by 1mV.</p>
 <p><img alt="TL431" src="../media/tl431dc3.png" /></p>
+<p>Explanation:</p>
+<ol>
+<li>
+<script type="math/tex">V_\mathrm{REF}\uparrow\Rightarrow V_\mathrm{Q1B} \uparrow \Rightarrow V_\mathrm{Q1E} \uparrow \Rightarrow V_\mathrm{Q4B} \uparrow</script>
+</li>
+<li>As <script type="math/tex">V_\mathrm{Q4B} \uparrow</script>, <script type="math/tex">I_\mathrm{C4}\uparrow</script>, it drains more current from <script type="math/tex">Q_7</script>. Because <script type="math/tex">Q_8</script> mirrors <script type="math/tex">Q_7</script>, so <script type="math/tex">I_\mathrm{C8}\uparrow</script>.</li>
+<li>As it turned out, <script type="math/tex">V_\mathrm{Q2B}</script> didn't change much (probably due to its larger area), so does <script type="math/tex">V_\mathrm{Q6B}</script>.</li>
+<li>
+<script type="math/tex">I_\mathrm{C6}</script> only goes up a little bit, much less than <script type="math/tex">\Delta I_\mathrm{C8}</script>, the increase of <script type="math/tex">I_\mathrm{C8}</script> mostly feeds into base of <script type="math/tex">Q_9</script>.</li>
+<li>
+<script type="math/tex">\Delta I_\mathrm{B9}</script> is amplified by <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script>, increase <script type="math/tex">I_\mathrm{C10}</script> a lot.</li>
+<li>The increase of sink current will hopefully bring <script type="math/tex">V_\mathrm{REF}</script> down back.</li>
+</ol>
 <h2 id="simulation">Simulation</h2>
 <p>Simulating the following circuit using NgSpice in Python Jupyter.</p>
 <p><img alt="TL431" src="../media/tl431sim1.png" /></p>
