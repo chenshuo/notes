@@ -110,6 +110,16 @@
     <li class="toctree-l2"><a class="reference internal" href="#analysis">Analysis</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#calculation">Calculation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#reference-voltage">Reference voltage</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-amplifier">Error amplifier</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tempco">Tempco</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#feedback">Feedback</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#simulation">Simulation</a>
     </li>
@@ -225,6 +235,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>Ignoring base currents, <script type="math/tex">I_2 = I_\mathrm{C2} =  I_\mathrm{E2}</script>, <script type="math/tex">I_3 = I_\mathrm{C3} =  I_\mathrm{E3}</script>, <script type="math/tex">I_1 = I_\mathrm{C1} =  I_\mathrm{E1}</script>.</li>
 </ul>
 <h2 id="calculation">Calculation</h2>
+<h3 id="reference-voltage">Reference voltage</h3>
 <p>The reference voltage can be divided into 4 segments, from base of <script type="math/tex">Q_1</script> to ground: <script type="math/tex">V_\mathrm{REF} = V_\mathrm{BE1} + V_\mathrm{R4} + V_\mathrm{R3} + V_\mathrm{BE5}</script>.</p>
 <p><strong>First</strong>, we consider <script type="math/tex">Q_2, Q_3</script> and resistors connected to them, it's easy to find <script type="math/tex">I_2 = 3I_3</script>.</p>
 <ol>
@@ -243,7 +254,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>The current on <script type="math/tex">R_4</script> is <script type="math/tex">I_1 = I_2 + I_3 = 4I_3</script>, so <script type="math/tex">V_\mathrm{R4} = \dfrac{4 R_4}{R_1}\Delta V_\mathrm{BE} = 16.4\Delta V_\mathrm{BE}</script>
 </li>
 <li>Sum of voltages across <script type="math/tex">R_3</script> and <script type="math/tex">R_4</script> is <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4} = (9+16.4) \Delta V_\mathrm{BE} = 25.4\Delta V_\mathrm{BE}=25.4\ln 6 V_\mathrm{T}\approx 45.5 V_\mathrm{T}\approx 1.174</script>V.</li>
-<li>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 V/°C, canceling out negative tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script>, which is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}</script>
+<li>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 mV/°C, canceling out negative tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script>, which is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0}</script>
 </li>
 <li>In theory, <script type="math/tex">V_\mathrm{REF} = 2V_\mathrm{g0}</script> when its tempco is zero.</li>
 </ol>
@@ -262,6 +273,7 @@ Eugene Dvoskin's SPICE model (at the end of this page) uses a different ratio (<
 <li>The datasheet says typical <script type="math/tex">I_\mathrm{REF}=I_\mathrm{B1}=2</script>μA, so we estimate <script type="math/tex">\beta + 1 = I_{E1}/I_\mathrm{B1} = 240/2 = 120</script>.</li>
 </ol>
 <p>The voltages and currents shown in above schematic are from SPICE simulation.</p>
+<h3 id="error-amplifier">Error amplifier</h3>
 <p><strong>Second</strong>, we add <script type="math/tex">Q_4\dots Q_8</script> into the picture, omitting <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script> for now.</p>
 <p>It's safe to assume that all <script type="math/tex">Q_4\dots Q_8</script> share the same (emitter) current, because <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> form a current mirror, and it sets the currents of <script type="math/tex">Q_4</script>, <script type="math/tex">Q_5</script>, and <script type="math/tex">Q_6</script> to be all the same.</p>
 <p>We will show that the current is 60μA for <script type="math/tex">Q_4\dots Q_8</script>, same as emitter current of <script type="math/tex">Q_3</script>.</p>
@@ -279,6 +291,33 @@ Is this reasonable? My explanation is that the feedback of output stage will bri
 <p>The following diagram shows what we have analyzed so far.</p>
 <p><img alt="TL431" src="../media/tl431dc2.png" /></p>
 <p>The voltages and currents shown in above schematic are from SPICE simulation.</p>
+<h3 id="tempco">Tempco</h3>
+<p>Recall that <script type="math/tex">V_\mathrm{REF} = V_\mathrm{BE1} + V_\mathrm{R4} + V_\mathrm{R3} + V_\mathrm{BE5} = 2.495\mathrm{V}</script>.</p>
+<ol>
+<li>
+<p>
+<script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4} = (9+16.4) \Delta V_\mathrm{BE} = 25.4\Delta V_\mathrm{BE}=25.4\ln 6 V_\mathrm{T}\approx 45.5 V_\mathrm{T}\approx 1.174\mathrm{V}</script>
+</p>
+</li>
+<li>
+<p>
+<script type="math/tex"> V_\mathrm{BE1}  +  V_\mathrm{BE5}  = V_\mathrm{REF} - (V_\mathrm{R3} + V_\mathrm{R4}) = 2.495 - 1.174 = 1.321\mathrm{V}</script>
+</p>
+</li>
+<li>
+<p>Tempco of <script type="math/tex">V_\mathrm{R3} + V_\mathrm{R4}</script> is <script type="math/tex">45.5 \times 86.2</script> = 3.922 mV/°C</p>
+</li>
+<li>
+<p>Tempco of <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5}</script> is <script type="math/tex">\dfrac{V_\mathrm{BE1} - V_\mathrm{g0}}{T_0} +\dfrac{V_\mathrm{BE5} - V_\mathrm{g0}}{T_0} = \dfrac{V_\mathrm{BE1} + V_\mathrm{BE5} - 2V_\mathrm{g0}}{T_0} = \dfrac{1.321 - 2\times 1.205}{300}=-3.63</script> mV/°C</p>
+</li>
+<li>
+<p>Tempco of  <script type="math/tex">V_\mathrm{REF} = 3.922 - 3.63 = +0.292</script>mV/°C</p>
+</li>
+</ol>
+<p>From this calculation, we concluded that TL431's reference voltage will change 20.44mV when temperature changes from 0°C to 70°C. However TL431 datasheet says it will only change 4mV in this case, which is 5x better than our calculation.</p>
+<p>I don't know how does TL431 archive such good tempco when <script type="math/tex">V_\mathrm{REF} = 2.495\mathrm{V}</script>,
+because tempco of <script type="math/tex">V_\mathrm{REF}</script> is determined only by itself: <script type="math/tex">\dfrac{\mathrm{d} V_\mathrm{REF}}{\mathrm{d}\, T}=\dfrac{V_\mathrm{REF} -  2V_\mathrm{g0}}{T_0} = 0.085/300=0.283</script>mV/°C.
+Unless the chip manufacturer managed to change <script type="math/tex">V_\mathrm{g0}</script>.</p>
 <p><strong>Third</strong>, let's calculate the required <script type="math/tex">I_\mathrm{S}</script>, just for fun.</p>
 <p>Recall that <script type="math/tex">V_\mathrm{REF} = V_\mathrm{BE1} + V_\mathrm{R4} + V_\mathrm{R3} + V_\mathrm{BE5} = 2.50</script>V, in order to get <script type="math/tex">V_\mathrm{R4} + V_\mathrm{R3} = 1.2</script>V, we need <script type="math/tex">V_\mathrm{BE1} + V_\mathrm{BE5} = 1.3</script>V.</p>
 <p>There are at least two ways to achieve that, given that <script type="math/tex">I_\mathrm{E1} \approx 4 I_\mathrm{E5}</script>:</p>
@@ -310,6 +349,7 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 </ol>
 <p><img alt="TL431" src="../media/tl431is2.png" /> second way to estimate <script type="math/tex">I_\mathrm{S}</script>.</p>
 <p>In the SPICE model, we set <script type="math/tex">I_\mathrm{S} = 1.0</script>fA for NPN transistors.</p>
+<h3 id="feedback">Feedback</h3>
 <p><strong>Fourth</strong>, the feedback loop.</p>
 <p>
 <script type="math/tex">Q_1</script> is an emitter follower, <script type="math/tex">Q_4</script> and <script type="math/tex">Q_6</script> is differential pair, current mirror <script type="math/tex">Q_7</script> and <script type="math/tex">Q_8</script> serves as active load, the error amplifier output is collector of <script type="math/tex">Q_8</script>, which feeds into base of <script type="math/tex">Q_9</script>.</p>
@@ -321,10 +361,19 @@ so <script type="math/tex">V_\mathrm{BE1} = V_\mathrm{BE5} + V_\mathrm{T}\ln 4\a
 <li>
 <script type="math/tex">V_\mathrm{REF}\uparrow\Rightarrow V_\mathrm{Q1B} \uparrow \Rightarrow V_\mathrm{Q1E} \uparrow \Rightarrow V_\mathrm{Q4B} \uparrow</script>
 </li>
-<li>As <script type="math/tex">V_\mathrm{Q4B} \uparrow</script>, <script type="math/tex">I_\mathrm{C4}\uparrow</script>, it drains more current from <script type="math/tex">Q_7</script>. Because <script type="math/tex">Q_8</script> mirrors <script type="math/tex">Q_7</script>, so <script type="math/tex">I_\mathrm{C8}\uparrow</script>.</li>
-<li>As it turned out, <script type="math/tex">V_\mathrm{Q2B}</script> didn't change much (probably due to its larger area), so does <script type="math/tex">V_\mathrm{Q6B}</script>.</li>
 <li>
-<script type="math/tex">I_\mathrm{C6}</script> only goes up a little bit, much less than <script type="math/tex">\Delta I_\mathrm{C8}</script>, the increase of <script type="math/tex">I_\mathrm{C8}</script> mostly feeds into base of <script type="math/tex">Q_9</script>.</li>
+<script type="math/tex">I_\mathrm{C4} \propto \exp V_\mathrm{BE4}</script>
+</li>
+<li>As <script type="math/tex">V_\mathrm{Q4B} \uparrow</script>, <script type="math/tex">I_\mathrm{C4}\uparrow</script>, it drains more current from <script type="math/tex">Q_7</script>. Because <script type="math/tex">Q_8</script> mirrors <script type="math/tex">Q_7</script>, so <script type="math/tex">I_\mathrm{C8}\uparrow</script>.</li>
+<li>
+<script type="math/tex">I_\mathrm{C2}</script> is almost linear with <script type="math/tex">V_\mathrm{Q1E} </script>, because <script type="math/tex">V_\mathrm{Q2B}\propto \log I_\mathrm{C2}</script>.</li>
+<li>
+<script type="math/tex">Q_2</script> and <script type="math/tex">Q_6</script> form a current source, <script type="math/tex">I_\mathrm{C6} = \frac{1}{3}I_\mathrm{C2}</script>
+</li>
+<li>In short, <script type="math/tex">\Delta I_\mathrm{C4} \propto \exp \Delta V_\mathrm{REF}</script>, while <script type="math/tex">\Delta I_\mathrm{C6} \propto \Delta V_\mathrm{REF}</script>
+</li>
+<li>
+<script type="math/tex">I_\mathrm{C6}</script> only goes up linear with <script type="math/tex">\Delta V_\mathrm{REF}</script>, much lower than <script type="math/tex">\Delta I_\mathrm{C8}</script>, the increase of <script type="math/tex">I_\mathrm{C8}</script> mostly feeds into base of <script type="math/tex">Q_9</script>.</li>
 <li>
 <script type="math/tex">\Delta I_\mathrm{B9}</script> is amplified by <script type="math/tex">Q_9</script> and <script type="math/tex">Q_{10}</script>, increase <script type="math/tex">I_\mathrm{C10}</script> a lot.</li>
 <li>The increase of sink current will hopefully bring <script type="math/tex">V_\mathrm{REF}</script> down back.</li>
