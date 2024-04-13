@@ -576,12 +576,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput" id="cell-id=6bd4017d-f6de-4102-836f-1129c7cea470">
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs jp-mod-noInput" id="cell-id=0bf41f4d-df11-48cf-bd7f-ad26fdf25dc3">
-</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9a5baf6e-16fb-46f6-8066-20ee45162d51">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -612,8 +606,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=2b11a510-c61d-4637-b7c6-011087f06d9a">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=2b11a510-c61d-4637-b7c6-011087f06d9a">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -679,8 +673,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=10f8ae61-7523-4b29-87de-efd5982d423b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=10f8ae61-7523-4b29-87de-efd5982d423b">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -730,8 +724,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=e42c4ba9-e294-420f-9b5f-650de9a87900">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=e42c4ba9-e294-420f-9b5f-650de9a87900">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -766,8 +760,8 @@ when Vout is set to 5V, $R_5$ should ensure the bandgap have a good tempco.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=078d609e-ab91-4f17-84ec-f085cf5905b9">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=078d609e-ab91-4f17-84ec-f085cf5905b9">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -788,28 +782,68 @@ when Vout is set to 5V, $R_5$ should ensure the bandgap have a good tempco.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>We now simulate the circuit on the left side of the dotted line.</p>
-<p>Print the DC operating point of following SPICE netlist</p>
-<div class="highlight"><pre><span></span><span class="o">*</span><span class="w"> </span><span class="nx">Bandgap</span><span class="w"> </span><span class="nx">reference</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">UA78Lxx</span>
-<span class="w">  </span><span class="nx">V1</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">5</span><span class="nx">V</span>
-<span class="w">  </span><span class="nx">R5</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="mi">4</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R1</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="mi">1</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R2</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="mi">10</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">Q1</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">Q2</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="nx">r3</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">R3</span><span class="w"> </span><span class="nx">r3</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R4</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="mi">2</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">Q3</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">Q4</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">PNP</span>
-<span class="w">  </span>
-<span class="w">  </span><span class="p">.</span><span class="nx">model</span><span class="w"> </span><span class="nx">NPN</span><span class="w"> </span><span class="nx">NPN</span><span class="p">(</span><span class="nx">BF</span><span class="p">=</span><span class="mi">120</span><span class="w"> </span><span class="nx">Cje</span><span class="p">=</span><span class="mi">1</span><span class="kd">p</span><span class="w"> </span><span class="nx">Cjc</span><span class="p">=</span><span class="mi">2</span><span class="kd">p</span><span class="w"> </span><span class="nx">Rb</span><span class="p">=</span><span class="mi">40</span><span class="w"> </span><span class="nx">VAF</span><span class="p">=</span><span class="mi">80</span><span class="w"> </span><span class="nx">VAR</span><span class="p">=</span><span class="mi">50</span><span class="w"> </span><span class="nx">KF</span><span class="p">=</span><span class="m m-Double">3.2e-16</span><span class="w"> </span><span class="nx">AF</span><span class="p">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="w">  </span><span class="p">.</span><span class="nx">model</span><span class="w"> </span><span class="nx">PNP</span><span class="w"> </span><span class="nx">PNP</span><span class="p">(</span><span class="nx">BF</span><span class="p">=</span><span class="mi">60</span><span class="w"> </span><span class="nx">Cje</span><span class="p">=</span><span class="mi">1</span><span class="kd">p</span><span class="w"> </span><span class="nx">Cjc</span><span class="p">=</span><span class="mi">3</span><span class="kd">p</span><span class="w"> </span><span class="nx">Rb</span><span class="p">=</span><span class="mi">80</span><span class="w"> </span><span class="nx">VAF</span><span class="p">=</span><span class="mi">70</span><span class="w"> </span><span class="nx">VAR</span><span class="p">=</span><span class="mi">40</span><span class="p">)</span>
-<span class="w">  </span><span class="p">.</span><span class="nx">options</span><span class="w"> </span><span class="nx">savecurrents</span>
+<p>Print the DC operating point of following SPICE netlist.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=e8f0d027-e783-4710-b0cd-804e6f0cf5d3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-1">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ng</span><span class="o">.</span><span class="n">circ</span><span class="p">(</span><span class="s1">'''</span>
+<span class="s1">  V1 out 0 5V</span>
+<span class="s1">  R5 out q8b 4k</span>
+<span class="s1">  R1 q8b q1b 1k</span>
+<span class="s1">  R2 q8b q3b 10k</span>
+<span class="s1">  Q1 q1b q1b 0 NPN</span>
+<span class="s1">  Q2 q3b q1b r3 NPN</span>
+<span class="s1">  R3 r3 0 1k</span>
+<span class="s1">  R4 q8b q4b 2k</span>
+<span class="s1">  Q3 q4b q3b 0 NPN</span>
+<span class="s1">  Q4 0 q4b q8b PNP</span>
+<span class="s1">  .model NPN NPN(BF=120 Cje=1p Cjc=2p Rb=40 VAF=80 VAR=50 KF=3.2e-16 AF=1)</span>
+<span class="s1">  .model PNP PNP(BF=60 Cje=1p Cjc=3p Rb=80 VAF=70 VAR=40)</span>
+<span class="s1">  .options savecurrents</span>
+<span class="s1">'''</span><span class="p">)</span>
+
+<span class="n">print_op</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
+<div class="clipboard-copy-txt" id="cell-1">ng.circ('''
+  V1 out 0 5V
+  R5 out q8b 4k
+  R1 q8b q1b 1k
+  R2 q8b q3b 10k
+  Q1 q1b q1b 0 NPN
+  Q2 q3b q1b r3 NPN
+  R3 r3 0 1k
+  R4 q8b q4b 2k
+  Q3 q4b q3b 0 NPN
+  Q4 0 q4b q8b PNP
+  .model NPN NPN(BF=120 Cje=1p Cjc=2p Rb=40 VAF=80 VAR=50 KF=3.2e-16 AF=1)
+  .model PNP PNP(BF=60 Cje=1p Cjc=3p Rb=80 VAF=70 VAR=40)
+  .options savecurrents
+''')
+
+print_op(False, True)</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=e8f0d027-e783-4710-b0cd-804e6f0cf5d3">
+</div>
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -852,8 +886,8 @@ when Vout is set to 5V, $R_5$ should ensure the bandgap have a good tempco.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=54cd89e2-8465-47f6-b6b3-4044d4a9eac4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=54cd89e2-8465-47f6-b6b3-4044d4a9eac4">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -878,8 +912,8 @@ when Vout is set to 5V, $R_5$ should ensure the bandgap have a good tempco.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=bbace912-09df-45aa-93dc-0dc11e367c2b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=bbace912-09df-45aa-93dc-0dc11e367c2b">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -922,8 +956,8 @@ R5 = 4400, Iq =  833.0 uA, Vref@27C = 1.335 V, delta =   -8.86 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=8b420a71-b62c-4c43-826d-bf6111d497fd">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=8b420a71-b62c-4c43-826d-bf6111d497fd">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -978,8 +1012,8 @@ R5 = 4400, Iq =  833.0 uA, Vref@27C = 1.335 V, delta =   -8.86 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=f4b12857-a3cc-4b37-81e3-2c1d35052853">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=f4b12857-a3cc-4b37-81e3-2c1d35052853">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1000,47 +1034,107 @@ R5 = 4400, Iq =  833.0 uA, Vref@27C = 1.335 V, delta =   -8.86 mV
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <p>SPICE netlist for DC path of μA78L05.</p>
-<div class="highlight"><pre><span></span><span class="o">*</span><span class="w"> </span><span class="nx">DC</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">μA78L05</span>
-<span class="w">  </span><span class="nx">V1</span><span class="w"> </span><span class="nx">vcc</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="nx">V</span>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ee29c0e3-f958-42ae-a579-ad1707eb305f">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-2">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ng</span><span class="o">.</span><span class="n">circ</span><span class="p">(</span><span class="s1">'''</span>
+<span class="s1">  V1 vcc 0 10V</span>
 
-<span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="nx">Bandgap</span><span class="w"> </span><span class="nx">reference</span>
-<span class="w">  </span><span class="nx">R5</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="mi">4</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R1</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="mi">1</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R2</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="mi">10</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">Q1</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">Q2</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="nx">q1b</span><span class="w"> </span><span class="nx">r3</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">R3</span><span class="w"> </span><span class="nx">r3</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R4</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="mi">2</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">Q3</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="nx">q3b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">Q4</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="nx">q4b</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">PNP</span>
+<span class="s1">  * Bandgap reference</span>
+<span class="s1">  R5 out q8b 4k</span>
+<span class="s1">  R1 q8b q1b 1k</span>
+<span class="s1">  R2 q8b q3b 10k</span>
+<span class="s1">  Q1 q1b q1b 0 NPN</span>
+<span class="s1">  Q2 q3b q1b r3 NPN</span>
+<span class="s1">  R3 r3 0 1k</span>
+<span class="s1">  R4 q8b q4b 2k</span>
+<span class="s1">  Q3 q4b q3b 0 NPN</span>
+<span class="s1">  Q4 0 q4b q8b PNP</span>
 
-<span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="nx">Error</span><span class="w"> </span><span class="nx">amplifier</span>
-<span class="w">  </span><span class="nx">Q5</span><span class="w"> </span><span class="nx">q5c</span><span class="w"> </span><span class="nx">q6b</span><span class="w"> </span><span class="nx">vcc</span><span class="w"> </span><span class="nx">PNP</span>
-<span class="w">  </span><span class="nx">Q6</span><span class="w"> </span><span class="nx">q6b</span><span class="w"> </span><span class="nx">q6b</span><span class="w"> </span><span class="nx">vcc</span><span class="w"> </span><span class="nx">PNP</span>
-<span class="w">  </span><span class="nx">Q8</span><span class="w"> </span><span class="nx">q6b</span><span class="w"> </span><span class="nx">q8b</span><span class="w"> </span><span class="nx">q8e</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">R8</span><span class="w"> </span><span class="nx">q8e</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">4</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">Q7</span><span class="w"> </span><span class="nx">q5c</span><span class="w"> </span><span class="nx">q7b</span><span class="w"> </span><span class="nx">q8e</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">R6</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="nx">q7b</span><span class="w"> </span><span class="m m-Double">3.8</span><span class="nx">k</span>
-<span class="w">  </span><span class="nx">R7</span><span class="w"> </span><span class="nx">q7b</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="m m-Double">1.4</span><span class="nx">k</span>
+<span class="s1">  * Error amplifier</span>
+<span class="s1">  Q5 q5c q6b vcc PNP</span>
+<span class="s1">  Q6 q6b q6b vcc PNP</span>
+<span class="s1">  Q8 q6b q8b q8e NPN</span>
+<span class="s1">  R8 q8e 0 4k</span>
+<span class="s1">  Q7 q5c q7b q8e NPN</span>
+<span class="s1">  R6 out q7b 3.8k</span>
+<span class="s1">  R7 q7b 0 1.4k</span>
 
-<span class="w">  </span><span class="o">*</span><span class="w"> </span><span class="nx">Output</span>
-<span class="w">  </span><span class="nx">Q12</span><span class="w"> </span><span class="nx">vcc</span><span class="w"> </span><span class="nx">q5c</span><span class="w"> </span><span class="nx">q14b</span><span class="w"> </span><span class="nx">NPN</span>
-<span class="w">  </span><span class="nx">Q14</span><span class="w"> </span><span class="nx">vcc</span><span class="w"> </span><span class="nx">q14b</span><span class="w"> </span><span class="nx">q14e</span><span class="w"> </span><span class="nx">NPN</span><span class="w"> </span><span class="mi">10</span>
-<span class="w">  </span><span class="nx">R10</span><span class="w"> </span><span class="nx">q14e</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="mi">2</span>
-<span class="w">  </span><span class="nx">R11</span><span class="w"> </span><span class="nx">q14b</span><span class="w"> </span><span class="nx">q13b</span><span class="w"> </span><span class="mi">500</span>
-<span class="w">  </span><span class="nx">R12</span><span class="w"> </span><span class="nx">q13b</span><span class="w"> </span><span class="nx">q14e</span><span class="w"> </span><span class="mi">200</span>
+<span class="s1">  * Output</span>
+<span class="s1">  Q12 vcc q5c q14b NPN</span>
+<span class="s1">  Q14 vcc q14b q14e NPN 10</span>
+<span class="s1">  R10 q14e out 2</span>
+<span class="s1">  R11 q14b q13b 500</span>
+<span class="s1">  R12 q13b q14e 200</span>
 
-<span class="w">  </span><span class="nx">Rload</span><span class="w"> </span><span class="nx">out</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="nx">k</span>
+<span class="s1">  Rload out 0 1k</span>
+<span class="s1">  .model NPN NPN(BF=120 Cje=1p Cjc=2p Rb=40 VAF=80 VAR=50 KF=3.2e-16 AF=1)</span>
+<span class="s1">  .model PNP PNP(BF=60 Cje=1p Cjc=3p Rb=80 VAF=70 VAR=40)</span>
+<span class="s1">  .options savecurrents</span>
+<span class="s1">'''</span><span class="p">)</span>
 
-<span class="w">  </span><span class="p">.</span><span class="nx">model</span><span class="w"> </span><span class="nx">NPN</span><span class="w"> </span><span class="nx">NPN</span><span class="p">(</span><span class="nx">BF</span><span class="p">=</span><span class="mi">120</span><span class="w"> </span><span class="nx">Cje</span><span class="p">=</span><span class="mi">1</span><span class="kd">p</span><span class="w"> </span><span class="nx">Cjc</span><span class="p">=</span><span class="mi">2</span><span class="kd">p</span><span class="w"> </span><span class="nx">Rb</span><span class="p">=</span><span class="mi">40</span><span class="w"> </span><span class="nx">VAF</span><span class="p">=</span><span class="mi">80</span><span class="w"> </span><span class="nx">VAR</span><span class="p">=</span><span class="mi">50</span><span class="w"> </span><span class="nx">KF</span><span class="p">=</span><span class="m m-Double">3.2e-16</span><span class="w"> </span><span class="nx">AF</span><span class="p">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="w">  </span><span class="p">.</span><span class="nx">model</span><span class="w"> </span><span class="nx">PNP</span><span class="w"> </span><span class="nx">PNP</span><span class="p">(</span><span class="nx">BF</span><span class="p">=</span><span class="mi">60</span><span class="w"> </span><span class="nx">Cje</span><span class="p">=</span><span class="mi">1</span><span class="kd">p</span><span class="w"> </span><span class="nx">Cjc</span><span class="p">=</span><span class="mi">3</span><span class="kd">p</span><span class="w"> </span><span class="nx">Rb</span><span class="p">=</span><span class="mi">80</span><span class="w"> </span><span class="nx">VAF</span><span class="p">=</span><span class="mi">70</span><span class="w"> </span><span class="nx">VAR</span><span class="p">=</span><span class="mi">40</span><span class="p">)</span>
-<span class="w">  </span><span class="p">.</span><span class="nx">options</span><span class="w"> </span><span class="nx">savecurrents</span>
+<span class="n">print_op</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
+<div class="clipboard-copy-txt" id="cell-2">ng.circ('''
+  V1 vcc 0 10V
+
+  * Bandgap reference
+  R5 out q8b 4k
+  R1 q8b q1b 1k
+  R2 q8b q3b 10k
+  Q1 q1b q1b 0 NPN
+  Q2 q3b q1b r3 NPN
+  R3 r3 0 1k
+  R4 q8b q4b 2k
+  Q3 q4b q3b 0 NPN
+  Q4 0 q4b q8b PNP
+
+  * Error amplifier
+  Q5 q5c q6b vcc PNP
+  Q6 q6b q6b vcc PNP
+  Q8 q6b q8b q8e NPN
+  R8 q8e 0 4k
+  Q7 q5c q7b q8e NPN
+  R6 out q7b 3.8k
+  R7 q7b 0 1.4k
+
+  * Output
+  Q12 vcc q5c q14b NPN
+  Q14 vcc q14b q14e NPN 10
+  R10 q14e out 2
+  R11 q14b q13b 500
+  R12 q13b q14e 200
+
+  Rload out 0 1k
+  .model NPN NPN(BF=120 Cje=1p Cjc=2p Rb=40 VAF=80 VAR=50 KF=3.2e-16 AF=1)
+  .model PNP PNP(BF=60 Cje=1p Cjc=3p Rb=80 VAF=70 VAR=40)
+  .options savecurrents
+''')
+
+print_op(False)</div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=ee29c0e3-f958-42ae-a579-ad1707eb305f">
+</div>
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1113,8 +1207,8 @@ $R_5 = 3.92$kΩ, $R_6=3.82$kΩ.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=dc52b376-7157-4d32-a6cc-54786a924aac">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=dc52b376-7157-4d32-a6cc-54786a924aac">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1232,8 +1326,8 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=c467e81f-61a6-4aed-b729-4ce06dcc2949">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=c467e81f-61a6-4aed-b729-4ce06dcc2949">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1348,15 +1442,40 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=f68c4225-baa0-4708-9e80-72eba19be18b">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f68c4225-baa0-4708-9e80-72eba19be18b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-3">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="si">%.1f</span><span class="s1"> uA'</span> <span class="o">%</span> <span class="p">(</span><span class="mf">8292.58</span> <span class="o">-</span> <span class="mf">5048.73</span><span class="p">))</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-3">print('%.1f uA' % (8292.58 - 5048.73))</div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>3243.8500000000004</pre>
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>3243.9 uA
+</pre>
 </div>
 </div>
 </div>
@@ -1372,8 +1491,8 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=11d3c2e6-320b-4e8f-98ce-ef940bc8fdb9">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=11d3c2e6-320b-4e8f-98ce-ef940bc8fdb9">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1416,8 +1535,8 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=7f3d016e-df78-453e-9039-91015eab6d64">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=7f3d016e-df78-453e-9039-91015eab6d64">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1470,8 +1589,8 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=19bda738-6080-4550-b668-c1d5effa7513">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=19bda738-6080-4550-b668-c1d5effa7513">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1500,8 +1619,8 @@ R5 = 4080, Vout@27C = 5.004 V, delta = -13.56 mV, max-min =  18.57 mV
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=1b693942-718c-407f-9bf7-3dd89b075085">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=1b693942-718c-407f-9bf7-3dd89b075085">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1533,8 +1652,8 @@ This matches datasheet.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=702f09f2-6c82-46ef-9fe7-87b34f300bf2">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=702f09f2-6c82-46ef-9fe7-87b34f300bf2">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
@@ -1659,18 +1778,12 @@ R17 com  q9e  100
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=042e39b5-c78a-4904-8704-1a077bc2c7f0">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell celltag_hide_code" id="cell-id=042e39b5-c78a-4904-8704-1a077bc2c7f0">
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child">
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>ERROR:ngspyce.sharedspice:Using SPARSE 1.3 as Direct Linear Solver
-</pre>
-</div>
-</div>
 <div class="jp-OutputArea-child">
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
 <pre>@c.x1.c1[i] =     0.00 uA
@@ -1748,8 +1861,34 @@ R17 com  q9e  100
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noInput" id="cell-id=327c4687-a83b-4993-80ac-a1c10b682133">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=327c4687-a83b-4993-80ac-a1c10b682133">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-4">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Bias current</span>
+<span class="mf">8898.08</span> <span class="o">-</span> <span class="mf">5035.70</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-4"># Bias current
+8898.08 - 5035.70</div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell-outputWrapper">
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
