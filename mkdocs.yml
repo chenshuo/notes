@@ -14,9 +14,12 @@ markdown_extensions:
   - mdx_math
 plugins:
   - mkdocs-jupyter:
-      show_input: False
       no_input: True
-      include_source: True
+      remove_tag_config:
+        remove_input_tags:
+          - hide_code
+        remove_cell_tags:
+          - hide_cell
 nav:
   - Home: index.md
   - Bugs: bugs.md

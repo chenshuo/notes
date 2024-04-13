@@ -2,6 +2,12 @@
    max-width: 1024px;
 }
 
+.rst-content blockquote {
+  /* color: #080; */
+  padding-left: 10px;
+  border-left: 4px solid #e6e6e6;
+}
+
 .rst-content code {
   color: #080;
 }
