@@ -1,0 +1,217 @@
+* uA741 circuits
+
+*
+* 20T from LTspice, with BJT models from 24T
+*
+.subckt LM741C in+ in- out vcc vee
+
+* Input stage
+Q1  q8c  in+  q1e  NPN
+Q2  q8c  in-  q2e  NPN
+Q3  q5c  q10c q1e  PNP
+Q4  q16b q10c q2e  PNP
+
+Q5  q5c  q5b  r1   NPN
+Q6  q16b q5b  r2   NPN
+Q7  vcc  q5c  q5b  NPN
+
+R1  r1   vee  1k
+R2  r2   vee  1k
+R3  q5b  vee  50k
+
+* Biasing
+
+Q8  q8c  q8c  vcc  PNP
+Q9  q10c q8c  vcc  PNP
+Q10 q10c q11c r4   NPN
+Q11 q11c q11c vee  NPN
+Q12 q12c q12c vcc  PNP
+Q13 q14b q12c vcc  PNP
+R4  r4   vee  5k
+R5  q12c q11c 39k
+
+* Gain stage
+
+Q16 q20b q16b q17b NPN
+Q17 q20b q17b q17e NPN
+R11 q17e vee  50
+R12 q17b vee  50k
+
+* Output stage
+Q14 vcc  q14b q14e NPN 3
+Q20 vee  q20b q20e PNP 3
+R9  q14e out  25
+R10 out  q20e 50
+
+* Rubber diode to remove crossover distroation
+Q18 q14b q18b q20b NPN
+R7  q14b q18b 4.5k
+R8  q18b q20b 7.5k
+
+* Short-circuit protection
+
+Q15 q14b q14e out NPN
+Q22 q16b q17e vee NPN
+
+* Miller capacitor
+
+C1  q14b q16b 30p
+
+.model npn NPN ( Bf=200 Br=2.0 VAf=125V Is=10fA Tf=0.35ns
++ Rb=200 Rc=200 Re=2 Cje=1.0pF Vje=0.70V Mje=0.33 Cjc=0.3pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+.model pnp PNP ( Bf=50 Br=4.0 VAf=50V Is=10fA Tf=30ns
++ Rb=300 Rc=100 Re=10 Cje=0.3pF Vje=0.55V Mje=0.5 Cjc=1.0pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+
+.ends
+
+*
+* 24T from SPICE book
+*
+.subckt UA741A in+ in- out vcc vee
+
+* 1st or input stage
+Q1 q8c in+ q1e npn
+Q2 q8c in- q2e npn
+Q3 q5c q3b q1e pnp
+Q4 q6c q3b q2e pnp
+Q5 q5c q5b r1  npn
+Q6 q6c q5b r2  npn
+Q7 vcc q5c q5b npn
+Q8 q8c q8c vcc pnp
+Q9 q3b q8c vcc pnp
+R1 r1  vee 1k
+R2 r2  vee 1k
+R3 q5b vee 50k
+
+* 2nd stage
+R12  q6c  q16b 300
+Q13B q17c q12c vcc pnp 0.75
+Q16  vcc  q16b q17b npn
+Q17  q17c q17b r8   npn
+R8   r8   vee  100
+R9   q17b vee  50k
+Cc   q16b q17c 30p
+
+* output or buffer stage
+Q13A q14b q12c vcc pnp 0.25
+Q14  vcc  q14b q14e npn 3
+Q19  q14b q19b q20b npn
+Q18  q14b q14b q19b npn
+Q20  vee  q20b q20e pnp 3
+Q22  vee  q17c q20b pnp
+R6   q14e out  27
+R7   out  q20e 22
+R10  q19b q20b 40k
+
+* short-circuit protection circuitry
+Q15 q14b q14e out npn
+Q21 q24c q20e out pnp
+Q23 q16b q24c vee npn
+Q24 q24c q24c vee npn
+R11 q24c vee 50k
+
+* biasing stage
+Q10 q3b  q11c r4  npn
+Q11 q11c q11c vee npn
+Q12 q12c q12c vcc pnp
+R4  r4   vee   5k
+R5  q12c q11c 39k
+
+* transistor model statements
+.model npn NPN ( Bf=200 Br=2.0 VAf=125V Is=10fA Tf=0.35ns
++ Rb=200 Rc=200 Re=2 Cje=1.0pF Vje=0.70V Mje=0.33 Cjc=0.3pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+
+.model pnp PNP ( Bf=50 Br=4.0 VAf=50V Is=10fA Tf=30ns
++ Rb=300 Rc=100 Re=10 Cje=0.3pF Vje=0.55V Mje=0.5 Cjc=1.0pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+
+.ends
+
+*
+* 20T from XL741
+*
+.subckt XL741 in+ in- out vcc vee
+
+* Input stage
+Q1  q8c  in+  q1e  NPN
+Q2  q8c  in-  q2e  NPN
+D1  q1e  q3e       BAT54
+D2  q2e  q4e       BAT54
+Q3  q5c  q10c q3e  PNP
+Q4  q16b q10c q4e  PNP
+
+Q5  q5c  q5b  r1   NPN
+Q6  q16b q5b  r2   NPN
+Q7  vcc  q5c  q5b  NPN
+
+R1  r1   vee  1k
+R2  r2   vee  1k
+R3  q5b  vee  51k
+
+* Biasing
+
+Q8  q8c  q8c  vcc  PNP
+Q9  q10c q8c  vcc  PNP
+Q10 q10c q11c r4   NPN
+Q11 q11c q11c vee  NPN
+Q12 q12c q12c vcc  PNP
+Q13 q14b q12c vcc  PNP
+R4  r4   vee  4.7k
+R5  q12c q11c 39k
+
+* Gain stage and Miller capacitor
+
+Q16 q20b q16b q17b NPN
+Q17 q20b q17b q17e NPN
+R11 q17e vee  51
+R12 q17b vee  51k
+C1  q16b q14b 30p
+
+* Output stage
+
+Q14 vcc  q14b q14e NPN
+Q20 vee  q20b q20e PNP
+R9  q14e out  24
+R10 q20e out  51
+
+* Rubber diode to remove crossover distroation
+
+Q18 q14b q18b q20b NPN
+R7  q14b q18b 4.7k
+R8  q18b q20b 7.5k
+
+* Short-circuit protection
+
+Q15 q14b q14e out NPN
+Q22 q16b q17e vee NPN
+
+* Transistor models
+
+.model NPN NPN(IS=10f BF=160 VAF=100 Cje=.5p Cjc=0.5p
++ Rb=20 RC=1 RE=0.1)
+.model PNP PNP(IS=10f BF=160 VAF=50  Cje=.3p Cjc=1.5p
++ Rb=20 RC=1 RE=0.1)
+.MODEL BAT54 D ( IS=34.9u RS=0.210 BV=30.0 IBV=2.00u
++ CJO=13.3p  M=0.333 N=2.28 TT=7.20n )
+
+There are also SPICE models available in
+* https://github.com/evenator/LTSpice-Libraries/blob/master/cmp/standard.bjt
+
+* The following models from datasheets are "worthless", according to https://www.mit.edu/~6.301/
+
+* 2N3904 also found in Sedra&Smith AppB
+.model 2N3904 NPN(Is=6.734f Vaf=74.03 Bf=416.4 Ne=1.259
++ Ise=6.734f Ikf=66.78m Xtb=1.5 Br=.7371 Nc=2 Isc=0 Ikr=0 Rc=1
++ Cjc=3.638p Mjc=.3085 Vjc=.75 Fc=.5 Cje=4.493p Mje=.2593 Vje=.75
++ Tr=239.5n Tf=301.2p Itf=.4 Vtf=4 Xtf=2 Rb=10)
+
+* 2N3906 also found in Sedra&Smith AppB
+.model 2N3906 PNP(Is=1.41f Vaf=18.7 Bf=180.7 Ne=1.5 Ise=0
++ Ikf=80m Xtb=1.5 Br=4.977 Nc=2 Isc=0 Ikr=0 Rc=2.5 Cjc=9.728p
++ Mjc=.5776 Vjc=.75 Fc=.5 Cje=8.063p Mje=.3677 Vje=.75 Tr=33.42n
++ Tf=179.3p Itf=.4 Vtf=4 Xtf=6 Rb=10)
+
+.ends
