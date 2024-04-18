@@ -197,7 +197,7 @@ Q22 q16b q17e vee NPN
 .MODEL BAT54 D ( IS=34.9u RS=0.210 BV=30.0 IBV=2.00u
 + CJO=13.3p  M=0.333 N=2.28 TT=7.20n )
 
-There are also SPICE models available in
+* There are also SPICE models available in
 * https://github.com/evenator/LTSpice-Libraries/blob/master/cmp/standard.bjt
 
 * The following models from datasheets are "worthless", according to https://www.mit.edu/~6.301/
