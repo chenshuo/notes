@@ -137,6 +137,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#output-bias">Output bias</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#short-circuit-protection">Short-circuit protection</a>
+    </li>
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#measure-with-multimeter">Measure with multimeter</a>
@@ -425,7 +427,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     if (!diagrams.length) {
       return;
     }
-    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.2.3/mermaid.esm.min.mjs")).default;
+    const mermaid = (await import("https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.5.0/mermaid.esm.min.mjs")).default;
+    const parser = new DOMParser();
 
     mermaid.initialize({
       maxTextSize: 100000,
@@ -441,39 +444,52 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     let _nextMermaidId = 0;
 
     function makeMermaidImage(svg) {
-      const img = document.createElement('img');
-      const maxWidth = svg.match(/max-width: (\d+)/);
-      if (maxWidth && maxWidth[1]) {
-        const width = parseInt(maxWidth[1]);
-        if (width && !Number.isNaN(width) && Number.isFinite(width)) {
-          img.width = width;
-        }
+      const img = document.createElement("img");
+      const doc = parser.parseFromString(svg, "image/svg+xml");
+      const svgEl = doc.querySelector("svg");
+      const { maxWidth } = svgEl?.style || {};
+      const firstTitle = doc.querySelector("title");
+      const firstDesc = doc.querySelector("desc");
+
+      img.setAttribute("src", `data:image/svg+xml,${encodeURIComponent(svg)}`);
+      if (maxWidth) {
+        img.width = parseInt(maxWidth);
       }
-      img.setAttribute('src', `data:image/svg+xml,${encodeURIComponent(svg)}`);
-      return img;
+      if (firstTitle) {
+        img.setAttribute("alt", firstTitle.textContent);
+      }
+      if (firstDesc) {
+        const caption = document.createElement("figcaption");
+        caption.className = "sr-only";
+        caption.textContent = firstDesc.textContent;
+        return [img, caption];
+      }
+      return [img];
     }
 
     async function makeMermaidError(text) {
-      let errorMessage = '';
+      let errorMessage = "";
       try {
         await mermaid.parse(text);
       } catch (err) {
         errorMessage = `${err}`;
       }
 
-      const result = document.createElement('details');
-      const summary = document.createElement('summary');
-      const pre = document.createElement('pre');
-      const code = document.createElement('code');
+      const result = document.createElement("details");
+      result.className = 'jp-RenderedMermaid-Details';
+      const summary = document.createElement("summary");
+      summary.className = 'jp-RenderedMermaid-Summary';
+      const pre = document.createElement("pre");
+      const code = document.createElement("code");
       code.innerText = text;
       pre.appendChild(code);
       summary.appendChild(pre);
       result.appendChild(summary);
 
-      const warning = document.createElement('pre');
+      const warning = document.createElement("pre");
       warning.innerText = errorMessage;
       result.appendChild(warning);
-      return result;
+      return [result];
     }
 
     async function renderOneMarmaid(src) {
@@ -483,30 +499,41 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       const el = document.createElement("div");
       el.style.visibility = "hidden";
       document.body.appendChild(el);
-      let result = null;
+      let results = null;
+      let output = null;
       try {
         const { svg } = await mermaid.render(id, raw, el);
-        result = makeMermaidImage(svg);
+        results = makeMermaidImage(svg);
+        output = document.createElement("figure");
+        results.map(output.appendChild, output);
       } catch (err) {
         parent.classList.add("jp-mod-warning");
-        result = await makeMermaidError(raw);
+        results = await makeMermaidError(raw);
+        output = results[0];
       } finally {
         el.remove();
       }
       parent.classList.add("jp-RenderedMermaid");
-      parent.appendChild(result);
+      parent.appendChild(output);
     }
 
     void Promise.all([...diagrams].map(renderOneMarmaid));
   });
 </script>
 <style>
-  .jp-RenderedMarkdown .jp-Mermaid:not(.jp-RenderedMermaid) {
+  .jp-Mermaid:not(.jp-RenderedMermaid) {
     display: none;
   }
-  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning {
+
+  .jp-RenderedMermaid {
+    overflow: auto;
+    display: flex;
+  }
+
+  .jp-RenderedMermaid.jp-mod-warning {
     width: auto;
-    padding: 10px;
+    padding: 0.5em;
+    margin-top: 0.5em;
     border: var(--jp-border-width) solid var(--jp-warn-color2);
     border-radius: var(--jp-border-radius);
     color: var(--jp-ui-font-color1);
@@ -514,17 +541,32 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning details > pre {
+
+  .jp-RenderedMermaid figure {
+    margin: 0;
+    overflow: auto;
+    max-width: 100%;
+  }
+
+  .jp-RenderedMermaid img {
+    max-width: 100%;
+  }
+
+  .jp-RenderedMermaid-Details > pre {
     margin-top: 1em;
   }
-  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning summary {
+
+  .jp-RenderedMermaid-Summary {
     color: var(--jp-warn-color2);
   }
-  .jp-RenderedMarkdown .jp-RenderedMermaid.jp-mod-warning summary > pre {
-    display: inline-block;
-  }
-  .jp-RenderedMermaid > .mermaid {
+
+  .jp-RenderedMermaid:not(.jp-mod-warning) pre {
     display: none;
+  }
+
+  .jp-RenderedMermaid-Summary > pre {
+    display: inline-block;
+    white-space: normal;
   }
 </style>
 <!-- End of mermaid configuration --><div class="jupyter-wrapper">
@@ -534,7 +576,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="xl741741se-simulation-and-experiments">XL741/741SE Simulation and Experiments<a class="anchor-link" href="#xl741741se-simulation-and-experiments">¶</a></h1><p>By Shuo Chen (chenshuo_at_chenshuo.com) [60% done]</p>
+<h1 id="xl741741se-simulation-and-experiments">XL741/741SE Simulation and Experiments<a class="anchor-link" href="#xl741741se-simulation-and-experiments">¶</a></h1><p>By Shuo Chen (chenshuo_at_chenshuo.com) [70% done]</p>
 <p>Latest version: <a href="https://chenshuo.github.io/notes/XL741/">https://chenshuo.github.io/notes/XL741/</a></p>
 <p>Jupyter source of this page: <a href="https://github.com/chenshuo/notes/blob/master/notebooks/XL741.ipynb">https://github.com/chenshuo/notes/blob/master/notebooks/XL741.ipynb</a></p>
 <p>Comments and discussions: <a href="https://github.com/chenshuo/notes/discussions">https://github.com/chenshuo/notes/discussions</a></p>
@@ -551,7 +593,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <a href="https://spectrum.ieee.org/chip-hall-of-fame-fairchild-semiconductor-a741-opamp">https://spectrum.ieee.org/chip-hall-of-fame-fairchild-semiconductor-a741-opamp</a></p>
 <p><a href="https://shop.evilmadscientist.com/productsmenu/762">XL741</a> and <a href="https://shop.evilmadscientist.com/productsmenu/923">741SE</a> are
 faithful and functional transistor-scale replicas of the μA741 IC, designed by <a href="http://tubetime.us/">Eric Schlaepfer</a>, in collaboration with <a href="https://www.evilmadscientist.com/">Evil Mad Scientist Laboratories</a>. Here's <a href="https://wiki.evilmadscientist.com/741">the central documentation site</a> for these discrete 741 Op-Amp kits.</p>
-<p>IMO, new designs in the 21th century should not use μA741, there are better alternatives, so called <a href="https://www.youtube.com/watch?v=uq1DMWtjL2U&amp;ab_channel=EEVblog">"jelly-bean op-amps"</a>.
+<p>IMO, new designs in the 21th century <a href="https://electronics.stackexchange.com/questions/304521/reasons-not-to-use-a-741-op-amp">should not use μA741</a>, there are better alternatives, so called <a href="https://www.youtube.com/watch?v=uq1DMWtjL2U&amp;ab_channel=EEVblog">"jelly-bean op-amps"</a>.
 As per <a href="https://electronics.stackexchange.com/a/8257">https://electronics.stackexchange.com/a/8257</a></p>
 <blockquote>
 <p>It's an ideal op amp to learn the basics on due to its non-ideal nature.</p>
@@ -700,14 +742,325 @@ $\newcommand{\mV}{\mathrm{mV}} \newcommand{\mA}{\mathrm{mA}} \newcommand{\uA}{\m
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><strong>Measure</strong></p>
-<p>TBD</p>
-<p>I measured 3 2N3904 and 3 2N3906 (TO-92 packages, not SOT-23 come with my 741SE kits) using multimeters and a cheap <a href="https://www.mikrocontroller.net/articles/AVR_Transistortester">AVR transistor tester</a> clone from Ebay, here's the results:</p>
-<p>FIXME:</p>
+<p><strong>Measure $\beta$ and $\Is$</strong></p>
+<p>I measured 3 2N3904 (TO-92 packages, not SOT-23 come with my 741SE kits) using multimeters , here's the results:</p>
+<table>
+<thead>
+<tr>
+<th>Transistor</th>
+<th>$\beta$*</th>
+<th>Vbe @ Ie=440µA</th>
+<th>Vbe @ Ie=1.28mA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2N3904 no.1</td>
+<td>159</td>
+<td>636mV</td>
+<td>662mV</td>
+</tr>
+<tr>
+<td>2N3904 no.2</td>
+<td>166</td>
+<td>637mV</td>
+<td>662mV</td>
+</tr>
+<tr>
+<td>2N3904 no.3</td>
+<td>165</td>
+<td>636mV</td>
+<td>662mV</td>
+</tr>
+<tr>
+<td>2N3904 average</td>
+<td>163.3</td>
+<td>636.3mV</td>
+<td>662.0mV</td>
+</tr>
+</tbody>
+</table>
+<p>* My cheap <a href="https://www.mikrocontroller.net/articles/AVR_Transistortester">AVR transistor tester</a> clone from Ebay shows higher $\beta$ values, I am more trusting multimeters.</p>
 <p>Recall basic Ebers-Moll model:</p>
 <p>$\ui{E} = \Is\exp\dfrac{\uv{BE}}{\Vt}$</p>
-<p>$\uv{BE}=\Vt\ln\dfrac{\ui{E}}{\Is}$</p>
-<p>We assume $\Vt=25.8\mathrm{mV}$</p>
+<p>If we assume $\Vt=25.8\mathrm{mV}$, we could calculate $\Is = \ui{E}\Big/\exp\dfrac{\uv{BE}}{\Vt}$</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=52073f72-f8c7-43d9-bf75-67124fd3e4ea">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-1">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">Vt</span> <span class="o">=</span> <span class="mf">25.8</span>
+<span class="n">Ie1</span>  <span class="o">=</span> <span class="mf">440e-6</span>
+<span class="n">Vbe1</span> <span class="o">=</span> <span class="mf">636.3</span>
+<span class="n">Is1</span> <span class="o">=</span> <span class="n">Ie1</span> <span class="o">/</span> <span class="n">exp</span><span class="p">(</span><span class="n">Vbe1</span> <span class="o">/</span> <span class="n">Vt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Is1 = </span><span class="si">%g</span><span class="s1">'</span> <span class="o">%</span> <span class="n">Is1</span><span class="p">)</span>
+
+<span class="n">Ie2</span>  <span class="o">=</span> <span class="mf">1.28e-3</span>
+<span class="n">Vbe2</span> <span class="o">=</span> <span class="mf">662.0</span>
+<span class="n">Is2</span> <span class="o">=</span> <span class="n">Ie2</span> <span class="o">/</span> <span class="n">exp</span><span class="p">(</span><span class="n">Vbe2</span> <span class="o">/</span> <span class="n">Vt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Is2 = </span><span class="si">%g</span><span class="s1">'</span> <span class="o">%</span> <span class="n">Is2</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-1">Vt = 25.8
+Ie1  = 440e-6
+Vbe1 = 636.3
+Is1 = Ie1 / exp(Vbe1 / Vt)
+print('Is1 = %g' % Is1)
+
+Ie2  = 1.28e-3
+Vbe2 = 662.0
+Is2 = Ie2 / exp(Vbe2 / Vt)
+print('Is2 = %g' % Is2)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Is1 = 8.56128e-15
+Is2 = 9.19782e-15
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c0117c8d-02fe-42cb-89aa-557094ba91a7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>For simplicity, I just assume $\Is=10$fA in my calculation and simulation.</p>
+<p>Then I did the same on 3 2N3906 transistors, got similar 10fA $\Is$. (9.73fA when Ie = 440uA, 10.7fA whtn Ie = 1.28mA).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=cbf3b6c9-592b-4bf7-b46f-ddb36f97ad0e">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><strong>Measure Early voltage $\uv{A}$</strong></p>
+<p>I don't have a curve tracer, instead, using 3 multimeters, I was able to measue the base current, collector current and Vce at the same time. Here's the result of one 2N3906 (PNP).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Ib (uA)</th>
+<th>Ic (mA)</th>
+<th style="text-align:right">Vce (V)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">10.19</td>
+<td>2.275</td>
+<td style="text-align:right">15.97</td>
+</tr>
+<tr>
+<td style="text-align:right">10.19</td>
+<td>2.242</td>
+<td style="text-align:right">14.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.17</td>
+<td>2.209</td>
+<td style="text-align:right">13.97</td>
+</tr>
+<tr>
+<td style="text-align:right">10.05</td>
+<td>2.151</td>
+<td style="text-align:right">12.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.06</td>
+<td>2.119</td>
+<td style="text-align:right">11.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.06</td>
+<td>2.094</td>
+<td style="text-align:right">10.97</td>
+</tr>
+<tr>
+<td style="text-align:right">10.02</td>
+<td>2.058</td>
+<td style="text-align:right">9.97</td>
+</tr>
+<tr>
+<td style="text-align:right">10.01</td>
+<td>2.028</td>
+<td style="text-align:right">8.97</td>
+</tr>
+<tr>
+<td style="text-align:right">9.99</td>
+<td>1.992</td>
+<td style="text-align:right">7.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.00</td>
+<td>1.967</td>
+<td style="text-align:right">6.97</td>
+</tr>
+<tr>
+<td style="text-align:right">9.98</td>
+<td>1.938</td>
+<td style="text-align:right">5.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.06</td>
+<td>1.928</td>
+<td style="text-align:right">4.98</td>
+</tr>
+<tr>
+<td style="text-align:right">10.02</td>
+<td>1.894</td>
+<td style="text-align:right">3.98</td>
+</tr>
+<tr>
+<td style="text-align:right">9.99</td>
+<td>1.853</td>
+<td style="text-align:right">2.97</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>$\beta$ can also be calculated from the data above, it's around 180 for this PNP transistor.</p>
+</blockquote>
+<p>If we ignore the $\ui{B}$ variances, and run a simple linear regression of $\ui{C}$ versus $\uv{CE}$, we got:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0bf77f1b-4988-4998-a058-73f1c1f93ceb">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-2">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">Ic</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.275</span><span class="p">,</span> <span class="mf">2.242</span><span class="p">,</span> <span class="mf">2.209</span><span class="p">,</span> <span class="mf">2.151</span><span class="p">,</span> <span class="mf">2.119</span><span class="p">,</span> <span class="mf">2.094</span><span class="p">,</span> <span class="mf">2.058</span><span class="p">,</span> <span class="mf">2.028</span><span class="p">,</span> <span class="mf">1.992</span><span class="p">,</span> <span class="mf">1.967</span><span class="p">,</span> <span class="mf">1.938</span><span class="p">,</span> <span class="mf">1.928</span><span class="p">,</span> <span class="mf">1.894</span><span class="p">,</span> <span class="mf">1.853</span><span class="p">]</span>
+<span class="n">Vce</span> <span class="o">=</span> <span class="p">[</span><span class="mf">15.97</span><span class="p">,</span> <span class="mf">14.98</span><span class="p">,</span> <span class="mf">13.97</span><span class="p">,</span> <span class="mf">12.98</span><span class="p">,</span> <span class="mf">11.98</span><span class="p">,</span> <span class="mf">10.97</span><span class="p">,</span> <span class="mf">9.97</span><span class="p">,</span> <span class="mf">8.97</span><span class="p">,</span><span class="mf">7.98</span><span class="p">,</span><span class="mf">6.97</span><span class="p">,</span><span class="mf">5.98</span><span class="p">,</span><span class="mf">4.98</span><span class="p">,</span><span class="mf">3.98</span><span class="p">,</span><span class="mf">2.974</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Vce</span><span class="p">,</span> <span class="n">Ic</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mf">16.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Vce (V)'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'Ic (mA) @ Ib=10uA'</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-2">Ic = [2.275, 2.242, 2.209, 2.151, 2.119, 2.094, 2.058, 2.028, 1.992, 1.967, 1.938, 1.928, 1.894, 1.853]
+Vce = [15.97, 14.98, 13.97, 12.98, 11.98, 10.97, 9.97, 8.97,7.98,6.97,5.98,4.98,3.98,2.974]
+
+plt.plot(Vce, Ic)
+plt.ylim(0, 2.5)
+plt.xlim(2, 16.5)
+plt.xlabel('Vce (V)')
+plt.ylabel('Ic (mA) @ Ib=10uA')</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
+<pre>Text(0, 0.5, 'Ic @ Ib=10uA')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0">
+<img alt="No description has been provided for this image" class="" src="data:image/png;base64,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r5vWSlJgYKDnf19dXXp6uhITE7Vx40YNHTpUkuR0OrVr1y7dd999xhZnkIZgc/jwYb3//vuKjY01uiRD3XnnnY3GM06cOFF33nmnZs6caVBVxgkJCdGoUaP88ne2y4SbOXPmaNWqVXr77bcVGRnp6RO32WwKCwszuDr/i4yMbDTeKCIiQrGxsV12HNIDDzygcePG6ZlnntG3v/1t7d69W6+99ppee+01o0szxJQpU/T0008rNTVVgwYN0kcffaRf/vKXuueee4wuzW9KSkp05MgRz/Pjx49r//79iomJUWpqqubNm6ennnpK/fv3V3p6uhYuXKjk5GRNnTrVuKLbUUvnIykpSd/85je1b98+rV+/XrW1tZ6/szExMQoJCTGq7HZ1qd+RiwNecHCwEhMTNWDAAH+X6heXOh8PPfSQpk2bpvHjx+vGG2/Ue++9p7/+9a/avHmzbwtp9+uxOghJTS4rVqwwurQOo6tfCu52u91//etf3VdffbXbarW6MzIy3K+99prRJRnG6XS6586d605NTXWHhoa6+/Tp437sscfclZWVRpfmN++//36Tfzfuuusut9tddzn4woUL3QkJCW6r1eq+6aab3IcOHTK26HbU0vk4fvx4s39n33//faNLbzeX+h25mNkvBW/N+fjd737n7tevnzs0NNQ9ZMgQ97p163xeh8Xt7kLTjQIAANPrcgOKAQCAuRFuAACAqRBuAACAqRBuAACAqRBuAACAqRBuAACAqRBuAACAqRBuAACAqRBuAHQZ586dU3x8vE6cONGm477zne/ohRdeaJ+iAPgc4QaA30yZMkW33HJLk9s++OADWSwWffzxx+32/k8//bS+/vWvq3fv3tq7d68sFot27tzZ5L433XSTbr/9dknS448/rqeffloOh6PdagPgO4QbAH4za9YsbdiwQadPn260bcWKFRo5cqSuueaadnnvsrIy/e53v9OsWbMkSSNGjNCQIUO0fPnyRvueOHFC77//vmffq6++Wn379tUf/vCHdqkNgG8RbgD4za233qoePXpo5cqVXutLSkr05ptvesKEJH366ae69dZbFRUVpcjISH35y1/W0aNHPduXLVumgQMHKjQ0VBkZGVq8eHGL7/3uu+/KarVqzJgxnnWzZs3Sn//8Z5WVlXntu3LlSiUlJXm1Mk2ZMkWrV6++nI8NwM8INwD8JigoSDNmzNDKlSt14T1733zzTdXW1mr69OmSpDNnzmj8+PGyWq3atGmT9u7dq3vuuUc1NTWSpD/+8Y9atGiRnn76aX322Wd65plntHDhQr3++uvNvvcHH3ygESNGeK274447VFlZqf/5n//xrHO73Xr99dd19913KzAw0LP+2muv1e7du1VZWemTcwGg/XBXcAB+dfDgQQ0cOFDvv/++brjhBknS+PHjlZaWpt///veSpEcffVSrV6/WoUOHFBwc3Og1+vXrp5///OeeMCRJTz31lN59911t3769yfedOnWqYmNj9bvf/c5r/fTp05WTk6PNmzdLkjZt2qSbbrpJhw8fVr9+/Tz7ffzxxxoyZIhOnDihtLS0KzkFANoZLTcA/CojI0Pjxo3zjHU5cuSIPvjgA68uqf379+vLX/5yk8GmtLRUR48e1axZs9StWzfP8tRTT3l1W12svLxcoaGhjdbfc8892rp1q+fY5cuXKzMz0yvYSFJYWJgkNerCAtDxEG4A+N2sWbP01ltvqbi4WCtWrFDfvn2VmZnp2d4QJJpSUlIiSfrtb3+r/fv3e5YDBw40e+WTJMXFxamwsLDR+ptuukmpqalauXKlnE6n1qxZ4xW0GhQUFEiSevTo0erPCcAYhBsAfvftb39bAQEBWrVqld544w3dc889slgsnu3XXHONPvjgA1VXVzc6NiEhQcnJyTp27Jj69evntaSnpzf7nsOGDdO///3vRusDAgI0c+ZMvf7661q1apVCQkL0zW9+s9F+Bw4cUK9evRQXF3eZnxqAvzDmBoAhZs+erTVr1sjpdCo7O1vJycmebefOndOAAQOUmZmpBQsWyGazaefOnbr22ms1YMAALVu2TD/60Y/0i1/8QrfccosqKyu1Z88eFRYWav78+U2+3yeffKLhw4crLy9P0dHRXtuys7OVnp4um82madOmacmSJY2ObxhgfPGYHQAdDy03AAwxa9YsFRYWauLEiV7BRpJiY2O1adMmlZSUKDMzUyNGjNBvf/tbzxic2bNna9myZVqxYoUGDx6szMxMrVy5ssWWm8GDB2v48OH6y1/+0mhbamqqJkyYoMLCQt1zzz2NtldUVGjdunW69957r/BTA/AHWm4AdBnvvPOOHnroIR04cEABAa3/v92SJUu0du1a/eMf/2jH6gD4SpDRBQCAv0yePFmHDx/WmTNnlJKS0urjgoOD9Zvf/KYdKwPgS7TcAAAAU2HMDQAAMBXCDQAAMBXCDQAAMBXCDQAAMBXCDQAAMBXCDQAAMBXCDQAAMBXCDQAAMBXCDQAAMJX/B+3M2b8pPj4KAAAAAElFTkSuQmCC"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=ddadb644-c7a5-452d-99be-835dfa83aeaa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-3">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">m</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">Vce</span><span class="p">,</span> <span class="n">Ic</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Va = </span><span class="si">%.1f</span><span class="s1"> V'</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="o">/</span><span class="n">m</span><span class="p">))</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-3">m, b = np.polyfit(Vce, Ic, 1)
+print(m, b)
+print('Va = %.1f V' % (b/m))</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>0.031722893069276184 1.7528450959134443
+Va = 55.3 V
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=41ab6802-f9b7-4379-bacf-27fda89f08ac">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>We will assume Vaf = 50V for PNP transistors.
+Similarly, I measure one 2N3904, its Vaf was ~200V.</p>
 </div>
 </div>
 </div>
@@ -724,7 +1077,7 @@ $\newcommand{\mV}{\mathrm{mV}} \newcommand{\mA}{\mathrm{mA}} \newcommand{\uA}{\m
 <th>Transistor</th>
 <th>$\beta$</th>
 <th>$\Is$</th>
-<th>Early voltage $\uv{A}$*</th>
+<th>Early voltage $\uv{A}$</th>
 </tr>
 </thead>
 <tbody>
@@ -732,20 +1085,19 @@ $\newcommand{\mV}{\mathrm{mV}} \newcommand{\mA}{\mathrm{mA}} \newcommand{\uA}{\m
 <td>NPN (2N3904)</td>
 <td>160</td>
 <td>10fA</td>
-<td></td>
+<td>200</td>
 </tr>
 <tr>
 <td>PNP (2N3906)</td>
 <td>160</td>
 <td>10fA</td>
-<td></td>
+<td>50</td>
 </tr>
 </tbody>
 </table>
 <p>Given $\beta\gg 1$, we are going to ignore base currents in calculation below unless otherwise mentioned.
 In the original 20T design, the $\beta$ for some PNP transistors (particularly Q3/Q4) is fairly low (less than 10, usually ~5), which made the analysis more difficult, but in XL741/741SE, $\beta$ of 2N3906 is high enough for the base currents to be ignored.</p>
-<p>* I didn't measure the Early voltage (yet), but just use the value from Sedra&amp;Smith book.
-It doesn't affect the calculation of DC operating points, but does affect the DC gain simulation.</p>
+<p>Early voltage doesn't affect the calculation of DC operating points, but does affect the DC gain simulation and other performance.</p>
 </div>
 </div>
 </div>
@@ -786,11 +1138,65 @@ Assuming $\uv{BE} = 0.65$V for Q11 and Q12.</p>
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=a1319fba-970a-4edd-83d6-b4d3d83bd8ed">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Let's verify, $\uv{BE}=\Vt\ln\dfrac{\ui{E}}{\Is} = \Vt \ln\dfrac{0.736\times10^{-3}}{10^{-14}} =  645.6$ mV, matches the estimation of 0.65V above.</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=f15d1432-bdce-40ba-a454-4d2fb885f8ba">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy for="cell-4">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">Vt</span> <span class="o">=</span> <span class="mf">25.8</span>
+<span class="n">Vbe</span> <span class="o">=</span> <span class="n">Vt</span> <span class="o">*</span> <span class="n">log</span><span class="p">(</span><span class="mf">0.736e-3</span> <span class="o">/</span> <span class="mf">1e-14</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Vbe @ Ic=0.736mA = </span><span class="si">%.1f</span><span class="s1"> mV'</span> <span class="o">%</span> <span class="n">Vbe</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-4">Vt = 25.8
+Vbe = Vt * log(0.736e-3 / 1e-14)
+print('Vbe @ Ic=0.736mA = %.1f mV' % Vbe)</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Vbe @ Ic=0.736mA = 645.6 mV
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fd2709b5-a89f-49e1-8b51-e19f85fed4c2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>Let's calculate $I_\mathrm{C10}$, which is the bias current of the input stage.</p>
 <p>Q10/Q11 and R4 form a Wildar current source.</p>
 <p>$I_\mathrm{C10} R_4 = V_\mathrm{T}\ln \dfrac{I_\mathrm{REF}}{I_\mathrm{C10}}$</p>
 <p>It's a transcendental equation, let's solve $\ui{C10}$ using numerical method, which gives 19.84µA.</p>
@@ -806,7 +1212,7 @@ Assuming $\uv{BE} = 0.65$V for Q11 and Q12.</p>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-1">
+<clipboard-copy for="cell-5">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -836,7 +1242,7 @@ Assuming $\uv{BE} = 0.65$V for Q11 and Q12.</p>
     <span class="n">Ic</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">root</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">'Ic10 = </span><span class="si">%.2f</span><span class="s1"> uA'</span> <span class="o">%</span> <span class="p">(</span><span class="n">Ic</span><span class="p">))</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">def Ic10(x):
+<div class="clipboard-copy-txt" id="cell-5">def Ic10(x):
     Ic = x
     Vt = 25.8
     Iref = 736
@@ -1181,7 +1587,7 @@ $\uv{CE12}\approx -0.65$V, $\uv{CE13}\approx -14.45$V, so $\ui{C13} \approx \ui{
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-2">
+<clipboard-copy for="cell-6">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1220,7 +1626,7 @@ $\uv{CE12}\approx -0.65$V, $\uv{CE13}\approx -14.45$V, so $\ui{C13} \approx \ui{
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Open loop Vin vs. Vout'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Output range: </span><span class="si">%.2f</span><span class="s1"> V to </span><span class="si">%.2f</span><span class="s1"> V'</span> <span class="o">%</span> <span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">Vout</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">Vout</span><span class="p">)))</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2">ng.circ('''
+<div class="clipboard-copy-txt" id="cell-6">ng.circ('''
 * Power and input
 
 Vcc vcc 0  15V
@@ -1285,7 +1691,7 @@ print('Output range: %.2f V to %.2f V' % (min(Vout), max(Vout)))</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-3">
+<clipboard-copy for="cell-7">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1308,7 +1714,7 @@ print('Output range: %.2f V to %.2f V' % (min(Vout), max(Vout)))</div>
 <span class="n">gain</span> <span class="o">=</span> <span class="n">deltaVout</span> <span class="o">/</span> <span class="n">deltaVin</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Gain = </span><span class="si">%.0f</span><span class="s1">, </span><span class="si">%.1f</span><span class="s1"> dB'</span> <span class="o">%</span> <span class="p">(</span><span class="n">gain</span><span class="p">,</span> <span class="mi">20</span><span class="o">*</span><span class="n">log10</span><span class="p">(</span><span class="n">gain</span><span class="p">)))</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">cross_point = np.sum(Vout &lt; 0)
+<div class="clipboard-copy-txt" id="cell-7">cross_point = np.sum(Vout &lt; 0)
 assert Vout[cross_point] &gt; 0 and Vout[cross_point-1] &lt; 0
 print('Vos = %.1f uV' % (Vin[cross_point] * 1e6))
 
@@ -1358,7 +1764,7 @@ Gain = 62248, 95.9 dB
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-4">
+<clipboard-copy for="cell-8">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1371,7 +1777,7 @@ Gain = 62248, 95.9 dB
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="n">ng</span><span class="o">.</span><span class="n">cmd</span><span class="p">(</span><span class="s1">'alter vin -565.7u'</span><span class="p">)</span>
 <span class="n">print_op</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">ng.cmd('alter vin -565.7u')
+<div class="clipboard-copy-txt" id="cell-8">ng.cmd('alter vin -565.7u')
 print_op()</div>
 </div>
 </div>
@@ -1511,7 +1917,7 @@ vin#branch =   -42.54 nanoA
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-5">
+<clipboard-copy for="cell-9">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1523,7 +1929,7 @@ vin#branch =   -42.54 nanoA
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5"></div>
+<div class="clipboard-copy-txt" id="cell-9"></div>
 </div>
 </div>
 </div>
@@ -1548,7 +1954,7 @@ vin#branch =   -42.54 nanoA
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-6">
+<clipboard-copy for="cell-10">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1560,7 +1966,7 @@ vin#branch =   -42.54 nanoA
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6"></div>
+<div class="clipboard-copy-txt" id="cell-10"></div>
 </div>
 </div>
 </div>
@@ -1585,7 +1991,7 @@ vin#branch =   -42.54 nanoA
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-7">
+<clipboard-copy for="cell-11">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1597,7 +2003,7 @@ vin#branch =   -42.54 nanoA
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7"></div>
+<div class="clipboard-copy-txt" id="cell-11"></div>
 </div>
 </div>
 </div>
@@ -1622,7 +2028,7 @@ vin#branch =   -42.54 nanoA
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-8">
+<clipboard-copy for="cell-12">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1634,9 +2040,19 @@ vin#branch =   -42.54 nanoA
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8"></div>
+<div class="clipboard-copy-txt" id="cell-12"></div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8a364ecf-b191-48f5-b3a9-7468b2225b22">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h3 id="short-circuit-protection">Short-circuit protection<a class="anchor-link" href="#short-circuit-protection">¶</a></h3><p><a href="https://electronics.stackexchange.com/questions/483829/how-is-the-741-op-amp-output-protected-when-shorted-to-v">https://electronics.stackexchange.com/questions/483829/how-is-the-741-op-amp-output-protected-when-shorted-to-v</a></p>
 </div>
 </div>
 </div>
@@ -1669,7 +2085,7 @@ vin#branch =   -42.54 nanoA
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy for="cell-9">
+<clipboard-copy for="cell-13">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1681,7 +2097,7 @@ vin#branch =   -42.54 nanoA
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-9"></div>
+<div class="clipboard-copy-txt" id="cell-13"></div>
 </div>
 </div>
 </div>
