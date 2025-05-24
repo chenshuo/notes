@@ -1,0 +1,115 @@
+
+.subckt TL082    in+ in- vcc vee out
+
+* Bias
+
+J16 vcc  vcc q8b PJFET
+D2  vee  q8b     DZ
+Q8  q7c  q8b q8e NPN
+R11 q8e  vee     10k
+Q7  q7c  q7c vcc PNP
+Q6  q14b q7c vcc PNP
+Q5  q5c  q7c q5e PNP
+R1  vcc  q5e     100
+
+* Input
+
+J1 q3c  in- q5c PJFET
+J2 q10b in+ q5c PJFET2
+Q3 q3c  q3b r2  NPN
+Q4 q10b q3b r3  NPN
+Q9 vcc  q3c q3b NPN
+R2 r2   vee     1080
+R3 r3   vee     1080
+R4 q3b  vee     30k
+*C1 r2  vee     15pF
+
+* Gain
+
+Q10  vcc  q10b  q11b NPN
+Q11 q15b q11b r6   NPN
+R5  q11b vee  30k
+R6  r6   vee  100
+C2  q10b  q15b 18pF
+D1  q10b  q15b D
+
+* Vbe multiplier
+
+Q12 q14b q14b q13b NPN
+Q13 q14b q13b q15b NPN
+R7  q13b q15b 50k
+
+* Output
+
+Q14 vcc q14b q14e NPN 3
+Q15 vee q15b q15e PNP 3
+R8  q14e mid  64
+R9  mid  q15e 64
+R10 mid  out  128
+
+.model DZ D(IS=10fA BV=5.0)
+.model D D(IS=1fA)
+.model PJFET PJF(VTO=-1 BETA=0.246e-3 LAMBDA=5e-3)
+.model PJFET2 PJF(VTO=-1 BETA=0.246e-3 LAMBDA=5e-3)
+
+.model npn NPN ( Bf=200 Br=2.0 VAf=130V Is=5fA Tf=0.35ns
++ Rb=200 Rc=200 Re=2 Cje=1.0pF Vje=0.70V Mje=0.33 Cjc=0.3pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+
+.model pnp PNP ( Bf=50 Br=4.0 VAf=50V Is=2fA Tf=30ns
++ Rb=300 Rc=100 Re=10 Cje=0.3pF Vje=0.55V Mje=0.5 Cjc=1.0pF
++ Vjc=0.55V Mjc=0.5 Cjs=3.0pF Vjs=0.52V Mjs=0.5)
+.ends
+
+* TL082 OPERATIONAL AMPLIFIER "MACROMODEL" SUBCIRCUIT
+* CREATED USING PARTS RELEASE 4.01 ON 06/16/89 AT 13:08
+* (REV N/A)      SUPPLY VOLTAGE: +/-15V
+* CONNECTIONS:   NON-INVERTING INPUT
+*                | INVERTING INPUT
+*                | | POSITIVE POWER SUPPLY
+*                | | | NEGATIVE POWER SUPPLY
+*                | | | | OUTPUT
+*                | | | | |
+.SUBCKT TL082M   1 2 3 4 5
+*
+  C1   11 12 3.498E-12
+  C2    6  7 18.00E-12
+  Cs   10 99 9p
+  DC    5 53 DX
+  DE   54  5 DX
+  DLP  90 91 DX
+  DLN  92 90 DX
+  DP    4  3 DX
+  EGND 99  0 POLY(2) (3,0) (4,0) 0 .5 .5
+  FB    7 99 POLY(5) VB VC VE VLP VLN 0 4.715E6 -5E6 5E6 5E6 -5E6
+  GA    6  0 11 12 282.8E-6
+  GCM   0  6 10 99 8.942E-9
+  ISS   3 10 DC 195.0E-6
+  HLIM 90  0 VLIM 1K
+  J1   11  2 10 JX
+  J2   12  1 10 JX
+  R2    6  9 100.0E3
+  RD1   4 11 3.536E3
+  RD2   4 12 3.536E3
+  RO1   8  5 150
+  RO2   7 99 150
+  RP    3  4 20.43E3
+  RSS  10 99 1.026E6
+  VB    9  0 DC 0
+  VC    3 53 DC 2.200
+  VE   54  4 DC 2.200
+  VLIM  7  8 DC 0
+  VLP  91  0 DC 25
+  VLN   0 92 DC 25
+.MODEL DX D(IS=800.0E-18)
+.MODEL JX PJF(IS=15.00E-12 BETA=270.1E-6 VTO=-1)
+.ENDS
+
+.subckt TL082KH   in+ in- vcc vee out
+  J1   11  2 10 J1
+  J2   12  1 10 J2
+
+.MODEL DX D(IS=800.0E-18)
+.MODEL J1 PJF(IS=15.00E-12 BETA=270.1E-6 VTO=-1)
+.MODEL J2 PJF(IS=15.00E-12 BETA=270.1E-6 VTO=-1)
+.ends
