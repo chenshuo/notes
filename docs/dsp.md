@@ -1,5 +1,9 @@
 # Digital Signal Processing
 
+## Educational demos
+
+Original demos from http://dspfirst.gatech.edu/ in MATLAB, ported to Python in http://github.com/chenshuo/dspfirst
+
 ## DFT/FFT
 
 DFT is a matrix multiplication, the naive implementation is \(O(N^2)\).
